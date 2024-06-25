@@ -1,9 +1,8 @@
 import {DeleteOutlined, EllipsisOutlined, PlusOutlined} from '@ant-design/icons';
-import {ActionType, ProTable} from '@ant-design/pro-components';
+import {ActionType, ProTable,BetaSchemaForm} from '@ant-design/pro-components';
 import {Button, Divider, Dropdown, message, Popconfirm, Space, Table} from 'antd';
 import React, {FC, Fragment, useRef} from 'react';
 import {ajaxCommon} from "../../utils/common";
-import {BetaSchemaForm} from "@ant-design/pro-form";
 import {ModalPro} from "durians";
 
 
@@ -30,23 +29,25 @@ const columns_: any = [
     },
 ];
 
-interface type {
-    ajax?: any;
-    url?: any;
-    addUrl?: any;
-    editUrl?: any;
-    deleteUrl?: any;
-    deleteFieldUrl?: any;
-    fieldProps?: any,
-    fieldPropsAdd?: any;
-    setData?: Function;
-    setTotal?: Function;
-    setMsg?: Function;
-    actionBar?: any;
-    actionWidth?: number
-}
-
-const TablePro: FC<type> = ({
+const TablePro: FC<{
+  /**
+   * @description 通用ajax实现方法
+   * @default "默认值"
+   */
+  ajax?: any;
+  url?: any;
+  addUrl?: any;
+  editUrl?: any;
+  deleteUrl?: any;
+  deleteFieldUrl?: any;
+  fieldProps?: any,
+  fieldPropsAdd?: any;
+  setData?: Function;
+  setTotal?: Function;
+  setMsg?: Function;
+  actionBar?: any;
+  actionWidth?: number
+}> = ({
                                 ajax = ajaxCommon,
                                 url = 'https://proapi.azurewebsites.net/github/issues',
                                 addUrl,
@@ -131,7 +132,7 @@ const TablePro: FC<type> = ({
     let action = (_:any, record:any) => {
 
         return (
-            <div className="durinas">
+            <div className="durians_table_pro_action">
                 {actionBarComponent.map((Comp, i) => {
                     return (
                         <Fragment key={i}>
