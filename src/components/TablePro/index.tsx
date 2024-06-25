@@ -285,8 +285,6 @@ const TablePro: FC<{
                 ...(fieldProps.search || {})
             }:{
               labelWidth: 'auto',
-              span: 4,
-              defaultCollapsed: false,
             }}
             toolBarRender={() => [
                 ...(addUrl ? [
