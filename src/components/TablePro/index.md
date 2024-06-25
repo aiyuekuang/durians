@@ -7,13 +7,13 @@ group:
 
 # TablePro 高级表格
 
-
 ```jsx
 /**
  * title: demo预览
  */
 
 import {TablePro} from "durians";
+import {useEffect} from "react";
 
 
 /** 按钮组 */
@@ -45,8 +45,8 @@ export default () => {
 
   return (
     <div style={{
-      width:"100%",
-      overflow:"hidden"
+      width: "100%",
+      overflow: "hidden"
     }}>
 
       <TablePro
@@ -60,39 +60,39 @@ export default () => {
             dataIndex: 'name',
             width: 100,
             key: 'name',
-            sorter:true,
+            sorter: true,
             fixed: 'left',
-            align:"center"
-          // },{
-          //   title: 'Full Name222',
-          //   dataIndex: 'age',
-          //   align:"center",
-          //   width: 100,
-            
+            align: "center"
+            // },{
+            //   title: 'Full Name222',
+            //   dataIndex: 'age',
+            //   align:"center",
+            //   width: 100,
+
           },
           {
             title: 'Age',
             width: 100,
             dataIndex: 'age',
             key: 'age',
-            sorter:true,
+            sorter: true,
 
-            children:[
+            children: [
               {
                 title: 'Name1',
                 width: 100,
                 dataIndex: 'name1',
                 key: 'name',
-                sorter:true,
-                children:[
+                sorter: true,
+                children: [
                   {
                     title: 'Name3',
                     width: 100,
                     dataIndex: 'name3',
                     key: 'name',
-                    sorter:true,
+                    sorter: true,
                   }]
-              },{
+              }, {
                 title: 'Name2',
                 width: 100,
                 dataIndex: 'name2',

@@ -283,7 +283,11 @@ const TablePro: FC<{
                 span: 4,
                 defaultCollapsed: false,
                 ...(fieldProps.search || {})
-            }:false}
+            }:{
+              labelWidth: 'auto',
+              span: 4,
+              defaultCollapsed: false,
+            }}
             toolBarRender={() => [
                 ...(addUrl ? [
                     <BaseForm>
