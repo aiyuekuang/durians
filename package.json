@@ -1,6 +1,6 @@
 {
   "name": "durians",
-  "version": "0.0.21",
+  "version": "0.0.23",
   "description": "A react library developed with dumi",
   "license": "MIT",
   "module": "dist/index.js",
@@ -17,7 +17,7 @@
     "docs:preview": "dumi preview",
     "doctor": "father doctor",
     "prepublishOnly": "father doctor && npm run build",
-    "publishIn": "npm publish"
+    "publishIn": "npm version patch && npm publish"
   },
   "commitlint": {
     "extends": [
@@ -55,7 +55,9 @@
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
     "@ant-design/pro-components": "^2.7.10",
+    "@types/crypto-js": "^4.2.2",
     "antd": "^5.18.3",
+    "crypto-js": "^4.2.0",
     "esn": "^2.0.29",
     "umi-request": "^1.4.0"
   }

@@ -1,7 +1,6 @@
 import request from "umi-request";
 import {message} from "antd";
 
-
 export const ajaxCommon = (url: string, params: object, callback: Function, isApi = true) => {
     let api_ = "";
     if (isApi) {
