@@ -1,6 +1,6 @@
 {
   "name": "durians",
-  "version": "0.0.1",
+  "version": "0.0.21",
   "description": "A react library developed with dumi",
   "license": "MIT",
   "module": "dist/index.js",
@@ -9,6 +9,7 @@
     "dist"
   ],
   "scripts": {
+    "start": "npm run dev",
     "build": "father build",
     "build:watch": "father dev",
     "dev": "dumi dev",
@@ -16,7 +17,7 @@
     "docs:preview": "dumi preview",
     "doctor": "father doctor",
     "prepublishOnly": "father doctor && npm run build",
-    "start": "npm run dev"
+    "publishIn": "npm publish"
   },
   "commitlint": {
     "extends": [
