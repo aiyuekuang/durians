@@ -27,23 +27,6 @@
       "@commitlint/config-conventional"
     ]
   },
-  "lint-staged": {
-    "*.{md,json}": [
-      "prettier --write --no-error-on-unmatched-pattern"
-    ],
-    "*.{css,less}": [
-      "stylelint --fix",
-      "prettier --write"
-    ],
-    "*.{js,jsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --parser=typescript --write"
-    ]
-  },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
@@ -71,5 +54,12 @@
   },
   "authors": [
     "ztao"
-  ]
+  ],
+  "dependencies": {
+    "@ant-design/icons": "^5.3.7",
+    "@ant-design/pro-components": "^2.7.10",
+    "antd": "^5.18.3",
+    "esn": "^2.0.29",
+    "umi-request": "^1.4.0"
+  }
 }

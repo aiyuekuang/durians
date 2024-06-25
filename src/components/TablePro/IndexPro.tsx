@@ -2,9 +2,9 @@ import {DeleteOutlined, EllipsisOutlined, PlusOutlined} from '@ant-design/icons'
 import {ActionType, ProTable} from '@ant-design/pro-components';
 import {Button, Divider, Dropdown, message, Popconfirm, Space, Table} from 'antd';
 import React, {FC, Fragment, useRef} from 'react';
-import {ajaxCommon} from "@/utils/common";
+import {ajaxCommon} from "../../utils/common";
 import {BetaSchemaForm} from "@ant-design/pro-form";
-import ModalPro from "@/components/ModalPro";
+import {ModalPro} from "durians";
 
 
 const columns_: any = [
@@ -33,10 +33,10 @@ const columns_: any = [
 interface type {
     ajax?: any;
     url?: any;
-    urlAdd?: any;
-    urlEdit?: any;
-    urlDelete?: any;
-    urlDeleteField?: any;
+    addUrl?: any;
+    editUrl?: any;
+    deleteUrl?: any;
+    deleteFieldUrl?: any;
     fieldProps?: any,
     fieldPropsAdd?: any;
     setData?: Function;
@@ -49,31 +49,31 @@ interface type {
 const TablePro: FC<type> = ({
                                 ajax = ajaxCommon,
                                 url = 'https://proapi.azurewebsites.net/github/issues',
-                                urlAdd,
-                                urlEdit,
-                                urlDelete,
-                                urlDeleteField = "idList",
+                                addUrl,
+                                editUrl,
+                                deleteUrl,
+                                deleteFieldUrl = "idList",
                                 fieldPropsAdd = {},
                                 actionWidth = 100,
                                 fieldProps = {
                                     search: {},
                                     columns: columns_,
                                 },
-                                setData = (data) => {
+                                setData = (data:any) => {
                                     return data.data.records
                                 },
-                                setTotal = (data) => {
+                                setTotal = (data:any) => {
                                     return data.data.total
                                 },
-                                setMsg = (data) => {
+                                setMsg = (data:any) => {
                                     return data.msg
                                 },
                                 actionBar = []
                             }) => {
-    const actionRef = useRef<ActionType>();
+    const actionRef:any = useRef<ActionType>();
     let id_ = fieldProps.rowKey || "id"
-    let actionBarComponent = [...(urlDelete ? [({record}) => <BaseForm
-        record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(urlDelete ? [({record}) => <Popconfirm
+    let actionBarComponent = [...(deleteUrl ? [({record}:any) => <BaseForm
+        record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(deleteUrl ? [({record}:any) => <Popconfirm
         title="删除"
         description="确定删除这条数据吗？"
         onConfirm={() => {
@@ -90,7 +90,7 @@ const TablePro: FC<type> = ({
         return (
             <BetaSchemaForm
                 initialValues={record}
-                columns={fieldProps.columns.map((data) => {
+                columns={fieldProps.columns.map((data:any) => {
                     return {
                         ...data,
                         width: 'md',
@@ -99,12 +99,12 @@ const TablePro: FC<type> = ({
                 trigger={children}
                 onFinish={async (values: any) => {
                     let isSuccess = false
-                    let url_ = urlAdd
+                    let url_ = addUrl
                     let values_ = values
 
-                    if (record?.[id_] && urlEdit) {
+                    if (record?.[id_] && editUrl) {
                         values_[id_] = record?.[id_]
-                        url_ = urlEdit
+                        url_ = editUrl
                     }
                     await ajax(url_, values_, (data: any) => {
                         // 刷新页面
@@ -128,10 +128,10 @@ const TablePro: FC<type> = ({
     }
 
 
-    let action = (_, record) => {
+    let action = (_:any, record:any) => {
 
         return (
-            <div className="ztao_table_pro_action">
+            <div className="durinas">
                 {actionBarComponent.map((Comp, i) => {
                     return (
                         <Fragment key={i}>
@@ -146,11 +146,11 @@ const TablePro: FC<type> = ({
     }
 
     //删除的执行函数
-    const deleteHandle = (selectedRowKeys, callback = () => {
+    const deleteHandle = (selectedRowKeys:any, callback = () => {
     }) => {
-        let params_ = {}
-        params_[urlDeleteField] = selectedRowKeys
-        ajax(urlDelete, params_, (data) => {
+        let params_:any = {}
+        params_[deleteFieldUrl] = selectedRowKeys
+        ajax(deleteUrl, params_, (data:any) => {
             message.success(setMsg(data));
             actionRef.current?.reload();
             actionRef.current.clearSelected();
@@ -191,11 +191,11 @@ const TablePro: FC<type> = ({
                                      }) => {
                 return (
                     <Space size={16}>
-                        {urlDelete ?
+                        {deleteUrl ?
                             <ModalPro
                                 title="是否确定删除？"
                                 Content={() => "确定删除？"}
-                                handleOk={(callback) => {
+                                handleOk={(callback:any) => {
                                     deleteHandle(selectedRowKeys, () => {
                                         callback();
                                     })
@@ -284,7 +284,7 @@ const TablePro: FC<type> = ({
                 ...(fieldProps.search || {})
             }:false}
             toolBarRender={() => [
-                ...(urlAdd ? [
+                ...(addUrl ? [
                     <BaseForm>
                         <Button
                             key="button"
