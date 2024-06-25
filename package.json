@@ -17,7 +17,7 @@
     "docs:preview": "dumi preview",
     "doctor": "father doctor",
     "prepublishOnly": "father doctor && npm run build",
-    "publishIn": "npm version patch && npm publish"
+    "publishIn": "node ./bin/master.mjs && npm version patch && node ./bin/master.mjs && npm publish"
   },
   "commitlint": {
     "extends": [
