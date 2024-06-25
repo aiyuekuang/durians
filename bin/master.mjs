@@ -11,6 +11,8 @@ let execSyncFun = (cmd) => {
 let actBranch = execSyncFun("git branch").split('\n').find(line => line.startsWith('*')).split('*')[1].trim();
 execSyncFun(`git pull`)
 console.log(`拉取最新代码成功`)
+execSyncFun(`git merge --no-ff --no-commit origin ${actBranch}`)
 execSyncFun(`git commit -m "feat(BIN): 自动化发版"`)
+console.log(`本地推送成功`)
 execSyncFun(`git push origin ${actBranch}`)
 console.log("发版代码推送成功")
