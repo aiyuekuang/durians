@@ -3,7 +3,11 @@ import {exec, execSync} from 'child_process';
 let env = Object.assign({}, process.env);
 
 let execSyncFun = (cmd) => {
+  try{
     return execSync(cmd, {cwd: process.cwd(), env: env}).toString();
+  }catch (e){
+    console.log("命令行有错误，",e)
+  }
 }
 
 
