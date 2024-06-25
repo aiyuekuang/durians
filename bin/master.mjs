@@ -12,6 +12,7 @@ let actBranch = execSyncFun("git branch").split('\n').find(line => line.startsWi
 execSyncFun(`git pull`)
 console.log(`拉取最新代码成功`)
 execSyncFun(`git add .`)
+console.log(`本地提交成功`)
 execSyncFun(`git commit -m "feat(BIN): 自动化发版"`)
 console.log(`本地推送成功`)
 execSyncFun(`git push origin ${actBranch}`)
