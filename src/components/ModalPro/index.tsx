@@ -1,4 +1,4 @@
-import React, {ElementType, ReactElement, ReactNode, useState} from 'react';
+import React, {ElementType, FunctionComponent, ReactDOM, ReactElement, ReactHTML, ReactNode, useState} from 'react';
 import {Modal} from 'antd';
 import "./index.less"
 
@@ -19,7 +19,7 @@ const App: React.FC<{
    * 弹窗里的内容
    * @default () => <div>示例</div>
    */
-  Content?: ElementType;
+  Content?: any;
   /**
    * 触发点击事件弹窗包裹的内容
    * @default <div>点击</div>

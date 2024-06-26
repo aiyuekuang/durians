@@ -14,7 +14,7 @@ group:
 
 ```jsx
 /**
- * title: demo预览
+ * title: 默认无手机验证码登录模式
  */
 
 import {LoginPro} from "durians";
