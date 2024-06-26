@@ -28,11 +28,11 @@ jobs:
       - name: Build Project
         run: |
           yarn
-          npm run build
+          npm run docs:build
 
       # 部署到github
       - name: Deploy to Github
         uses: JamesIves/github-pages-deploy-action@v4.6.1
         with:
-          branch: docs:build # 打包的内容放到build分支下
+          branch: build # 打包的内容放到build分支下
           folder: docs-dist # 你打包后存放的文件,再试下
