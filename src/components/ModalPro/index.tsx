@@ -5,7 +5,7 @@ import "./index.less"
 const App: React.FC<{
   /**
    * 标题
-   * @default "基础"
+   * @default 基础
    */
   title?: string;
   /**

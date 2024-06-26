@@ -9,15 +9,51 @@ import {cun} from "esn";
 
 type LoginType = 'phone' | 'account';
 
-const LoginPro: FC<any> = ({
-                             ajax = ajaxCommon,
-                             url,
-                             captchaUrl,
-                             loginFormFieldProps,
-                             hasSmsLogin = false,
-                             hasAccountLogin = true,
-                             phoneField = "mobile"
-                           }) => {
+const LoginPro: FC<{
+  /**
+   * @description 通用ajax实现方法
+   * @default "默认值"
+   */
+  ajax?: Function;
+  /**
+   * @description 点击登录的url
+   * @default "默认值"
+   */
+  url?: string;
+  /**
+   * @description 发送短信验证码的url
+   * @default -
+   */
+  captchaUrl?: string;
+  /**
+   * @description antd-pro登录表单的props
+   * @default {}
+   */
+  loginFormFieldProps?: object;
+  /**
+   * @description 是否有短信登录模式
+   * @default false（无）
+   */
+  hasSmsLogin?: boolean;
+  /**
+   * @description 是否有账号密码登录模式
+   * @default true
+   */
+  hasAccountLogin?: boolean;
+  /**
+   * @description 发送短信验证码接口，发送手机号的字段
+   * @default true
+   */
+  phoneField?: string;
+}> = ({
+        ajax = ajaxCommon,
+        url,
+        captchaUrl,
+        loginFormFieldProps,
+        hasSmsLogin = false,
+        hasAccountLogin = true,
+        phoneField = "mobile"
+      }) => {
   const {token} = theme.useToken();
   const [loginType, setLoginType] = useState<LoginType>('account');
 
@@ -163,9 +199,9 @@ const LoginPro: FC<any> = ({
                 },
               ]}
               onGetCaptcha={async (phone) => {
-                let obj:any = {};
+                let obj: any = {};
                 obj[phoneField] = phone
-                ajax(captchaUrl, {...obj}, (data:any) => {
+                ajax(captchaUrl, {...obj}, (data: any) => {
                   message.success('验证码已发送，请查看手机短信');
                 })
               }}
