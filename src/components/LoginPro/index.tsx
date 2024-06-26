@@ -12,7 +12,11 @@ type LoginType = 'phone' | 'account';
 const LoginPro: FC<any> = ({
                              ajax = ajaxCommon,
                              url,
+                             captchaUrl,
                              loginFormFieldProps,
+                             hasSmsLogin = false,
+                             hasAccountLogin = true,
+                             phoneField = "mobile"
                            }) => {
   const {token} = theme.useToken();
   const [loginType, setLoginType] = useState<LoginType>('account');
@@ -25,8 +29,8 @@ const LoginPro: FC<any> = ({
       <LoginForm
         formRef={formRef}
         // logo="https://www.56008.com/images/newsimg/scm128.jpg"
-        title="新零帮内部管理平台"
-        subTitle="新零帮内部管理平台"
+        title="登录"
+        subTitle="欢迎登录系统"
         initialValues={{
           username: "admin",
           password: "111111"
@@ -36,7 +40,6 @@ const LoginPro: FC<any> = ({
           if (val1) {
             let _values = {...values};
             _values.password = CryptoJS.SHA256(values.password).toString(CryptoJS.enc.Base64)
-
             ajax(url, _values, (data: any) => {
               cun("token", data.data)
             }, false)
@@ -50,8 +53,8 @@ const LoginPro: FC<any> = ({
           activeKey={loginType}
           onChange={(activeKey) => setLoginType(activeKey as LoginType)}
         >
-          <Tabs.TabPane key={'account'} tab={'账号密码登录'}/>
-          <Tabs.TabPane key={'phone'} tab={'手机号登录'} disabled/>
+          <Tabs.TabPane key={'account'} tab={'账号密码登录'} disabled={!hasAccountLogin}/>
+          <Tabs.TabPane key={'phone'} tab={'手机号登录'} disabled={!hasSmsLogin}/>
         </Tabs>
         {loginType === 'account' && (
           <>
@@ -123,7 +126,7 @@ const LoginPro: FC<any> = ({
                 size: 'large',
                 prefix: <MobileOutlined className={'prefixIcon'}/>,
               }}
-              name="mobile"
+              name={phoneField}
               placeholder={'手机号'}
               rules={[
                 {
@@ -151,6 +154,7 @@ const LoginPro: FC<any> = ({
                 }
                 return '获取验证码';
               }}
+              phoneName={phoneField}
               name="captcha"
               rules={[
                 {
@@ -158,8 +162,12 @@ const LoginPro: FC<any> = ({
                   message: '请输入验证码！',
                 },
               ]}
-              onGetCaptcha={async () => {
-                message.success('获取验证码成功！验证码为：1234');
+              onGetCaptcha={async (phone) => {
+                let obj:any = {};
+                obj[phoneField] = phone
+                ajax(captchaUrl, {...obj}, (data:any) => {
+                  message.success('验证码已发送，请查看手机短信');
+                })
               }}
             />
           </>
