@@ -34,42 +34,42 @@ const TablePro: FC<{
    * @description 通用ajax实现方法
    * @default "默认值"
    */
-  ajax?: any;
+  ajax?: Function;
   /**
    * @description 获取数据的URL,例子，/api/new_find
    * @default "默认值"
    */
-  url?: any;
+  url?: string;
   /**
    * @description 新增的表单URL
    * @default "默认值"
    */
-  addUrl?: any;
+  addUrl?: string;
   /**
    * @description 编辑的表单URL
    * @default "默认值"
    */
-  editUrl?: any;
+  editUrl?: string;
   /**
    * @description 删除数据的URL
    * @default "默认值"
    */
-  deleteUrl?: any;
+  deleteUrl?: string;
   /**
    * @description 批量删除数据的字段名
    * @default "idList"
    */
-  deleteField?: any;
+  deleteField?: string;
   /**
    * @description pro-table的props参数，包括columns，dataSource等
    * @default "{}"
    */
-  fieldProps?: any,
+  fieldProps?: object,
   /**
    * @description BetaSchemaForm的props参数
    * @default "{}"
    */
-  fieldPropsAdd?: any;
+  addFieldProps?: object;
   /**
    * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终拿到的dataSource
    * @default "(data)=>{return data.data}"
@@ -89,7 +89,7 @@ const TablePro: FC<{
    * @description 表格后面的操作组，类型是个数组，元素是组件，会传递record
    * @default "[({record})=>{return <div>跳转</div>}]"
    */
-  actionBar?: any;
+  actionBar?: any[];
   /**
    * @description 表格操作列的宽度
    * @default "100"
@@ -102,7 +102,7 @@ const TablePro: FC<{
         editUrl,
         deleteUrl,
         deleteField = "idList",
-        fieldPropsAdd = {},
+        addFieldProps = {},
         actionWidth = 100,
         fieldProps = {
           search: {},
@@ -171,7 +171,7 @@ const TablePro: FC<{
           span: 12,
         }}
         grid={true}
-        {...fieldPropsAdd}
+        {...addFieldProps}
       />
     )
   }
