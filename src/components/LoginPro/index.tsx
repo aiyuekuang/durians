@@ -83,8 +83,8 @@ const LoginPro: FC<{
         title="登录"
         subTitle="欢迎登录系统"
         initialValues={{
-          username: "admin",
-          password: "111111"
+          username: "",
+          password: ""
         }}
         onFinish={async (values) => {
           const val1 = await formRef.current.validateFields();
@@ -115,7 +115,7 @@ const LoginPro: FC<{
                 size: 'large',
                 prefix: <UserOutlined className={'prefixIcon'}/>,
               }}
-              placeholder={'用户名: admin or user'}
+              placeholder={'用户名'}
               rules={[
                 {
                   required: true,
@@ -160,7 +160,7 @@ const LoginPro: FC<{
                   );
                 },
               }}
-              placeholder={'密码: 111111'}
+              placeholder={'请输入密码'}
               rules={[
                 {
                   required: true,
