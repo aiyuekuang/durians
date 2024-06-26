@@ -32,7 +32,23 @@ const columns_: any = [
 const TablePro: FC<{
   /**
    * @description 通用ajax实现方法
-   * @default "默认值"
+   * @default (url: string, params: object, callback: Function, isApi = true) => {
+   *     let api_ = "";
+   *     if (isApi) {
+   *         api_ = "api";
+   *     }
+   *
+   *     return request.post(api_ + url, {data: params}).then((data) => {
+   *         if (data.code == 0) {
+   *             callback(data)
+   *         } else {
+   *             message.error(data.msg)
+   *         }
+   *     }).catch(function (error) {
+   *         console.log(error);
+   *     })
+   * }
+   * }
    */
   ajax?: Function;
   /**
