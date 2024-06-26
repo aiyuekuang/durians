@@ -2,6 +2,7 @@
 hero:
   title: durians
   description: 许多榴莲，一个基于antd-pro的低代码库，旨在快速搭建数字化平台
+  actions:
     - text: 表格
       link: /components/table-pro
     - text: 登录
