@@ -1,5 +1,5 @@
 ---
-title: Table 表格
+title: LoginPro 高级登录
 group:
   title: 通用
   order: 1
