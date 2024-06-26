@@ -9,7 +9,7 @@ group:
 
 ```jsx
 /**
- * title: demo预览
+ * title: 基础使用
  */
 
 import {TablePro} from "durians";

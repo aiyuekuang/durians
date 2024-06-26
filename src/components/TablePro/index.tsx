@@ -80,12 +80,12 @@ const TablePro: FC<{
    * @description pro-table的props参数，包括columns，dataSource等
    * @default {}
    */
-  fieldProps?: object,
+  fieldProps?: any,
   /**
    * @description BetaSchemaForm的props参数
    * @default {}
    */
-  addFieldProps?: object;
+  addFieldProps?: any;
   /**
    * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终拿到的dataSource
    * @default (data)=>{return data.data}
@@ -319,14 +319,15 @@ const TablePro: FC<{
       }}
       form={{
         // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-        syncToUrl: (values, type) => {
-          if (type === 'get') {
-            return {
-              ...values,
-            };
-          }
-          return values;
-        },
+        // syncToUrl: (values, type) => {
+        //   if (type === 'get') {
+        //     return {
+        //       ...values,
+        //     };
+        //   }
+        //   return values;
+        // },
+        syncToUrl:false
       }}
       pagination={{
         pageSize: 10,
