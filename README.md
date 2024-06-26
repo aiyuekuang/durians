@@ -3,41 +3,17 @@
 [![NPM version](https://img.shields.io/npm/v/durians.svg?style=flat)](https://npmjs.org/package/durians)
 [![NPM downloads](http://img.shields.io/npm/dm/durians.svg?style=flat)](https://npmjs.org/package/durians)
 
-A react library developed with dumi
+一个基于antd-pro的低代码库
 
-## Usage
+# [文档地址](https://aiyuekuang.github.io/durians/components/login-pro)
 
-TODO
-
-## Options
-
-TODO
-
-## Development
+# 安装
 
 ```bash
-# install dependencies
-$ yarn install
-
-# develop library by docs demo
-$ yarn start
-
-# build library source code
-$ yarn run build
-
-# build library source code in watch mode
-$ yarn run build:watch
-
-# build docs
-$ yarn run docs:build
-
-# Locally preview the production build.
-$ yarn run docs:preview
-
-# check your project for potential problems
-$ yarn run doctor
+yarn add durians
+or
+npm i durians
 ```
 
 ## LICENSE
-
 MIT
