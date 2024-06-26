@@ -1,7 +1,7 @@
 ---
 title: ModalPro 高级弹窗
 group:
-  title: 通用
+  title: 组件
   order: 1
 ---
 

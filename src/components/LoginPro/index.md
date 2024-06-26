@@ -1,7 +1,7 @@
 ---
 title: LoginPro 高级登录
 group:
-  title: 通用
+  title: 组件
   order: 1
 ---
 

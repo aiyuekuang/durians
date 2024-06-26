@@ -1,7 +1,7 @@
 ---
 title: Table 表格
 group:
-  title: 通用
+  title: 组件
   order: 1
 ---
 
