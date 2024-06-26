@@ -35,17 +35,65 @@ const TablePro: FC<{
    * @default "默认值"
    */
   ajax?: any;
+  /**
+   * @description 获取数据的URL,例子，/api/new_find
+   * @default "默认值"
+   */
   url?: any;
+  /**
+   * @description 新增的表单URL
+   * @default "默认值"
+   */
   addUrl?: any;
+  /**
+   * @description 编辑的表单URL
+   * @default "默认值"
+   */
   editUrl?: any;
+  /**
+   * @description 删除数据的URL
+   * @default "默认值"
+   */
   deleteUrl?: any;
-  deleteFieldUrl?: any;
+  /**
+   * @description 批量删除数据的字段名
+   * @default "idList"
+   */
+  deleteField?: any;
+  /**
+   * @description pro-table的props参数，包括columns，dataSource等
+   * @default "{}"
+   */
   fieldProps?: any,
+  /**
+   * @description BetaSchemaForm的props参数
+   * @default "{}"
+   */
   fieldPropsAdd?: any;
+  /**
+   * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终拿到的dataSource
+   * @default "(data)=>{return data.data}"
+   */
   setData?: Function;
+  /**
+   * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格数据总数据量，分页时用的
+   * @default "(data)=>{return data.total}"
+   */
   setTotal?: Function;
+  /**
+   * @description 新增表单提交成功之后，需要返回给页面的一个message弹窗中的提示，返回值是一个字符串
+   * @default "(data)=>{return data.message}"
+   */
   setMsg?: Function;
+  /**
+   * @description 表格后面的操作组，类型是个数组，元素是组件，会传递record
+   * @default "[({record})=>{return <div>跳转</div>}]"
+   */
   actionBar?: any;
+  /**
+   * @description 表格操作列的宽度
+   * @default "100"
+   */
   actionWidth?: number
 }> = ({
         ajax = ajaxCommon,
@@ -53,7 +101,7 @@ const TablePro: FC<{
         addUrl,
         editUrl,
         deleteUrl,
-        deleteFieldUrl = "idList",
+        deleteField = "idList",
         fieldPropsAdd = {},
         actionWidth = 100,
         fieldProps = {
@@ -150,7 +198,7 @@ const TablePro: FC<{
   const deleteHandle = (selectedRowKeys: any, callback = () => {
   }) => {
     let params_: any = {}
-    params_[deleteFieldUrl] = selectedRowKeys
+    params_[deleteField] = selectedRowKeys
     ajax(deleteUrl, params_, (data: any) => {
       message.success(setMsg(data));
       actionRef.current?.reload();

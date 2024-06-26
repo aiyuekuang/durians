@@ -38,3 +38,4 @@ export default () => {
   );
 };
 ```
+<API id="LoginPro"></API>

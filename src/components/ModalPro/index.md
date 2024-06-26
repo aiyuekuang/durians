@@ -35,3 +35,4 @@ export default () => {
   );
 };
 ```
+<API id="ModalPro"></API>
