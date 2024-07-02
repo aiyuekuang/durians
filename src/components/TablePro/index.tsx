@@ -116,6 +116,7 @@ const TablePro: FC<{
    * @default {pageIndex:"pageIndex",pageSize:"pageSize"}
    */
   paginationAlias?: any;
+  tableAlertOptionRenderPro?: any[];
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -140,9 +141,10 @@ const TablePro: FC<{
         },
         actionBar = [],
         paginationAlias = {
-          page_number: "pageIndex",
-          page_size: "pageSize"
-        }
+          pageIndex: "pageIndex",
+          pageSize: "pageSize"
+        },
+        tableAlertOptionRenderPro = []
       }) => {
   const actionRef: any = useRef<ActionType>();
   let id_ = fieldProps.rowKey || "id"
@@ -284,25 +286,31 @@ const TablePro: FC<{
                   批量删除
                 </Button>
               </ModalPro> : null}
+            {tableAlertOptionRenderPro.map((data, i) => {
+              return data(selectedRowKeys,selectedRows,onCleanSelected)
+            })}
             {/*<a>导出数据</a>*/}
           </Space>
         );
       }}
       actionRef={actionRef}
       request={async (params, sort, filter) => {
-        console.log(777, ajax, sort, params, filter);
-        let result = null
+        let result = fieldProps.dataSource
         let _params: any = {}
         _params[paginationAlias.pageIndex] = params.current
         _params[paginationAlias.pageSize] = params.pageSize
 
-        await ajax(url, {
-          ..._params,
-          ...params,
-        }, (data: any) => {
-          console.log(data)
-          result = data
-        })
+        console.log(777, ajax, sort, params, filter, _params);
+        if (url) {
+          await ajax(url, {
+            ..._params,
+            ...params,
+          }, (data: any) => {
+            console.log(data)
+            result = data
+          })
+        }
+
 
         return Promise.resolve({
           data: setData(result),

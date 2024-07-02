@@ -52,109 +52,116 @@ export default () => {
       <TablePro
         className={"xlb_table_demo"}
         // rowHeight={200}
+        tableAlertOptionRenderPro={[(props)=>{
+          return <div>111</div>
+        }]}
         bordered={true}
-        rowKey={"key"}
-        columns={[
-          {
-            title: 'Full Name',
-            dataIndex: 'name',
-            width: 100,
-            key: 'name',
-            sorter: true,
-            fixed: 'left',
-            align: "center"
-            // },{
-            //   title: 'Full Name222',
-            //   dataIndex: 'age',
-            //   align:"center",
+        fieldProps={{
+          
+          rowKey:"key",
+          dataSource: data,
+          columns: [
+            {
+              title: 'Full Name',
+              dataIndex: 'name',
+              width: 100,
+              key: 'name',
+              sorter: true,
+              fixed: 'left',
+              align: "center"
+              // },{
+              //   title: 'Full Name222',
+              //   dataIndex: 'age',
+              //   align:"center",
+              //   width: 100,
+
+            },
+            {
+              title: 'Age',
+              width: 100,
+              dataIndex: 'age',
+              key: 'age',
+              sorter: true,
+
+              children: [
+                {
+                  title: 'Name1',
+                  width: 100,
+                  dataIndex: 'name1',
+                  key: 'name',
+                  sorter: true,
+                  children: [
+                    {
+                      title: 'Name3',
+                      width: 100,
+                      dataIndex: 'name3',
+                      key: 'name',
+                      sorter: true,
+                    }]
+                }, {
+                  title: 'Name2',
+                  width: 100,
+                  dataIndex: 'name2',
+                  key: 'name',
+                },
+              ]
+            },
+            {
+              title: 'Column 1',
+              dataIndex: 'address',
+              key: '1',
+              width: 500,
+            },
+            // {
+            //   title: 'Column 2',
+            //   dataIndex: '2',
+            //   key: '2',
+            //   width: 150,
+            // },
+            // {
+            //   title: 'Column 3',
+            //   dataIndex: '3',
+            //   key: '3',
+            //   width: 150,
+            // },
+            // {
+            //   title: 'Column 4',
+            //   dataIndex: '4',
+            //   key: '4',
+            //   width: 150,
+            // },
+            // {
+            //   title: 'Column 5',
+            //   dataIndex: '5',
+            //   key: '5',
+            //   width: 150,
+            // },
+            // {
+            //   title: 'Column 6',
+            //   dataIndex: '6',
+            //   key: '6',
+            //   width: 150,
+            // },
+            // {
+            //   title: 'Column 7',
+            //   dataIndex: '7',
+            //   key: '7',
+            //   width: 150,
+            // },
+            // {title: 'Column 8', dataIndex: '8', key: '8'},
+            // {
+            //   title: 'Action',
+            //   dataIndex: 'operation',
+            //   key: 'operation',
             //   width: 100,
-
-          },
-          {
-            title: 'Age',
-            width: 100,
-            dataIndex: 'age',
-            key: 'age',
-            sorter: true,
-
-            children: [
-              {
-                title: 'Name1',
-                width: 100,
-                dataIndex: 'name1',
-                key: 'name',
-                sorter: true,
-                children: [
-                  {
-                    title: 'Name3',
-                    width: 100,
-                    dataIndex: 'name3',
-                    key: 'name',
-                    sorter: true,
-                  }]
-              }, {
-                title: 'Name2',
-                width: 100,
-                dataIndex: 'name2',
-                key: 'name',
-              },
-            ]
-          },
-          {
-            title: 'Column 1',
-            dataIndex: 'address',
-            key: '1',
-            width: 500,
-          },
-          // {
-          //   title: 'Column 2',
-          //   dataIndex: '2',
-          //   key: '2',
-          //   width: 150,
-          // },
-          // {
-          //   title: 'Column 3',
-          //   dataIndex: '3',
-          //   key: '3',
-          //   width: 150,
-          // },
-          // {
-          //   title: 'Column 4',
-          //   dataIndex: '4',
-          //   key: '4',
-          //   width: 150,
-          // },
-          // {
-          //   title: 'Column 5',
-          //   dataIndex: '5',
-          //   key: '5',
-          //   width: 150,
-          // },
-          // {
-          //   title: 'Column 6',
-          //   dataIndex: '6',
-          //   key: '6',
-          //   width: 150,
-          // },
-          // {
-          //   title: 'Column 7',
-          //   dataIndex: '7',
-          //   key: '7',
-          //   width: 150,
-          // },
-          // {title: 'Column 8', dataIndex: '8', key: '8'},
-          // {
-          //   title: 'Action',
-          //   dataIndex: 'operation',
-          //   key: 'operation',
-          //   width: 100,
-          //   render: () => <a>action</a>,
-          // },
-        ]}
-        dataSource={data}
+            //   render: () => <a>action</a>,
+            // },
+          ]
+        }}
       />
     </div>
   );
 };
 ```
+
 <API id="TablePro"></API>
