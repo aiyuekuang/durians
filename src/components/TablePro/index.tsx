@@ -115,7 +115,7 @@ const TablePro: FC<{
    * @description ajax接口分页参数的字段别名
    * @default {pageIndex:"pageIndex",pageSize:"pageSize"}
    */
-  paginationAlias?: object;
+  paginationAlias?: any;
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -140,7 +140,8 @@ const TablePro: FC<{
         },
         actionBar = [],
         paginationAlias = {
-          pageIndex: "pageIndex", pageSize: "pageSize"
+          page_number: "pageIndex",
+          page_size: "pageSize"
         }
       }) => {
   const actionRef: any = useRef<ActionType>();
@@ -291,7 +292,7 @@ const TablePro: FC<{
       request={async (params, sort, filter) => {
         console.log(777, ajax, sort, params, filter);
         let result = null
-        let _params:any = {}
+        let _params: any = {}
         _params[paginationAlias.pageIndex] = params.current
         _params[paginationAlias.pageSize] = params.pageSize
 
