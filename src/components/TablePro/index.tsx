@@ -281,7 +281,7 @@ const TablePro: FC<{
       }}
       actionRef={actionRef}
       request={async (params, sort, filter) => {
-        console.log(777, sort, params, filter);
+        console.log(777,ajax, sort, params, filter);
         let result = null
         await ajax(url, {
           pageIndex: params.current,
