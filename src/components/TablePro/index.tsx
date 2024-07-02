@@ -110,9 +110,14 @@ const TablePro: FC<{
    * @description 表格操作列的宽度
    * @default 100
    */
-  actionWidth?: number
+  actionWidth?: number;
+  /**
+   * @description ajax接口分页参数的字段别名
+   * @default {pageIndex:"pageIndex",pageSize:"pageSize"}
+   */
+  paginationAlias?: object;
 }> = ({
-        ajax ,
+        ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
         addUrl,
         editUrl,
@@ -133,7 +138,10 @@ const TablePro: FC<{
         setMsg = (data: any) => {
           return data.msg
         },
-        actionBar = []
+        actionBar = [],
+        paginationAlias = {
+          pageIndex: "pageIndex", pageSize: "pageSize"
+        }
       }) => {
   const actionRef: any = useRef<ActionType>();
   let id_ = fieldProps.rowKey || "id"
@@ -281,11 +289,14 @@ const TablePro: FC<{
       }}
       actionRef={actionRef}
       request={async (params, sort, filter) => {
-        console.log(777,ajax, sort, params, filter);
+        console.log(777, ajax, sort, params, filter);
         let result = null
+        let _params:any = {}
+        _params[paginationAlias.pageIndex] = params.current
+        _params[paginationAlias.pageSize] = params.pageSize
+
         await ajax(url, {
-          pageIndex: params.current,
-          pageSize: params.pageSize,
+          ..._params,
           ...params,
         }, (data: any) => {
           console.log(data)
@@ -327,7 +338,7 @@ const TablePro: FC<{
         //   }
         //   return values;
         // },
-        syncToUrl:false
+        syncToUrl: false
       }}
       pagination={{
         pageSize: 10,
