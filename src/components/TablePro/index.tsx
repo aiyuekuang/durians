@@ -265,6 +265,8 @@ const TablePro: FC<{
                                  selectedRows,
                                  onCleanSelected,
                                }) => {
+        console.log(5555,tableAlertOptionRenderPro)
+
         return (
           <Space size={16}>
             {deleteUrl ?
@@ -286,8 +288,9 @@ const TablePro: FC<{
                   批量删除
                 </Button>
               </ModalPro> : null}
-            {tableAlertOptionRenderPro.map((data, i) => {
-              return data(selectedRowKeys, selectedRows, onCleanSelected)
+            {tableAlertOptionRenderPro.map((Comp, i) => {
+              console.log(222,Comp)
+              return <Comp selectedRowKeys={selectedRowKeys} selectedRows={selectedRows} onCleanSelected={onCleanSelected} key={i}/>
             })}
             {/*<a>导出数据</a>*/}
           </Space>

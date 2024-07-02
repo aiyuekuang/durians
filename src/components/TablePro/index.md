@@ -12,7 +12,7 @@ group:
  * title: 基础使用
  */
 
-import {TablePro} from "durians";
+import {TablePro,FormPro} from "durians";
 import {useEffect} from "react";
 
 
