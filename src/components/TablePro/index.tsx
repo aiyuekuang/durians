@@ -287,7 +287,7 @@ const TablePro: FC<{
                 </Button>
               </ModalPro> : null}
             {tableAlertOptionRenderPro.map((data, i) => {
-              return data(selectedRowKeys,selectedRows,onCleanSelected)
+              return data(selectedRowKeys, selectedRows, onCleanSelected)
             })}
             {/*<a>导出数据</a>*/}
           </Space>

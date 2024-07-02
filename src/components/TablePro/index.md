@@ -53,7 +53,7 @@ export default () => {
         className={"xlb_table_demo"}
         // rowHeight={200}
         tableAlertOptionRenderPro={[(props)=>{
-          return <div>111</div>
+          return <FormPro/>
         }]}
         bordered={true}
         fieldProps={{
