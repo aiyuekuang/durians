@@ -112,7 +112,7 @@ const TablePro: FC<{
    */
   actionWidth?: number
 }> = ({
-        ajax = ajaxCommon,
+        ajax ,
         url = 'https://proapi.azurewebsites.net/github/issues',
         addUrl,
         editUrl,
