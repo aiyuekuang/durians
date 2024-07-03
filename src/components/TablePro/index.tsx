@@ -1,5 +1,5 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
-import {ActionType, BetaSchemaForm, ProTable} from '@ant-design/pro-components';
+import {ActionType, ProTable} from '@ant-design/pro-components';
 import {Button, Divider, message, Popconfirm, Space, Table} from 'antd';
 import React, {FC, Fragment, useRef} from 'react';
 import {ajaxCommon, commonFormHandler} from "../../utils/common";
@@ -236,9 +236,8 @@ const TablePro: FC<{
           grid: true,
           ...addFormProFieldProps
         }
-
         }
-      />
+      >{children}</FormPro>
     )
   }
 
