@@ -2,8 +2,8 @@ import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {ActionType, BetaSchemaForm, ProTable} from '@ant-design/pro-components';
 import {Button, Divider, message, Popconfirm, Space, Table} from 'antd';
 import React, {FC, Fragment, useRef} from 'react';
-import {ajaxCommon} from "../../utils/common";
-import {ModalPro} from "durians";
+import {ajaxCommon, commonFormHandler} from "../../utils/common";
+import {FormPro, ModalPro} from "durians";
 
 
 const columns_: any = [
@@ -85,7 +85,7 @@ const TablePro: FC<{
    * @description BetaSchemaForm的props参数
    * @default {}
    */
-  addFieldProps?: any;
+  addFormProFieldProps?: any;
   /**
    * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终拿到的dataSource
    * @default (data)=>{return data.data}
@@ -124,7 +124,7 @@ const TablePro: FC<{
         editUrl,
         deleteUrl,
         deleteField = "idList",
-        addFieldProps = {},
+        addFormProFieldProps = {},
         actionWidth = 100,
         fieldProps = {
           search: {},
@@ -161,44 +161,83 @@ const TablePro: FC<{
     <a style={{color: "red"}}>删除</a>
   </Popconfirm>] : [])]
 
-
+  // let yy = () => {
+  //   return <BetaSchemaForm
+  //     initialValues={record}
+  //     columns={fieldProps.columns.map((data: any) => {
+  //       return {
+  //         ...data,
+  //         width: 'md',
+  //       }
+  //     }) as any}
+  //     trigger={children}
+  //     onFinish={async (values: any) => {
+  //       let isSuccess = false
+  //       let url_ = addUrl
+  //       let values_ = values
+  //
+  //       if (record?.[id_] && editUrl) {
+  //         values_[id_] = record?.[id_]
+  //         url_ = editUrl
+  //       }
+  //       await ajax(url_, values_, (data: any) => {
+  //         // 刷新页面
+  //         actionRef.current?.reload();
+  //         message.success(setMsg(data));
+  //         isSuccess = true
+  //       })
+  //       return isSuccess
+  //     }}
+  //     layoutType="ModalForm"
+  //     rowProps={{
+  //       gutter: [16, 16],
+  //     }}
+  //     colProps={{
+  //       span: 12,
+  //     }}
+  //     grid={true}
+  //     {...addFormProFieldProps}
+  //   />
+  // }
   let BaseForm: FC<{ children?: any; record?: any }> = ({children, record}) => {
     return (
-      <BetaSchemaForm
-        initialValues={record}
-        columns={fieldProps.columns.map((data: any) => {
-          return {
-            ...data,
-            width: 'md',
-          }
-        }) as any}
-        trigger={children}
-        onFinish={async (values: any) => {
-          let isSuccess = false
-          let url_ = addUrl
-          let values_ = values
+      <FormPro
+        fieldProps={{
+          initialValues: record,
+          columns: fieldProps.columns.map((data: any) => {
+            return {
+              ...data,
+              width: 'md',
+            }
+          }),
+          onFinish: async (values: any) => {
+            let isSuccess = false
+            let url_ = addUrl
+            let values_ = values
 
-          if (record?.[id_] && editUrl) {
-            values_[id_] = record?.[id_]
-            url_ = editUrl
-          }
-          await ajax(url_, values_, (data: any) => {
-            // 刷新页面
-            actionRef.current?.reload();
-            message.success(setMsg(data));
-            isSuccess = true
-          })
-          return isSuccess
-        }}
-        layoutType="ModalForm"
-        rowProps={{
-          gutter: [16, 16],
-        }}
-        colProps={{
-          span: 12,
-        }}
-        grid={true}
-        {...addFieldProps}
+            if (record?.[id_] && editUrl) {
+              values_[id_] = record?.[id_]
+              url_ = editUrl
+            }
+            await ajax(url_, values_, (data: any) => {
+              // 刷新页面
+              actionRef.current?.reload();
+              message.success(setMsg(data));
+              isSuccess = true
+            })
+            return isSuccess
+          },
+          rowProps: {
+            gutter: [16, 16],
+          },
+          colProps: {
+            span: 12,
+          },
+          grid: true,
+          ...addFormProFieldProps
+        }
+
+        }
       />
     )
   }
@@ -265,7 +304,7 @@ const TablePro: FC<{
                                  selectedRows,
                                  onCleanSelected,
                                }) => {
-        console.log(5555,tableAlertOptionRenderPro)
+        console.log(5555, tableAlertOptionRenderPro)
 
         return (
           <Space size={16}>
@@ -289,8 +328,9 @@ const TablePro: FC<{
                 </Button>
               </ModalPro> : null}
             {tableAlertOptionRenderPro.map((Comp, i) => {
-              console.log(222,Comp)
-              return <Comp selectedRowKeys={selectedRowKeys} selectedRows={selectedRows} onCleanSelected={onCleanSelected} key={i}/>
+              console.log(222, Comp)
+              return <Comp selectedRowKeys={selectedRowKeys} selectedRows={selectedRows}
+                           onCleanSelected={onCleanSelected} key={i}/>
             })}
             {/*<a>导出数据</a>*/}
           </Space>
@@ -359,7 +399,7 @@ const TablePro: FC<{
       dateFormatter="string"
       {...fieldProps}
 
-      columns={[...fieldProps.columns, ...(actionBarComponent.length ? [{
+      columns={[...commonFormHandler(fieldProps.columns, ajax), ...(actionBarComponent.length ? [{
         title: "操作",
         dataIndex: "actionTablePro",
         fixed: "right",

@@ -17,19 +17,20 @@ const Index: React.FC<{
    * @default {}
    */
   fieldProps?: any;
-  url: string;
+  url?: string;
   ajax?: Function;
   finishFun?: Function;
   setMsg?: Function
+  children?:any
 }> = ({
         layoutType = "ModalForm", fieldProps = {}, url, ajax = ajaxCommon, finishFun = () => {
   }, setMsg = (data: any) => {
     return data.msg
-  },
+  },children=<Button>点击我</Button>
       }) => {
   return (
     <BetaSchemaForm
-      trigger={<Button>点击我</Button>}
+      trigger={children}
       layoutType={'ModalForm'}
       onFinish={async (values) => {
         console.log(values);
