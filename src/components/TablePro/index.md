@@ -68,6 +68,7 @@ export default () => {
               key: 'name',
               sorter: true,
               fixed: 'left',
+              valueType:"treeSelectPro",
               align: "center"
               // },{
               //   title: 'Full Name222',
