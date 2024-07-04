@@ -2,7 +2,7 @@ import {Button, message} from 'antd';
 import React from 'react';
 import {BetaSchemaForm} from "@ant-design/pro-components";
 import {ajaxCommon} from "../../utils/common";
-
+import ProProviderPro from "../ProProviderPro"
 
 
 // 脚手架示例组件
@@ -21,49 +21,51 @@ const Index: React.FC<{
   ajax?: Function;
   finishFun?: Function;
   setMsg?: Function
-  children?:any
+  children?: any
 }> = ({
         layoutType = "ModalForm", fieldProps = {}, url, ajax = ajaxCommon, finishFun = () => {
   }, setMsg = (data: any) => {
     return data.msg
-  },children=<Button>点击我</Button>
+  }, children = <Button>点击我</Button>
       }) => {
   return (
-    <BetaSchemaForm
-      trigger={children}
-      layoutType={'ModalForm'}
-      onFinish={async (values) => {
-        console.log(values);
-        await ajax(url, values, (data: any) => {
-          // 刷新页面
-          message.success(setMsg(data));
-          finishFun()
-        })
-      }}
-      {...(layoutType === 'ModalForm'
-        ? {
-          modalProps: {destroyOnClose: true},
-        }
-        : {
-          drawerProps: {destroyOnClose: true},
-        })}
-      columns={[
-        {
-          title: '标题',
-          dataIndex: 'title',
-          formItemProps: {
-            rules: [
-              {
-                required: true,
-                message: '此项为必填项',
-              },
-            ],
+    <ProProviderPro>
+      <BetaSchemaForm
+        trigger={children}
+        layoutType={'ModalForm'}
+        onFinish={async (values) => {
+          console.log(values);
+          await ajax(url, values, (data: any) => {
+            // 刷新页面
+            message.success(setMsg(data));
+            finishFun()
+          })
+        }}
+        {...(layoutType === 'ModalForm'
+          ? {
+            modalProps: {destroyOnClose: true},
+          }
+          : {
+            drawerProps: {destroyOnClose: true},
+          })}
+        columns={[
+          {
+            title: '标题',
+            dataIndex: 'title',
+            formItemProps: {
+              rules: [
+                {
+                  required: true,
+                  message: '此项为必填项',
+                },
+              ],
+            },
+            width: 'md',
           },
-          width: 'md',
-        },
-      ]}
-      {...fieldProps}
-    />
+        ]}
+        {...fieldProps}
+      />
+    </ProProviderPro>
   );
 };
 

@@ -7,6 +7,7 @@ import {ajaxCommon} from "../../utils/common";
 import CryptoJS from "crypto-js";
 import {cun} from "esn";
 
+
 type LoginType = 'phone' | 'account';
 
 const LoginPro: FC<{
@@ -69,6 +70,7 @@ const LoginPro: FC<{
         hasAccountLogin = true,
         phoneField = "mobile"
       }) => {
+
   const {token} = theme.useToken();
   const [loginType, setLoginType] = useState<LoginType>('account');
 
@@ -76,6 +78,7 @@ const LoginPro: FC<{
 
 
   return (
+
     <div style={{backgroundColor: token.colorBgContainer}} className="crm_login_body">
       <LoginForm
         formRef={formRef}

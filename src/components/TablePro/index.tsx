@@ -4,6 +4,7 @@ import {Button, Divider, message, Popconfirm, Space, Table} from 'antd';
 import React, {FC, Fragment, useRef} from 'react';
 import {ajaxCommon, commonFormHandler} from "../../utils/common";
 import {FormPro, ModalPro} from "durians";
+import ProProviderPro from '../ProProviderPro';
 
 
 const columns_: any = [
@@ -273,160 +274,161 @@ const TablePro: FC<{
   }
 
   return (
-    <ProTable
-      defaultSize="small"
-      scroll={{x: "100%"}}
-      rowSelection={{
-        // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
-        // 注释该行则默认不显示下拉选项
-        selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
-      }}
-      tableAlertRender={({
-                           selectedRowKeys,
-                           selectedRows,
-                           onCleanSelected,
-                         }) => {
-        console.log(selectedRowKeys, selectedRows);
-        return (
-          <Space size={24}>
+    <ProProviderPro>
+      <ProTable
+        defaultSize="small"
+        scroll={{x: "100%"}}
+        rowSelection={{
+          // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
+          // 注释该行则默认不显示下拉选项
+          selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
+        }}
+        tableAlertRender={({
+                             selectedRowKeys,
+                             selectedRows,
+                             onCleanSelected,
+                           }) => {
+          console.log(selectedRowKeys, selectedRows);
+          return (
+            <Space size={24}>
                         <span>
                           已选 {selectedRowKeys.length} 项
                           <a style={{marginInlineStart: 8}} onClick={onCleanSelected}>
                             取消选择
                           </a>
                         </span>
-          </Space>
-        );
-      }}
-      tableAlertOptionRender={({
-                                 selectedRowKeys,
-                                 selectedRows,
-                                 onCleanSelected,
-                               }) => {
-        console.log(5555, tableAlertOptionRenderPro)
+            </Space>
+          );
+        }}
+        tableAlertOptionRender={({
+                                   selectedRowKeys,
+                                   selectedRows,
+                                   onCleanSelected,
+                                 }) => {
+          console.log(5555, tableAlertOptionRenderPro)
 
-        return (
-          <Space size={16}>
-            {deleteUrl ?
-              <ModalPro
-                title="是否确定删除？"
-                Content={() => "确定删除？"}
-                handleOk={(callback: any) => {
-                  deleteHandle(selectedRowKeys, () => {
-                    callback();
-                  })
-                }}
-              >
-                <Button
-                  size="small"
-                  key="danger"
-                  icon={<DeleteOutlined/>}
-                  danger
+          return (
+            <Space size={16}>
+              {deleteUrl ?
+                <ModalPro
+                  title="是否确定删除？"
+                  Content={() => "确定删除？"}
+                  handleOk={(callback: any) => {
+                    deleteHandle(selectedRowKeys, () => {
+                      callback();
+                    })
+                  }}
                 >
-                  批量删除
-                </Button>
-              </ModalPro> : null}
-            {tableAlertOptionRenderPro.map((Comp, i) => {
-              console.log(222, Comp)
-              return <Comp selectedRowKeys={selectedRowKeys} selectedRows={selectedRows}
-                           onCleanSelected={onCleanSelected} key={i}/>
-            })}
-            {/*<a>导出数据</a>*/}
-          </Space>
-        );
-      }}
-      actionRef={actionRef}
-      request={async (params, sort, filter) => {
-        let result = fieldProps.dataSource
-        let _params: any = {}
-        _params[paginationAlias.pageIndex] = params.current
-        _params[paginationAlias.pageSize] = params.pageSize
+                  <Button
+                    size="small"
+                    key="danger"
+                    icon={<DeleteOutlined/>}
+                    danger
+                  >
+                    批量删除
+                  </Button>
+                </ModalPro> : null}
+              {tableAlertOptionRenderPro.map((Comp, i) => {
+                return <Comp selectedRowKeys={selectedRowKeys} selectedRows={selectedRows}
+                             onCleanSelected={onCleanSelected} key={i}/>
+              })}
+              {/*<a>导出数据</a>*/}
+            </Space>
+          );
+        }}
+        actionRef={actionRef}
+        request={async (params, sort, filter) => {
+          let result = fieldProps.dataSource
+          let _params: any = {}
+          _params[paginationAlias.pageIndex] = params.current
+          _params[paginationAlias.pageSize] = params.pageSize
 
-        console.log(777, ajax, sort, params, filter, _params);
-        if (url) {
-          await ajax(url, {
-            ..._params,
-            ...params,
-          }, (data: any) => {
-            console.log(data)
-            result = data
-          })
-        }
+          console.log(777, sort, params, filter, _params);
+          if (url) {
+            await ajax(url, {
+              ..._params,
+              ...params,
+            }, (data: any) => {
+              console.log(data)
+              result = data
+            })
+          }
 
 
-        return Promise.resolve({
-          data: setData(result),
-          success: true,
-          total: setTotal(result)
-        });
-      }}
-      editable={{
-        type: 'multiple',
-      }}
-      columnsState={{
-        persistenceKey: 'pro-table-singe-demos',
-        persistenceType: 'localStorage',
-        defaultValue: {
-          option: {fixed: 'right', disable: true},
-        },
-        onChange(value) {
-          console.log('value: ', value);
-        },
-      }}
-      rowKey="id"
-      options={{
-        setting: {
-          listsHeight: 400,
-        },
-      }}
-      form={{
-        // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-        // syncToUrl: (values, type) => {
-        //   if (type === 'get') {
-        //     return {
-        //       ...values,
-        //     };
-        //   }
-        //   return values;
-        // },
-        syncToUrl: false
-      }}
-      pagination={{
-        pageSize: 10,
-        onChange: (page) => console.log(page),
-      }}
-      dateFormatter="string"
-      {...fieldProps}
+          return Promise.resolve({
+            data: setData(result),
+            success: true,
+            total: setTotal(result)
+          });
+        }}
+        editable={{
+          type: 'multiple',
+        }}
+        columnsState={{
+          persistenceKey: 'pro-table-singe-demos',
+          persistenceType: 'localStorage',
+          defaultValue: {
+            option: {fixed: 'right', disable: true},
+          },
+          onChange(value) {
+            console.log('value: ', value);
+          },
+        }}
+        rowKey="id"
+        options={{
+          setting: {
+            listsHeight: 400,
+          },
+        }}
+        form={{
+          // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
+          // syncToUrl: (values, type) => {
+          //   if (type === 'get') {
+          //     return {
+          //       ...values,
+          //     };
+          //   }
+          //   return values;
+          // },
+          syncToUrl: false
+        }}
+        pagination={{
+          pageSize: 10,
+          onChange: (page) => console.log(page),
+        }}
+        dateFormatter="string"
+        {...fieldProps}
 
-      columns={[...commonFormHandler(fieldProps.columns, ajax), ...(actionBarComponent.length ? [{
-        title: "操作",
-        dataIndex: "actionTablePro",
-        fixed: "right",
-        actionWidth,
-        render: action
-      }] : [])]}
-      search={fieldProps.search ? {
-        labelWidth: 'auto',
-        span: 4,
-        defaultCollapsed: false,
-        ...(fieldProps.search || {})
-      } : {
-        labelWidth: 'auto',
-      }}
-      toolBarRender={() => [
-        ...(addUrl ? [
-          <BaseForm>
-            <Button
-              key="button"
-              icon={<PlusOutlined/>}
-              type="primary"
-            >
-              新建
-            </Button>
-          </BaseForm>] : []),
-        ...(fieldProps.toolBarRender || [])
-      ]}
-    />
+        columns={[...commonFormHandler(fieldProps.columns, ajax), ...(actionBarComponent.length ? [{
+          title: "操作",
+          dataIndex: "actionTablePro",
+          fixed: "right",
+          actionWidth,
+          render: action
+        }] : [])]}
+        search={fieldProps.search ? {
+          labelWidth: 'auto',
+          span: 4,
+          defaultCollapsed: false,
+          ...(fieldProps.search || {})
+        } : {
+          labelWidth: 'auto',
+        }}
+        toolBarRender={() => [
+          ...(addUrl ? [
+            <BaseForm>
+              <Button
+                key="button"
+                icon={<PlusOutlined/>}
+                type="primary"
+              >
+                新建
+              </Button>
+            </BaseForm>] : []),
+          ...(fieldProps.toolBarRender || [])
+        ]}
+      />
+    </ProProviderPro>
   );
 };
 
