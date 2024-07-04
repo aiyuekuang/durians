@@ -305,7 +305,6 @@ const TablePro: FC<{
                                    selectedRows,
                                    onCleanSelected,
                                  }) => {
-          console.log(5555, tableAlertOptionRenderPro)
 
           return (
             <Space size={16}>
