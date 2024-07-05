@@ -79,6 +79,11 @@ const LoginPro: FC<{
    * @default SHA256
    */
   encryption?: string;
+  /**
+   * @description 额外的密码混淆文本
+   * @default ""
+   */
+  extraPasswordText?: string;
 }> = ({
         ajax = ajaxCommon,
         url,
@@ -87,7 +92,8 @@ const LoginPro: FC<{
         hasSmsLogin = false,
         hasAccountLogin = true,
         phoneField = "mobile",
-        encryption = "SHA256"
+        encryption = "SHA256",
+  extraPasswordText = ""
       }) => {
 
   const {token} = theme.useToken();
@@ -112,7 +118,7 @@ const LoginPro: FC<{
           const val1 = await formRef.current.validateFields();
           if (val1) {
             let _values = {...values};
-            _values.password = encryptionMap.get(encryption).fun(values.password);
+            _values.password = encryptionMap.get(encryption).fun(values.password + extraPasswordText);
             ajax(url, _values, (data: any) => {
               cun("token", data.data)
             }, false)

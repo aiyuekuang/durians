@@ -265,7 +265,6 @@ const TablePro: FC<{
       callback()
     })
   }
-
   return (
     <ProProviderPro>
       <ProTable
@@ -345,8 +344,6 @@ const TablePro: FC<{
               result = data
             })
           }
-
-
           return Promise.resolve({
             data: setData(result),
             success: true,
@@ -390,11 +387,11 @@ const TablePro: FC<{
         }}
         dateFormatter="string"
         {...fieldProps}
-
         columns={[...commonFormHandler(fieldProps.columns, ajax), ...(actionBarComponent.length ? [{
-          title: "操作",
+          title: "操作项",
           dataIndex: "actionTablePro",
           fixed: "right",
+          hideInSearch: true,
           actionWidth,
           render: action
         }] : [])]}
