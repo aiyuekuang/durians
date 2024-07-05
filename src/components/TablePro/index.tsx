@@ -228,13 +228,6 @@ const TablePro: FC<{
             })
             return isSuccess
           },
-          rowProps: {
-            gutter: [16, 16],
-          },
-          colProps: {
-            span: 12,
-          },
-          grid: true,
           ...addFormProFieldProps
         }
         }
