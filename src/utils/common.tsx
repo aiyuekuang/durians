@@ -22,7 +22,7 @@ export const ajaxCommon = (url: string, params: object, callback: Function, isAp
 export const commonFormHandler = (columns:any,ajax:any)=>{
   for (let i of columns){
     let proConfig = i.proConfig
-    if(i.valueType === "select" || i.valueType === "treeSelect"){
+    if(i.valueType === "select"){
       i.request= async (params:any, props:any) => {
         let arr:any = []
         console.log(33333, params)
