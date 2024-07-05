@@ -18,7 +18,7 @@
     "doctor": "father doctor",
     "prepublishOnly": "father doctor && npm run build",
     "publishIn": "node ./bin/master.mjs && npm version patch && node ./bin/master.mjs && npm publish",
-    "copy": "node ./bin/copy.mjs"
+    "copy": "npm run build &&node ./bin/copy.mjs"
   },
   "commitlint": {
     "extends": [

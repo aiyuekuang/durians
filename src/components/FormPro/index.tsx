@@ -20,26 +20,33 @@ const Index: React.FC<{
   url?: string;
   ajax?: Function;
   finishFun?: Function;
-  setMsg?: Function
-  children?: any
+  setMsg?: Function;
+  children?: any;
+  params?: any;
 }> = ({
-        layoutType = "ModalForm", fieldProps = {}, url, ajax = ajaxCommon, finishFun = () => {
+        params = {}, layoutType = "ModalForm", fieldProps = {}, url, ajax = ajaxCommon, finishFun = () => {
   }, setMsg = (data: any) => {
     return data.msg
   }, children = <Button>点击我</Button>
       }) => {
+  console.log(777888, fieldProps)
   return (
     <ProProviderPro>
       <BetaSchemaForm
         trigger={children}
         layoutType={'ModalForm'}
-        onFinish={async (values) => {
+        onFinish={async (values:any = {}) => {
+          let isSuccess = false
+
+          let _values = {...params, ...values}
           console.log(values);
-          await ajax(url, values, (data: any) => {
+          await ajax(url, _values, (data: any) => {
             // 刷新页面
             message.success(setMsg(data));
             finishFun()
+            isSuccess = true
           })
+          return isSuccess
         }}
         {...(layoutType === 'ModalForm'
           ? {

@@ -201,8 +201,21 @@ const TablePro: FC<{
   //   />
   // }
   let BaseForm: FC<{ children?: any; record?: any }> = ({children, record}) => {
+    let url_ = addUrl
+    let _params: any = {}
+    if (record?.[id_] && editUrl) {
+      _params[id_] = record?.[id_]
+      url_ = editUrl
+    }
+
     return (
       <FormPro
+        ajax={ajax}
+        {...addFormProFieldProps}
+        url={url_}
+        finishFun={() => {
+          actionRef.current?.reload();
+        }}
         fieldProps={{
           initialValues: record,
           columns: fieldProps.columns.map((data: any) => {
@@ -211,27 +224,11 @@ const TablePro: FC<{
               width: 'md',
             }
           }),
-          onFinish: async (values: any) => {
-            let isSuccess = false
-            let url_ = addUrl
-            let values_ = values
-
-            if (record?.[id_] && editUrl) {
-              values_[id_] = record?.[id_]
-              url_ = editUrl
-            }
-            await ajax(url_, values_, (data: any) => {
-              // 刷新页面
-              actionRef.current?.reload();
-              message.success(setMsg(data));
-              isSuccess = true
-            })
-            return isSuccess
-          },
-          ...addFormProFieldProps
-        }
-        }
-      >{children}</FormPro>
+          ...addFormProFieldProps.fieldProps
+        }}
+      >
+        {children}
+      </FormPro>
     )
   }
 

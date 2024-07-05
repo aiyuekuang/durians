@@ -23,7 +23,7 @@ export const commonFormHandler = (columns: any, ajax: any) => {
   for (let i of columns) {
     let proConfig = i.proConfig
     if (!i.request) {
-      if (i.valueType === "select") {
+      if (i.valueType === "select" || i.valueType === "treeSelect" ) {
         i.request = async (params: any, props: any) => {
           let arr: any = []
           console.log(33333, params)
