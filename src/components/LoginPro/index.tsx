@@ -5,10 +5,23 @@ import React, {FC, useRef, useState} from 'react';
 import "./index.less"
 import {ajaxCommon} from "../../utils/common";
 import CryptoJS from "crypto-js";
-import {cun} from "esn";
+import {createMap, cun} from "esn";
 
 
 type LoginType = 'phone' | 'account';
+
+
+const encryptionMap = createMap([{
+  id:"SHA256",
+  fun:(data:any)=>{
+    return CryptoJS.SHA256(data).toString(CryptoJS.enc.Base64)
+  }
+},{
+  id:"MD5",
+  fun:(data:any)=>{
+    return CryptoJS.MD5(data).toString(CryptoJS.enc.Hex)
+  }
+},])
 
 const LoginPro: FC<{
   /**
@@ -61,6 +74,11 @@ const LoginPro: FC<{
    * @default true
    */
   phoneField?: string;
+  /**
+   * @description CryptoJS的加密方式，还有其他形式的如MD5，SHA-1，SHA-256/SHA-384/SHA-512，RIPEMD
+   * @default SHA256
+   */
+  encryption?: string;
 }> = ({
         ajax = ajaxCommon,
         url,
@@ -68,7 +86,8 @@ const LoginPro: FC<{
         loginFormFieldProps,
         hasSmsLogin = false,
         hasAccountLogin = true,
-        phoneField = "mobile"
+        phoneField = "mobile",
+        encryption = "SHA256"
       }) => {
 
   const {token} = theme.useToken();
@@ -93,7 +112,7 @@ const LoginPro: FC<{
           const val1 = await formRef.current.validateFields();
           if (val1) {
             let _values = {...values};
-            _values.password = CryptoJS.SHA256(values.password).toString(CryptoJS.enc.Base64)
+            _values.password = encryptionMap.get(encryption).fun(values.password);
             ajax(url, _values, (data: any) => {
               cun("token", data.data)
             }, false)
