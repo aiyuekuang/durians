@@ -388,7 +388,7 @@ const TablePro: FC<{
         dateFormatter="string"
         {...fieldProps}
         columns={[...commonFormHandler(fieldProps.columns, ajax), ...(actionBarComponent.length ? [{
-          title: "操作项",
+          title: "操作",
           dataIndex: "actionTablePro",
           fixed: "right",
           hideInSearch: true,
