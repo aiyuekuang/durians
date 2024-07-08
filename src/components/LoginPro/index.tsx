@@ -3,22 +3,22 @@ import {LoginForm, ProFormCaptcha, ProFormCheckbox, ProFormText,} from '@ant-des
 import {message, Tabs, theme} from 'antd';
 import React, {FC, useRef, useState} from 'react';
 import "./index.less"
-import {ajaxCommon} from "../../utils/common";
+import {ajaxCommon, encrypted} from "../../utils/common";
 import CryptoJS from "crypto-js";
-import {createMap, cun} from "esn";
+import {createMap, cuns} from "esn";
 
 
 type LoginType = 'phone' | 'account';
 
 
 const encryptionMap = createMap([{
-  id:"SHA256",
-  fun:(data:any)=>{
+  id: "SHA256",
+  fun: (data: any) => {
     return CryptoJS.SHA256(data).toString(CryptoJS.enc.Base64)
   }
-},{
-  id:"MD5",
-  fun:(data:any)=>{
+}, {
+  id: "MD5",
+  fun: (data: any) => {
     return CryptoJS.MD5(data).toString(CryptoJS.enc.Hex)
   }
 },])
@@ -84,6 +84,32 @@ const LoginPro: FC<{
    * @default ""
    */
   extraPasswordText?: string;
+  /**
+   * @description 秘钥
+   * @default ""
+   */
+  secretKey?: string;
+  /**
+   * @description 返回结果的处理
+   * @default (data:any)=>{
+   *           return data.data
+   *   }
+   */
+  setData?: Function;
+  /**
+   * @description 登录成功之后的处理
+   * @default (data:any)=>{
+   *
+   *   }
+   */
+  callback?: Function;
+  /**
+   * @description 返回结果的处理
+   * @default (data:any)=>{
+   *           return data.data
+   *   }
+   */
+  tokenField?: string;
 }> = ({
         ajax = ajaxCommon,
         url,
@@ -92,8 +118,14 @@ const LoginPro: FC<{
         hasSmsLogin = false,
         hasAccountLogin = true,
         phoneField = "mobile",
-        encryption = "SHA256",
-  extraPasswordText = ""
+        extraPasswordText = "",
+        secretKey = "",
+        setData = (data: any) => {
+          return data.data
+        },
+        tokenField = "token",
+        callback = () => {
+        },
       }) => {
 
   const {token} = theme.useToken();
@@ -118,9 +150,10 @@ const LoginPro: FC<{
           const val1 = await formRef.current.validateFields();
           if (val1) {
             let _values = {...values};
-            _values.password = encryptionMap.get(encryption).fun(values.password + extraPasswordText);
+            _values.password = encrypted(values.password + extraPasswordText, secretKey, secretKey);
             ajax(url, _values, (data: any) => {
-              cun("token", data.data)
+              cuns(tokenField, setData(data.data))
+              callback(data)
             }, false)
           }
           return true;

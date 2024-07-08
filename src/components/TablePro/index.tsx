@@ -400,19 +400,22 @@ const TablePro: FC<{
         } : {
           labelWidth: 'auto',
         }}
-        toolBarRender={() => [
-          ...(addUrl ? [
-            <BaseForm>
-              <Button
-                key="button"
-                icon={<PlusOutlined/>}
-                type="primary"
-              >
-                新建
-              </Button>
-            </BaseForm>] : []),
-          ...(fieldProps.toolBarRender || [])
-        ]}
+        toolBarRender={() => {
+          return [
+            ...(addUrl ? [
+              <BaseForm>
+                <Button
+                  key="button"
+                  icon={<PlusOutlined/>}
+                  type="primary"
+                >
+                  新建
+                </Button>
+              </BaseForm>
+            ] : []),
+            ...(fieldProps.toolBarRender || [])
+          ]
+        }}
       />
     </ProProviderPro>
   );
