@@ -26,5 +26,6 @@ function copyFolder(sourcePath, destPath) {
 // 替换下面的路径为你的实际路径
 const srcDir = 'D:\\code\\durians\\dist';
 const destDir = 'D:\\code\\moblie_platform\\node_modules\\durians\\dist';
+const cache = 'D:\\code\\moblie_platform\\node_modules\\durians\\dist';
 
 copyFolder(srcDir, destDir)

@@ -1,11 +1,11 @@
 import {LockOutlined, MobileOutlined, UserOutlined,} from '@ant-design/icons';
 import {LoginForm, ProFormCaptcha, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
 import {message, Tabs, theme} from 'antd';
-import React, {FC, useRef, useState} from 'react';
+import React, {FC, useEffect, useRef, useState} from 'react';
 import "./index.less"
 import {ajaxCommon, encrypted} from "../../utils/common";
 import CryptoJS from "crypto-js";
-import {createMap, cuns} from "esn";
+import {createMap, cun, cuns, quObj} from "esn";
 
 
 type LoginType = 'phone' | 'account';
@@ -22,6 +22,8 @@ const encryptionMap = createMap([{
     return CryptoJS.MD5(data).toString(CryptoJS.enc.Hex)
   }
 },])
+
+let autoLogin = "autoLogin";
 
 const LoginPro: FC<{
   /**
@@ -134,6 +136,28 @@ const LoginPro: FC<{
   const formRef: any = useRef();
 
 
+  useEffect(() => {
+    let autoLoginValues = quObj(autoLogin);
+    if (autoLoginValues) {
+      loginFun(quObj(autoLogin))
+    }
+  }, []);
+
+
+  let loginFun = (values: any) => {
+    let _values = {...values};
+    _values.password = encrypted(_values.password + extraPasswordText, secretKey, secretKey);
+    ajax(url, _values, (data: any) => {
+      cuns(tokenField, setData(data.data))
+
+      if (values.autoLogin) {
+        cun(autoLogin, values)
+      }
+
+      callback(data)
+    }, false)
+  }
+
   return (
 
     <div style={{backgroundColor: token.colorBgContainer}} className="crm_login_body">
@@ -149,12 +173,7 @@ const LoginPro: FC<{
         onFinish={async (values) => {
           const val1 = await formRef.current.validateFields();
           if (val1) {
-            let _values = {...values};
-            _values.password = encrypted(values.password + extraPasswordText, secretKey, secretKey);
-            ajax(url, _values, (data: any) => {
-              cuns(tokenField, setData(data.data))
-              callback(data)
-            }, false)
+            loginFun(values);
           }
           return true;
         }}
