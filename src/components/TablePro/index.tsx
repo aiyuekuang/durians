@@ -118,13 +118,23 @@ const TablePro: FC<{
    */
   paginationAlias?: any;
   tableAlertOptionRenderPro?: any[];
+  deleteFields: string;
+  /**
+   * @description 单行删除的时候
+   * @default {pageIndex:"pageIndex",pageSize:"pageSize"}
+   */
+  deleteFieldIsArr: boolean;
+  deleteParams: any;
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
         addUrl,
         editUrl,
         deleteUrl,
-        deleteField = "idList",
+        deleteFields = "idList",
+        deleteField = null,
+        deleteFieldIsArr = false,
+        deleteParams = {},
         addFormProFieldProps = {},
         actionWidth = 100,
         fieldProps = {
@@ -154,7 +164,8 @@ const TablePro: FC<{
     title="删除"
     description="确定删除这条数据吗？"
     onConfirm={() => {
-      deleteHandle([record[id_]])
+      deleteHandle([record[id_]], () => {
+      }, false)
     }}
     okText="是"
     cancelText="否"
@@ -252,9 +263,23 @@ const TablePro: FC<{
 
   //删除的执行函数
   const deleteHandle = (selectedRowKeys: any, callback = () => {
-  }) => {
-    let params_: any = {}
-    params_[deleteField] = selectedRowKeys
+  }, batch = true) => {
+    let keys = selectedRowKeys;
+    if (!deleteFieldIsArr && !batch) {
+      keys = selectedRowKeys[0]
+    }
+
+    let params_: any = {...deleteParams}
+    if (batch) {
+      params_[deleteFields] = keys
+    } else {
+      if (deleteField) {
+        params_[deleteField] = keys
+      } else {
+        params_[fieldProps.rowKey || "id"] = keys
+      }
+    }
+
     ajax(deleteUrl, params_, (data: any) => {
       message.success(setMsg(data));
       actionRef.current?.reload();
