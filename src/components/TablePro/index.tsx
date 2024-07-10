@@ -118,13 +118,13 @@ const TablePro: FC<{
    */
   paginationAlias?: any;
   tableAlertOptionRenderPro?: any[];
-  deleteFields: string;
+  deleteFields?: string;
   /**
    * @description 单行删除的时候
    * @default {pageIndex:"pageIndex",pageSize:"pageSize"}
    */
-  deleteFieldIsArr: boolean;
-  deleteParams: any;
+  deleteFieldIsArr?: boolean;
+  deleteParams?: any;
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -232,9 +232,10 @@ const TablePro: FC<{
           columns: fieldProps.columns.map((data: any) => {
             return {
               ...data,
-              width: 'md',
+              width: null,
             }
           }),
+          title:"新增",
           ...addFormProFieldProps.fieldProps
         }}
       >

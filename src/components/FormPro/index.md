@@ -1,5 +1,5 @@
 ---
-title: ModalPro 高级弹窗
+title: FormPro 高级表单
 group:
   title: 组件
   order: 1
