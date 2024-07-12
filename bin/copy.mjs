@@ -14,6 +14,9 @@ function deleteFolderRecursive(folderPath) {
     });
     fs.rmdirSync(folderPath);
     console.log("******删除成功")
+  }else {
+    console.log("******没有文件夹")
+
   }
 }
 

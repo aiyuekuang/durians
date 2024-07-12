@@ -140,6 +140,7 @@ const TablePro: FC<{
         fieldProps = {
           search: {},
           columns: columns_,
+          rowKey:"id"
         },
         setData = (data: any) => {
           return data.data.records
@@ -159,7 +160,7 @@ const TablePro: FC<{
       }) => {
   const actionRef: any = useRef<ActionType>();
   let id_ = fieldProps.rowKey || "id"
-  let actionBarComponent = [...(deleteUrl ? [({record}: any) => <BaseForm
+  let actionBarComponent = [...(deleteUrl ? [({record}: any) => <BaseForm title="编辑" id={id_}
     record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(deleteUrl ? [({record}: any) => <Popconfirm
     title="删除"
     description="确定删除这条数据吗？"
@@ -211,12 +212,15 @@ const TablePro: FC<{
   //     {...addFormProFieldProps}
   //   />
   // }
-  let BaseForm: FC<{ children?: any; record?: any }> = ({children, record}) => {
+  let BaseForm: FC<{ children?: any; record?: any,id?:string,title?:string }> = ({children, record,id,title="新增"}) => {
+    console.log(5555, record,id)
     let url_ = addUrl
     let _params: any = {}
-    if (record?.[id_] && editUrl) {
-      _params[id_] = record?.[id_]
-      url_ = editUrl
+    if (id && record?.[id]) {
+      _params[id] = record?.[id]
+      if(editUrl){
+        url_ = editUrl
+      }
     }
 
     return (
@@ -227,6 +231,7 @@ const TablePro: FC<{
         finishFun={() => {
           actionRef.current?.reload();
         }}
+        params={{..._params,...addFormProFieldProps.params}}
         fieldProps={{
           initialValues: record,
           columns: fieldProps.columns.map((data: any) => {
@@ -235,7 +240,7 @@ const TablePro: FC<{
               width: null,
             }
           }),
-          title:"新增",
+          title,
           ...addFormProFieldProps.fieldProps
         }}
       >
