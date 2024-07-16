@@ -1,5 +1,59 @@
+@primary: green;
+
 .durians_table_pro_action {
-  >div{
+  > div {
     display: inline-block;
   }
+}
+
+.durians_table_body {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.durians_table_body_l {
+  .ant-tree {
+    background: transparent;
+  }
+
+  background: #e9e9e9;
+  height: 100%;
+  border-radius: 6px;
+}
+
+.durians_table_body_r {
+  flex: 1;
+}
+
+.durians_tree_body_title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+
+  > div {
+    text-align: center;
+  }
+}
+
+.durians_tree_body_title {
+  font-weight: bold;
+}
+
+.durians_tree_body_title_r {
+  cursor: pointer;
+
+  :hover {
+    color: @primary;
+  }
+}
+
+.durians_tree_body_title_node {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.durians_tree_body_title_node_r{
+  margin-left: 5px;
 }
