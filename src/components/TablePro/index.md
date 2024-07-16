@@ -50,6 +50,7 @@ export default () => {
     }}>
 
       <TablePro
+        treeFieldProps={{}}
         className={"xlb_table_demo"}
         // rowHeight={200}
         tableAlertOptionRenderPro={[(props)=>{

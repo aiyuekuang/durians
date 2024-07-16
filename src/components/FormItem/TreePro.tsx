@@ -81,7 +81,9 @@ const Index: React.FC<{
         title = "选择",
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
-        params = {},
+        params = (data: any) => {
+          return {}
+        },
         addUrl,
         editUrl,
         deleteUrl,
@@ -95,13 +97,11 @@ const Index: React.FC<{
         },
         fieldNames
       }) => {
-  const [treeData, setTreeData] = useState(initTreeData);
+  const [treeData, setTreeData]:any = useState([]);
 
 
   useEffect(() => {
-    ajax(url, {...params}, (data: any) => {
-      setTreeData(setData(data))
-    })
+    onLoadData({}, {...params({})})
   }, []);
 
   const onLoadData = (_params: any, values: any = {}) => {
@@ -165,22 +165,26 @@ const Index: React.FC<{
           </FormNode>
         </div>
       </div>
-      <Tree
-        loadData={onLoadData}
-        treeData={treeData}
-        titleRender={(nodeData) => {
-          console.log(8887, nodeData)
-          return (
-            <div className="durians_tree_body_title_node">
-              <div className="durians_tree_body_title_node_l">
-                {nodeData.title}
+      <div className="durians_tree_body_tree">
+        <Tree
+          loadData={onLoadData}
+          treeData={treeData}
+          titleRender={(nodeData) => {
+            return (
+              <div className="durians_tree_body_title_node">
+                <div className="durians_tree_body_title_node_l">
+                  {nodeData.title}
+                </div>
+                <div className="durians_tree_body_title_node_r" onClick={(e)=>{
+                  e.stopPropagation();
+                  console.log(2222)
+                }}>
+                  <EllipsisOutlined/>
+                </div>
               </div>
-              <div className="durians_tree_body_title_node_r">
-                <EllipsisOutlined/>
-              </div>
-            </div>
-          )
-        }}/>
+            )
+          }}/>
+      </div>
     </div>
   );
 };

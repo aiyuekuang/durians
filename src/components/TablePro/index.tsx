@@ -325,7 +325,7 @@ const TablePro: FC<{
         {treeFieldProps ? <div className="durians_table_body_l" style={{
           width: 300
         }}>
-          <TreePro {...treeFieldProps}/>
+          <TreePro ajax={ajax} {...treeFieldProps}/>
         </div> : null}
         <div className="durians_table_body_r">
           <ProTable
@@ -387,6 +387,7 @@ const TablePro: FC<{
                       onCleanSelected={onCleanSelected}
                       key={i}
                       formRef={formRef}
+                      actionRef={actionRef}
                     />
                   })}
                   {/*<a>导出数据</a>*/}
