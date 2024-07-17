@@ -405,6 +405,7 @@ const TablePro: FC<{
             request={async (params, sort, filter) => {
               let result = fieldProps.dataSource
               let _params: any = {}
+              console.log(22122,params)
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
 
@@ -423,19 +424,19 @@ const TablePro: FC<{
                 total: setTotal(result)
               });
             }}
-            editable={{
-              type: 'multiple',
-            }}
-            columnsState={{
-              persistenceKey: 'pro-table-singe-demos',
-              persistenceType: 'localStorage',
-              defaultValue: {
-                option: {fixed: 'right', disable: true},
-              },
-              onChange(value) {
-                console.log('value: ', value);
-              },
-            }}
+            // editable={{
+            //   type: 'multiple',
+            // }}
+            // columnsState={{
+            //   persistenceKey: 'pro-table-singe-demos',
+            //   persistenceType: 'localStorage',
+            //   defaultValue: {
+            //     option: {fixed: 'right', disable: true},
+            //   },
+            //   onChange(value) {
+            //     console.log('value: ', value);
+            //   },
+            // }}
             rowKey="id"
             options={{
               setting: {
