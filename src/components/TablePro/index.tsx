@@ -142,7 +142,11 @@ const TablePro: FC<{
    * @default null
    */
   treeFieldProps?: any;
-
+  /**
+   * @description 在请求分页接口的时候，进行的参数的处理
+   * @default （data）=>{return data}
+   */
+  paramsFun?: any;
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -175,13 +179,16 @@ const TablePro: FC<{
           pageSize: "pageSize"
         },
         tableAlertOptionRenderPro = [],
-        treeFieldProps = null
+        treeFieldProps = null,
+        paramsFun = (data: any) => {
+          return data
+        }
       }) => {
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
   let id_ = fieldProps.rowKey || "id"
   let actionBarComponent = [...(editUrl ? [({record}: any) => <BaseForm title="编辑" id={id_}
-                                                                          record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(deleteUrl ? [({record}: any) =>
+                                                                        record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(deleteUrl ? [({record}: any) =>
     <Popconfirm
       title="删除"
       description="确定删除这条数据吗？"
@@ -402,10 +409,10 @@ const TablePro: FC<{
               _params[paginationAlias.pageSize] = params.pageSize
 
               if (url) {
-                await ajax(url, {
+                await ajax(url, paramsFun({
                   ..._params,
                   ...params,
-                }, (data: any) => {
+                }), (data: any) => {
                   console.log(data)
                   result = data
                 })
