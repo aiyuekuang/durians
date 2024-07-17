@@ -180,7 +180,7 @@ const TablePro: FC<{
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
   let id_ = fieldProps.rowKey || "id"
-  let actionBarComponent = [...(deleteUrl ? [({record}: any) => <BaseForm title="编辑" id={id_}
+  let actionBarComponent = [...(editUrl ? [({record}: any) => <BaseForm title="编辑" id={id_}
                                                                           record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(deleteUrl ? [({record}: any) =>
     <Popconfirm
       title="删除"
@@ -401,7 +401,6 @@ const TablePro: FC<{
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
 
-              console.log(777, sort, params, filter, _params);
               if (url) {
                 await ajax(url, {
                   ..._params,
