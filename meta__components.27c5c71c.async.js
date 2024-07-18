@@ -84,7 +84,6 @@ export default () => {
         }]}
         bordered={true}
         fieldProps={{
-          
           rowKey:"key",
           dataSource: data,
           columns: [
@@ -102,7 +101,6 @@ export default () => {
               //   dataIndex: 'age',
               //   align:"center",
               //   width: 100,
-
             },
             {
               title: 'Age',
@@ -110,7 +108,6 @@ export default () => {
               dataIndex: 'age',
               key: 'age',
               sorter: true,
-
               children: [
                 {
                   title: 'Name1',
