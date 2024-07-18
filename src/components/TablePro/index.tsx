@@ -246,6 +246,8 @@ const TablePro: FC<{
                                                                                        id,
                                                                                        title = "新增"
                                                                                      }) => {
+
+    let columns_ = typeof fieldProps.columns === "function" ? fieldProps.columns("add") : fieldProps.columns;
     console.log(5555, record, id)
     let url_ = addUrl
     let _params: any = {}
@@ -267,7 +269,7 @@ const TablePro: FC<{
         params={{..._params, ...addFormProFieldProps.params}}
         fieldProps={{
           initialValues: record,
-          columns: fieldProps.columns.map((data: any) => {
+          columns: columns_.map((data: any) => {
             return {
               ...data,
               width: null,
@@ -405,7 +407,7 @@ const TablePro: FC<{
             request={async (params, sort, filter) => {
               let result = fieldProps.dataSource
               let _params: any = {}
-              console.log(22122,params)
+              console.log(22122, params)
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
 
@@ -461,7 +463,7 @@ const TablePro: FC<{
             }}
             dateFormatter="string"
             {...fieldProps}
-            columns={[...commonFormHandler(fieldProps.columns, ajax), ...(actionBarComponent.length ? [{
+            columns={[...commonFormHandler(typeof fieldProps.columns === "function" ? fieldProps.columns("table") : fieldProps.columns, ajax), ...(actionBarComponent.length ? [{
               title: "操作",
               dataIndex: "actionTablePro",
               fixed: "right",
