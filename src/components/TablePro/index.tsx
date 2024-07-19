@@ -1,7 +1,7 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {ActionType, ProTable} from '@ant-design/pro-components';
 import {Button, Divider, message, Popconfirm, Space, Table} from 'antd';
-import React, {FC, Fragment, useRef} from 'react';
+import React, {FC, Fragment, useRef, useState} from 'react';
 import {ajaxCommon, commonFormHandler} from "../../utils/common";
 import {FormPro, ModalPro, TreePro} from "durians";
 import ProProviderPro from '../ProProviderPro';
@@ -147,6 +147,7 @@ const TablePro: FC<{
    * @default （data）=>{return data}
    */
   paramsFun?: any;
+  treeParamsFun?: Function;
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -182,8 +183,15 @@ const TablePro: FC<{
         treeFieldProps = null,
         paramsFun = (data: any) => {
           return data
+        },
+        treeParamsFun = (data: any) => {
+          return {
+            treeId: data
+          }
         }
       }) => {
+  // 表格其他的
+  const [tableParams,setTableParams] = useState({})
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
   let id_ = fieldProps.rowKey || "id"
@@ -334,7 +342,15 @@ const TablePro: FC<{
         {treeFieldProps ? <div className="durians_table_body_l" style={{
           width: 300
         }}>
-          <TreePro ajax={ajax} {...treeFieldProps}/>
+          <TreePro
+            ajax={ajax}
+            {...treeFieldProps}
+            onSelect={(selectedKeys: any) => {
+              setTableParams({...tableParams,...treeParamsFun(selectedKeys)})
+              actionRef.current?.reload();
+
+            }}
+          />
         </div> : null}
         <div className="durians_table_body_r">
           <ProTable
@@ -406,8 +422,7 @@ const TablePro: FC<{
             actionRef={actionRef}
             request={async (params, sort, filter) => {
               let result = fieldProps.dataSource
-              let _params: any = {}
-              console.log(22122, params)
+              let _params: any = {...tableParams}
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
 

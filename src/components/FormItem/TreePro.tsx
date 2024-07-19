@@ -1,6 +1,6 @@
-import {Tree} from 'antd';
+import {Dropdown, MenuProps, message, Tree} from 'antd';
 import React, {useEffect, useState} from 'react';
-import {EllipsisOutlined, PlusOutlined} from "@ant-design/icons";
+import {EditOutlined, EllipsisOutlined, PlusOutlined} from "@ant-design/icons";
 import {FormPro} from "durians";
 import {ajaxCommon} from "../../utils/common";
 import {addChildToNode} from "../FormItem/treeSelectPro";
@@ -77,6 +77,9 @@ const Index: React.FC<{
    */
   params?: any;
   fieldNames?: any;
+  setMsg?: any;
+  onSelect: any;
+  editField?: string;
 }> = ({
         title = "选择",
         ajax = ajaxCommon,
@@ -88,21 +91,61 @@ const Index: React.FC<{
         editUrl,
         deleteUrl,
         deleteFields = "idList",
-        deleteField = null,
+        deleteField = "id",
         deleteFieldIsArr = false,
         deleteParams = {},
         addFormProFieldProps = {},
         setData = (data: any) => {
           return data.data
         },
-        fieldNames
+        setMsg = (data: any) => {
+          return data.msg
+        },
+        fieldNames,
+        onSelect = () => {
+        },
+        editField
       }) => {
-  const [treeData, setTreeData]:any = useState([]);
+  const [treeData, setTreeData]: any = useState([]);
 
+  const treeProps = {
+    ajax,
+    addUrl,
+    editUrl,
+    deleteUrl,
+    deleteFields,
+    deleteField,
+    editField,
+    deleteFieldIsArr,
+    deleteParams,
+    addFormProFieldProps
+  };
 
   useEffect(() => {
     onLoadData({}, {...params({})})
   }, []);
+
+
+  //删除的执行函数
+  const deleteHandle = (selectedRowKeys: any, batch = false) => {
+    let keys = selectedRowKeys;
+    if (!deleteFieldIsArr && !batch) {
+      keys = selectedRowKeys[0]
+    }
+
+    let params_: any = {...deleteParams}
+    if (batch) {
+      params_[deleteFields] = keys
+    } else {
+      params_[deleteField] = keys
+    }
+
+    ajax(deleteUrl, params_, (data: any) => {
+      message.success(setMsg(data));
+      onLoadData({}, {...params({})})
+    })
+  }
+
 
   const onLoadData = (_params: any, values: any = {}) => {
     return ajax(url, {...params(_params), ...values}, (data: any) => {
@@ -126,11 +169,25 @@ const Index: React.FC<{
     })
   }
 
-  let FormNode = ({children}: any) => {
+  let FormNode = (props: any) => {
+    const {children, addFormProFieldProps, ajax, addUrl, record} = props;
+
+    let url_ = addUrl
+    let _params: any = {}
+    if (editField && record.id) {
+      _params[editField] = record.id
+      if (editUrl) {
+        url_ = editUrl
+      }
+    }
+
     return (
       <FormPro
-        url={addUrl}
-        {...addFormProFieldProps}
+        finishFun={() => {
+          onLoadData({}, {...params({})})
+        }}
+        ajax={ajax}
+        url={url_}
         fieldProps={{
           columns: [
             {
@@ -147,10 +204,40 @@ const Index: React.FC<{
             }
           ]
         }}
+        {...addFormProFieldProps}
+        params={{..._params, ...(addFormProFieldProps?.params || {})}}
       >
         {children}
       </FormPro>
     )
+  }
+
+
+  let menuItem = (nodeData: any): MenuProps['items'] => {
+    return [{
+      key: '1',
+      label: (
+        <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.value}}>
+          <a>
+            编辑
+          </a>
+        </FormNode>
+      ),
+      icon: <EditOutlined/>,
+      disabled: !editUrl,
+    }, {
+      key: '2',
+      label: (
+        <a onClick={() => {
+          deleteHandle([nodeData.value])
+        }}
+        >
+          删除
+        </a>
+      ),
+      icon: <EditOutlined/>,
+      disabled: !deleteUrl,
+    }]
   }
 
   return (
@@ -160,30 +247,32 @@ const Index: React.FC<{
           {title}
         </div>
         <div className="durians_tree_body_title_r">
-          <FormNode>
+          <FormNode {...treeProps} addUrl={addUrl}>
             <PlusOutlined/>
           </FormNode>
         </div>
       </div>
       <div className="durians_tree_body_tree">
         <Tree
+          onSelect={onSelect}
           loadData={onLoadData}
           treeData={treeData}
           titleRender={(nodeData) => {
             return (
-              <div className="durians_tree_body_title_node">
+              <div className="durians_tree_body_title_node" key={nodeData.value}>
                 <div className="durians_tree_body_title_node_l">
-                  {nodeData.title}
+                  {nodeData.label}
                 </div>
-                <div className="durians_tree_body_title_node_r" onClick={(e)=>{
-                  e.stopPropagation();
-                  console.log(2222)
-                }}>
-                  <EllipsisOutlined/>
+                <div className="durians_tree_body_title_node_r">
+                  <Dropdown menu={{items: menuItem(nodeData)}}>
+                    <a onClick={(e) => e.preventDefault()}>
+                      <EllipsisOutlined/>
+                    </a>
+                  </Dropdown>
                 </div>
               </div>
             )
-          }}/>
+          }}></Tree>
       </div>
     </div>
   );
