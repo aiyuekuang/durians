@@ -343,7 +343,7 @@ const TablePro: FC<{
     <ProProviderPro>
       <div className="durians_table_body">
         {treeFieldProps ? <div className="durians_table_body_l" style={{
-          width: 300
+          width:300
         }}>
           <TreePro
             ajax={ajax}
@@ -368,7 +368,9 @@ const TablePro: FC<{
             }}
           />
         </div> : null}
-        <div className="durians_table_body_r">
+        <div className="durians_table_body_r" style={{
+          ...(treeFieldProps?{maxWidth:"calc(100% - 308px)"}:{})
+        }}>
           <ProTable
             formRef={formRef}
             defaultSize="small"
