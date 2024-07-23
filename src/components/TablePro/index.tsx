@@ -5,6 +5,7 @@ import React, {FC, Fragment, useRef, useState} from 'react';
 import {ajaxCommon, commonFormHandler} from "../../utils/common";
 import {FormPro, ModalPro, TreePro} from "durians";
 import ProProviderPro from '../ProProviderPro';
+import {cloneDeep} from "lodash-es";
 
 
 const columns_: any = [
@@ -192,6 +193,7 @@ const TablePro: FC<{
       }) => {
   // 表格其他的
   const [tableParams,setTableParams] = useState({})
+  // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
   let id_ = fieldProps.rowKey || "id"
@@ -258,7 +260,8 @@ const TablePro: FC<{
     let columns_ = typeof fieldProps.columns === "function" ? fieldProps.columns("add") : fieldProps.columns;
     console.log(5555, record, id)
     let url_ = addUrl
-    let _params: any = {}
+    let _params: any = {...tableParams}
+    console.log(890,_params)
     if (id && record?.[id]) {
       _params[id] = record?.[id]
       if (editUrl) {
@@ -345,10 +348,23 @@ const TablePro: FC<{
           <TreePro
             ajax={ajax}
             {...treeFieldProps}
-            onSelect={(selectedKeys: any) => {
-              setTableParams({...tableParams,...treeParamsFun(selectedKeys)})
-              actionRef.current?.reload();
+            fieldProps={{
+              onSelect:(selectedKeys: any) => {
+                setTableParams(org=>{
+                  let _org = cloneDeep(org);
+                  return {
+                    ..._org,
+                    ...treeParamsFun(selectedKeys)
+                  }
+                })
 
+                // tableParams.current = {
+                //   ...tableParams.current,
+                //   ...treeParamsFun(selectedKeys)
+                // }
+                actionRef.current?.reload();
+              },
+              ...treeFieldProps.fieldProps
             }}
           />
         </div> : null}
@@ -435,10 +451,12 @@ const TablePro: FC<{
                   result = data
                 })
               }
+              console.log(8888, _params, result)
+
               return Promise.resolve({
-                data: setData(result),
+                data: result ? setData(result) : [],
                 success: true,
-                total: setTotal(result)
+                total: result ? setTotal(result) : 0
               });
             }}
             // editable={{

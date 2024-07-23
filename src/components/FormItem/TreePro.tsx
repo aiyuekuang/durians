@@ -76,10 +76,10 @@ const Index: React.FC<{
    * @default {}
    */
   params?: any;
-  fieldNames?: any;
+  fieldProps: any;
   setMsg?: any;
-  onSelect: any;
   editField?: string;
+  isSelect: boolean;
 }> = ({
         title = "选择",
         ajax = ajaxCommon,
@@ -101,12 +101,18 @@ const Index: React.FC<{
         setMsg = (data: any) => {
           return data.msg
         },
-        fieldNames,
-        onSelect = () => {
-        },
-        editField
+        editField, fieldProps = {
+    fieldNames: {title: "title", key: "key", children: "children"}, onSelect: () => {
+    },
+  },
+        isSelect = false
       }) => {
   const [treeData, setTreeData]: any = useState([]);
+  const {
+    fieldNames, onSelect = () => {
+    }
+  } = fieldProps;
+
 
   const treeProps = {
     ajax,
@@ -153,15 +159,19 @@ const Index: React.FC<{
 
       if (fieldNames) {
         result = result.map((value: any) => {
-          value.label = value[fieldNames.label]
-          value.value = value[fieldNames.value]
+          value.title = value[fieldNames.title]
+          value.key = value[fieldNames.key]
+
+          if (isSelect) {
+            value.isLeaf = false
+          }
           return value
         })
       }
 
       setTreeData((org: any) => {
-        if (_params.value) {
-          return addChildToNode(org, _params.value, result)
+        if (_params.key) {
+          return addChildToNode(org, _params.key, result, fieldNames.key)
         } else {
           return result
         }
@@ -217,7 +227,7 @@ const Index: React.FC<{
     return [{
       key: '1',
       label: (
-        <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.value}}>
+        <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}}>
           <a>
             编辑
           </a>
@@ -229,7 +239,7 @@ const Index: React.FC<{
       key: '2',
       label: (
         <a onClick={() => {
-          deleteHandle([nodeData.value])
+          deleteHandle([nodeData.key])
         }}
         >
           删除
@@ -255,13 +265,15 @@ const Index: React.FC<{
       <div className="durians_tree_body_tree">
         <Tree
           onSelect={onSelect}
+          fieldNames={fieldNames}
           loadData={onLoadData}
           treeData={treeData}
           titleRender={(nodeData) => {
+            console.log(789666, nodeData)
             return (
-              <div className="durians_tree_body_title_node" key={nodeData.value}>
+              <div className="durians_tree_body_title_node" key={nodeData.key}>
                 <div className="durians_tree_body_title_node_l">
-                  {nodeData.label}
+                  {nodeData.title}
                 </div>
                 <div className="durians_tree_body_title_node_r">
                   <Dropdown menu={{items: menuItem(nodeData)}}>
