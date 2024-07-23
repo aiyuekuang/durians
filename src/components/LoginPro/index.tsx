@@ -148,7 +148,7 @@ const LoginPro: FC<{
     let _values = {...values};
     _values.password = encrypted(_values.password + extraPasswordText, secretKey, secretKey);
     ajax(url, _values, (data: any) => {
-      cuns(tokenField, setData(data.data))
+      cuns(tokenField, setData(data))
 
       if (values.autoLogin) {
         cun(autoLogin, values)
