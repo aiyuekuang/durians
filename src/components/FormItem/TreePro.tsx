@@ -163,7 +163,7 @@ const Index: React.FC<{
           value.key = value[fieldNames.key]
 
           if (isSelect) {
-            value.isLeaf = false
+            value.isLeaf = true
           }
           return value
         })
@@ -249,6 +249,8 @@ const Index: React.FC<{
       disabled: !deleteUrl,
     }]
   }
+
+  console.log(21222,treeData)
 
   return (
     <div className="durians_tree_body">
