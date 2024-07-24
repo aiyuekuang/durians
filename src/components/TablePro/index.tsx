@@ -149,6 +149,7 @@ const TablePro: FC<{
    */
   paramsFun?: any;
   treeParamsFun?: Function;
+  treeWidth: number
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -189,10 +190,11 @@ const TablePro: FC<{
           return {
             treeId: data
           }
-        }
+        },
+        treeWidth = 200
       }) => {
   // 表格其他的
-  const [tableParams,setTableParams] = useState({})
+  const [tableParams, setTableParams] = useState({})
   // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
@@ -261,7 +263,7 @@ const TablePro: FC<{
     console.log(5555, record, id)
     let url_ = addUrl
     let _params: any = {}
-    console.log(890,_params)
+    console.log(890, _params)
     if (id && record?.[id]) {
       _params[id] = record?.[id]
       if (editUrl) {
@@ -279,7 +281,7 @@ const TablePro: FC<{
         }}
         params={{..._params, ...addFormProFieldProps.params}}
         fieldProps={{
-          initialValues: {...record,...tableParams},
+          initialValues: {...record, ...tableParams},
           columns: columns_.map((data: any) => {
             return {
               ...data,
@@ -343,14 +345,14 @@ const TablePro: FC<{
     <ProProviderPro>
       <div className="durians_table_body">
         {treeFieldProps ? <div className="durians_table_body_l" style={{
-          width:300
+          width: treeWidth
         }}>
           <TreePro
             ajax={ajax}
             {...treeFieldProps}
             fieldProps={{
-              onSelect:(selectedKeys: any) => {
-                setTableParams(org=>{
+              onSelect: (selectedKeys: any) => {
+                setTableParams(org => {
                   let _org = cloneDeep(org);
                   return {
                     ..._org,
@@ -370,7 +372,7 @@ const TablePro: FC<{
           />
         </div> : null}
         <div className="durians_table_body_r" style={{
-          ...(treeFieldProps?{maxWidth:"calc(100% - 308px)"}:{})
+          ...(treeFieldProps ? {maxWidth: `calc(100% - ${treeWidth + 8}px)`} : {})
         }}>
           <ProTable
             formRef={formRef}
