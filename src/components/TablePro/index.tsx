@@ -260,7 +260,7 @@ const TablePro: FC<{
     let columns_ = typeof fieldProps.columns === "function" ? fieldProps.columns("add") : fieldProps.columns;
     console.log(5555, record, id)
     let url_ = addUrl
-    let _params: any = {...tableParams}
+    let _params: any = {}
     console.log(890,_params)
     if (id && record?.[id]) {
       _params[id] = record?.[id]
@@ -279,7 +279,7 @@ const TablePro: FC<{
         }}
         params={{..._params, ...addFormProFieldProps.params}}
         fieldProps={{
-          initialValues: record,
+          initialValues: {...record,...tableParams},
           columns: columns_.map((data: any) => {
             return {
               ...data,
@@ -362,6 +362,7 @@ const TablePro: FC<{
                 //   ...tableParams.current,
                 //   ...treeParamsFun(selectedKeys)
                 // }
+                // formRef.current.setFieldsValue(cloneDeep({...formRef.current.getFieldsValue(),...treeParamsFun(selectedKeys)}))
                 actionRef.current?.reload();
               },
               ...treeFieldProps.fieldProps

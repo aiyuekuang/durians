@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {EditOutlined, EllipsisOutlined, PlusOutlined} from "@ant-design/icons";
 import {FormPro} from "durians";
 import {ajaxCommon} from "../../utils/common";
-import {addChildToNode} from "../FormItem/treeSelectPro";
+import {addChildToNode} from "../FormItem/TreeSelectPro";
 
 
 const initTreeData = [

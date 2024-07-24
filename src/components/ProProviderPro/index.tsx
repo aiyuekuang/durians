@@ -1,6 +1,6 @@
 import {ProProvider,} from '@ant-design/pro-components';
 import React, {FC, useContext} from 'react';
-import TreeSelectPro from "../FormItem/treeSelectPro";
+import TreeSelectPro from "../FormItem/TreeSelectPro";
 
 const Index: FC<{
   children: any
