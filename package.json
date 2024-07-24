@@ -1,6 +1,6 @@
 {
   "name": "durians",
-  "version": "0.0.59",
+  "version": "0.0.60",
   "description": "A react library developed with dumi",
   "license": "MIT",
   "module": "dist/index.js",
