@@ -149,7 +149,7 @@ const TablePro: FC<{
    */
   paramsFun?: any;
   treeParamsFun?: Function;
-  treeWidth: number
+  treeWidth?: number
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',

@@ -1,6 +1,6 @@
 import {Dropdown, MenuProps, message, Tree} from 'antd';
 import React, {useEffect, useState} from 'react';
-import {EditOutlined, EllipsisOutlined, PlusOutlined} from "@ant-design/icons";
+import {EditOutlined, EllipsisOutlined, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
 import {FormPro} from "durians";
 import {ajaxCommon} from "../../utils/common";
 import {addChildToNode} from "../FormItem/TreeSelectPro";
@@ -80,6 +80,7 @@ const Index: React.FC<{
   setMsg?: any;
   editField?: string;
   isSelect: boolean;
+  detail: boolean;
 }> = ({
         title = "选择",
         ajax = ajaxCommon,
@@ -105,7 +106,9 @@ const Index: React.FC<{
     fieldNames: {title: "title", key: "key", children: "children"}, onSelect: () => {
     },
   },
-        isSelect = false
+        isSelect = false,
+        detail = true
+
       }) => {
   const [treeData, setTreeData]: any = useState([]);
   const {
@@ -180,7 +183,7 @@ const Index: React.FC<{
   }
 
   let FormNode = (props: any) => {
-    const {children, addFormProFieldProps, ajax, addUrl, record} = props;
+    const {children, addFormProFieldProps, ajax, addUrl, record,fieldProps} = props;
 
     let url_ = addUrl
     let _params: any = {}
@@ -198,23 +201,11 @@ const Index: React.FC<{
         }}
         ajax={ajax}
         url={url_}
-        fieldProps={{
-          columns: [
-            {
-              title: '标题',
-              dataIndex: 'title',
-              formItemProps: {
-                rules: [
-                  {
-                    required: true,
-                    message: '此项为必填项',
-                  },
-                ],
-              },
-            }
-          ]
-        }}
         {...addFormProFieldProps}
+        fieldProps={{
+          ...fieldProps,
+          ...addFormProFieldProps.fieldProps
+        }}
         params={{..._params, ...(addFormProFieldProps?.params || {})}}
       >
         {children}
@@ -227,7 +218,23 @@ const Index: React.FC<{
     return [{
       key: '1',
       label: (
-        <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}}>
+        <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}} fieldProps={{
+          initialValues:nodeData,
+          readonly:true
+        }}>
+          <a>
+            详情
+          </a>
+        </FormNode>
+      ),
+      icon: <UnorderedListOutlined/>,
+      disabled: !detail,
+    }, {
+      key: '2',
+      label: (
+        <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}} fieldProps={{
+          initialValues:nodeData
+        }}>
           <a>
             编辑
           </a>
@@ -236,7 +243,7 @@ const Index: React.FC<{
       icon: <EditOutlined/>,
       disabled: !editUrl,
     }, {
-      key: '2',
+      key: '3',
       label: (
         <a onClick={() => {
           deleteHandle([nodeData.key])
@@ -250,7 +257,7 @@ const Index: React.FC<{
     }]
   }
 
-  console.log(21222,treeData)
+  console.log(21222, treeData)
 
   return (
     <div className="durians_tree_body">
