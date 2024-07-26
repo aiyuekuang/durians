@@ -468,7 +468,6 @@ const TablePro: FC<{
                   result = data
                 })
               }
-              console.log(8888, _params, result)
 
               return Promise.resolve({
                 data: result ? setData(result) : [],
