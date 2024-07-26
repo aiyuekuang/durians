@@ -1,7 +1,7 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {ActionType, ProTable} from '@ant-design/pro-components';
 import {Button, Divider, message, Popconfirm, Space, Table} from 'antd';
-import React, {FC, Fragment, useRef, useState} from 'react';
+import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
 import {ajaxCommon, commonFormHandler} from "../../utils/common";
 import {FormPro, ModalPro, TreePro} from "durians";
 import ProProviderPro from '../ProProviderPro';
@@ -195,6 +195,7 @@ const TablePro: FC<{
       }) => {
   // 表格其他的
   const [tableParams, setTableParams] = useState({})
+  const [searchValues, setSearchValues] = useState({})
   // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
@@ -213,6 +214,14 @@ const TablePro: FC<{
     >
       <a style={{color: "red"}}>删除</a>
     </Popconfirm>] : [])]
+
+  useEffect(() => {
+    console.log(67666,formRef.current.getFieldsValue())
+    if(formRef?.current){
+      setSearchValues(formRef.current.getFieldsValue())
+    }
+  }, []);
+
 
   // let yy = () => {
   //   return <BetaSchemaForm
@@ -260,10 +269,8 @@ const TablePro: FC<{
                                                                                      }) => {
 
     let columns_ = typeof fieldProps.columns === "function" ? fieldProps.columns("add") : fieldProps.columns;
-    console.log(5555, record, id)
     let url_ = addUrl
     let _params: any = {}
-    console.log(890, _params)
     if (id && record?.[id]) {
       _params[id] = record?.[id]
       if (editUrl) {
@@ -375,6 +382,9 @@ const TablePro: FC<{
           ...(treeFieldProps ? {maxWidth: `calc(100% - ${treeWidth + 8}px)`} : {})
         }}>
           <ProTable
+            onSubmit={(values)=>{
+              setSearchValues(values);
+            }}
             formRef={formRef}
             defaultSize="small"
             scroll={{x: "100%"}}
@@ -435,6 +445,7 @@ const TablePro: FC<{
                       key={i}
                       formRef={formRef}
                       actionRef={actionRef}
+                      searchValues={searchValues}
                     />
                   })}
                   {/*<a>导出数据</a>*/}
@@ -535,7 +546,7 @@ const TablePro: FC<{
                 ...(fieldProps.toolBarRender?.map((Comp: any) => {
                   console.log(7656, typeof Comp)
                   if (typeof Comp === "function") {
-                    return <Comp action={action} formRef={formRef}/>
+                    return <Comp action={action} formRef={formRef} searchValues={searchValues}/>
                   } else {
                     return Comp
                   }
@@ -545,7 +556,6 @@ const TablePro: FC<{
           />
         </div>
       </div>
-
     </ProProviderPro>
   );
 };
