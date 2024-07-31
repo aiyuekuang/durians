@@ -1,6 +1,7 @@
 import request from "umi-request";
-import {message} from "antd";
+import {message, Space, Tag} from "antd";
 import CryptoJS from "crypto-js";
+import React from "react";
 
 export const ajaxCommon = (url: string, params: object, callback: Function, isApi = true) => {
   let api_ = "";
@@ -23,10 +24,11 @@ export const ajaxCommon = (url: string, params: object, callback: Function, isAp
 export const commonFormHandler = (columns: any, ajax: any) => {
   for (let i of columns) {
     let proConfig = i.proConfig
+    // 树形和下拉的特殊处理
     if (!i.request) {
       if (i.valueType === "select" || i.valueType === "treeSelect") {
         i.request = async (params: any, props: any) => {
-          console.log(22122,params,proConfig.params)
+          console.log(22122, params, proConfig.params)
           let arr: any = []
           await ajax(proConfig.url, {...params, ...(typeof proConfig.params === "function" ? proConfig.params(params, props) : (proConfig.params || {}))}, (data: any) => {
             arr = proConfig.setData(data)

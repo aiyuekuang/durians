@@ -1,22 +1,55 @@
-import { Layout, Row, Typography } from 'antd';
+import {Button, message, Upload} from 'antd';
 import React from 'react';
+import {UploadOutlined} from "@ant-design/icons";
 
 
-// 脚手架示例组件
+// 脚手架示例组件-uploadPro
 const Index: React.FC<{
   /**
    * 名称
    * */
-  name: string;
-}> = ({name="1111"}) => {
+  title?: string;
+  /**
+   * antd上传自己的API
+   * */
+  fieldProps?: any;
+  /**
+   * URL
+   * */
+  url?: string;
+  /**
+   * 头部
+   * */
+  headers?: any;
+  /**
+   * 变化后的函数
+   * */
+  onChange?: any;
+}> = ({title = "上传", fieldProps = {},url="/upload",headers={}}) => {
+
+  const uploadProps = {
+    name: 'file',
+    action: url,
+    headers: {
+      // authorization: 'authorization-text',
+      ...headers
+    },
+    onChange(info:any) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} 上传成功`);
+      } else if (info.file.status === 'error') {
+        message.error(`${info.file.name} 上传失败`);
+      }
+    },
+  };
+
   return (
-    <Layout>
-      <Row>
-        <Typography.Title level={3}>
-          欢迎使用 <strong>{name}</strong> ！
-        </Typography.Title>
-      </Row>
-    </Layout>
+    <Upload {...fieldProps} {...uploadProps}>
+      <Button icon={<UploadOutlined/>}>{title}</Button>
+    </Upload>
   );
 };
 

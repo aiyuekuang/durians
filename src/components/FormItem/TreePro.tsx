@@ -285,7 +285,7 @@ const Index: React.FC<{
                   {nodeData.title}
                 </div>
                 <div className="durians_tree_body_title_node_r">
-                  <Dropdown menu={{items: menuItem(nodeData)}}>
+                  <Dropdown menu={{items: menuItem(nodeData)}} getPopupContainer={()=>document.body}>
                     <a onClick={(e:any) => e.preventDefault()}>
                       <EllipsisOutlined/>
                     </a>

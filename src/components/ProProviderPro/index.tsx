@@ -1,6 +1,7 @@
 import {ProProvider,} from '@ant-design/pro-components';
 import React, {FC, useContext} from 'react';
 import TreeSelectPro from "../FormItem/TreeSelectPro";
+import UploadPro from "../FormItem/UploadPro";
 
 const Index: FC<{
   children: any
@@ -18,6 +19,11 @@ const Index: FC<{
             // render: (props) => <>{}</>,
             renderFormItem: (text, props) => (
               <TreeSelectPro {...props}/>
+            ),
+          },uploadPro: {
+            // render: (props) => <>{}</>,
+            renderFormItem: (text, props) => (
+              <UploadPro {...props}/>
             ),
           },
         },
