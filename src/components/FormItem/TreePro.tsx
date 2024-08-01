@@ -257,7 +257,7 @@ const Index: React.FC<{
     }]
   }
 
-  console.log(21222, treeData)
+
 
   return (
     <div className="durians_tree_body">

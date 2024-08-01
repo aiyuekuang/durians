@@ -168,13 +168,13 @@ const TablePro: FC<{
           rowKey: "id"
         },
         setData = (data: any) => {
-          return data.data.records
+          return data?.data?.records
         },
         setTotal = (data: any) => {
-          return data.data.total
+          return data?.data?.total
         },
         setMsg = (data: any) => {
-          return data.msg
+          return data?.msg
         },
         actionBar = [],
         paginationAlias = {
@@ -512,7 +512,7 @@ const TablePro: FC<{
             }}
             dateFormatter="string"
             {...fieldProps}
-            columns={[...commonFormHandler(typeof fieldProps.columns === "function" ? fieldProps.columns("table") : fieldProps.columns, ajax), ...(actionBarComponent.length ? [{
+            columns={[...commonFormHandler(typeof fieldProps.columns === "function" ? fieldProps.columns("table") : fieldProps.columns || [], ajax), ...(actionBarComponent.length ? [{
               title: "操作",
               dataIndex: "actionTablePro",
               fixed: "right",

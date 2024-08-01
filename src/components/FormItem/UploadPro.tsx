@@ -25,6 +25,10 @@ const Index: React.FC<{
    * 变化后的函数
    * */
   onChange?: any;
+  /**
+   * 接口请求完成后的数据处理
+   * */
+  setData?: any;
 }> = ({title = "上传", fieldProps = {},url="/upload",headers={}}) => {
 
   const uploadProps = {

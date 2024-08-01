@@ -33,7 +33,7 @@ const Index: React.FC<{
     <ProProviderPro>
       <BetaSchemaForm
         trigger={children}
-        layoutType={'ModalForm'}
+        layoutType={layoutType}
         onFinish={async (values:any = {}) => {
           let isSuccess = false
 
@@ -49,7 +49,7 @@ const Index: React.FC<{
         }}
         {...(layoutType === 'ModalForm'
           ? {
-            modalProps: {destroyOnClose: true},
+            modalProps: {destroyOnClose: true,getContainer:document.getElementById("root")},
           }
           : {
             drawerProps: {destroyOnClose: true},
