@@ -216,8 +216,8 @@ const TablePro: FC<{
     </Popconfirm>] : [])]
 
   useEffect(() => {
-    console.log(67666,formRef.current.getFieldsValue())
-    if(formRef?.current){
+    console.log(67666, formRef.current.getFieldsValue())
+    if (formRef?.current) {
       setSearchValues(formRef.current.getFieldsValue())
     }
   }, []);
@@ -382,18 +382,18 @@ const TablePro: FC<{
           ...(treeFieldProps ? {maxWidth: `calc(100% - ${treeWidth + 8}px)`} : {})
         }}>
           <ProTable
-            onSubmit={(values)=>{
+            onSubmit={(values) => {
               setSearchValues(values);
             }}
             formRef={formRef}
             defaultSize="small"
             scroll={{x: "100%"}}
-            rowSelection={{
+            rowSelection={deleteUrl || tableAlertOptionRenderPro.length ? {
               // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
               // 注释该行则默认不显示下拉选项
               selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
               preserveSelectedRowKeys: true,
-            }}
+            } : false}
             tableAlertRender={({
                                  selectedRowKeys,
                                  selectedRows,

@@ -9,7 +9,7 @@ const Index: React.FC<{
   /**
    * 名称
    * */
-  children?: string;
+  title?: string;
   /**
    * 值
    * */
@@ -28,13 +28,9 @@ const Index: React.FC<{
   modalFieldProps?: any;
 
 }> = ({
-        children = <Button type="link">
-          选择
-        </Button>, tableFieldProps = {}, modalFieldProps = {}, value = [], onChange
+        title = "选择", tableFieldProps = {}, modalFieldProps = {}, value = [], onChange
       }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState(value);
-
-  console.log(3333, tableFieldProps)
 
   useEffect(() => {
     setSelectedRowKeys(value)
@@ -62,7 +58,9 @@ const Index: React.FC<{
         onChange(onChange(selectedRowKeys))
       }}
     >
-      {children}
+      <Button type="link">
+        {value && value.length ? `已选择${value.length}个` : title}
+      </Button>
     </ModalPro>
   );
 };
