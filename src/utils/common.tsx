@@ -72,7 +72,7 @@ let decrypted = (encrypted: string, secretValue: string, ivValue: string) => {
 }
 
 //根据提供的字段判断数组中是否包含
-export const arrHasKey = (key:any,arr:any)=>{
+export const arrHasKey = (key:any,arr:any=[])=>{
   return arr.find((data: any) => {
     return key(data)
   })

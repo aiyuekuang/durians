@@ -348,10 +348,15 @@ const TablePro: FC<{
       callback()
     })
   }
+
+  // 根据columns的类型，进行col数据的转换，table是数据需要塞入的类型，这里用的是塞入表格的
+  let columnsTemp = typeof fieldProps.columns === "function" ? fieldProps.columns("table") : fieldProps.columns || []
+
+
   // 判断是否有关键词搜索的
   let keywordModel = arrHasKey((data: any) => {
     return data?.proConfig?.isKeyword
-  }, fieldProps.columns);
+  }, columnsTemp);
 
   console.log(666,keywordModel)
 
@@ -523,7 +528,7 @@ const TablePro: FC<{
               },
               ...fieldProps.options
             }}
-            columns={[...commonFormHandler(typeof fieldProps.columns === "function" ? fieldProps.columns("table") : fieldProps.columns || [], ajax), ...(actionBarComponent.length ? [{
+            columns={[...commonFormHandler(columnsTemp, ajax), ...(actionBarComponent.length ? [{
               title: "操作",
               dataIndex: "actionTablePro",
               fixed: "right",
