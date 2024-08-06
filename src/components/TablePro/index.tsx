@@ -2,7 +2,7 @@ import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {ActionType, ProTable} from '@ant-design/pro-components';
 import {Button, Divider, message, Popconfirm, Space, Table} from 'antd';
 import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
-import {ajaxCommon, commonFormHandler} from "../../utils/common";
+import {ajaxCommon, arrHasKey, commonFormHandler} from "../../utils/common";
 import {FormPro, ModalPro, TreePro} from "durians";
 import ProProviderPro from '../ProProviderPro';
 import {cloneDeep} from "lodash-es";
@@ -348,6 +348,13 @@ const TablePro: FC<{
       callback()
     })
   }
+  // 判断是否有关键词搜索的
+  let keywordModel = arrHasKey((data: any) => {
+    return data?.proConfig?.isKeyword
+  }, fieldProps.columns);
+
+  console.log(666,keywordModel)
+
   return (
     <ProProviderPro>
       <div className="durians_table_body">
@@ -489,11 +496,7 @@ const TablePro: FC<{
             //   },
             // }}
             rowKey="id"
-            options={{
-              setting: {
-                listsHeight: 400,
-              },
-            }}
+
             form={{
               // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
               // syncToUrl: (values, type) => {
@@ -511,7 +514,15 @@ const TablePro: FC<{
               onChange: (page) => console.log(page),
             }}
             dateFormatter="string"
+
             {...fieldProps}
+            options={{
+              ...(keywordModel ? {search: {name: keywordModel.dataIndex, placeholder: `请输入${keywordModel.title}`}} : {}),
+              setting: {
+                listsHeight: 400,
+              },
+              ...fieldProps.options
+            }}
             columns={[...commonFormHandler(typeof fieldProps.columns === "function" ? fieldProps.columns("table") : fieldProps.columns || [], ajax), ...(actionBarComponent.length ? [{
               title: "操作",
               dataIndex: "actionTablePro",
@@ -529,7 +540,6 @@ const TablePro: FC<{
               labelWidth: 'auto',
             }}
             toolBarRender={(action) => {
-              console.log(6666, fieldProps.toolBarRender)
               return [
                 ...(addUrl ? [
                   <BaseForm>
