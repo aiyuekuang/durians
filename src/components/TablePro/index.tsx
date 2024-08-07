@@ -223,44 +223,6 @@ const TablePro: FC<{
   }, []);
 
 
-  // let yy = () => {
-  //   return <BetaSchemaForm
-  //     initialValues={record}
-  //     columns={fieldProps.columns.map((data: any) => {
-  //       return {
-  //         ...data,
-  //         width: 'md',
-  //       }
-  //     }) as any}
-  //     trigger={children}
-  //     onFinish={async (values: any) => {
-  //       let isSuccess = false
-  //       let url_ = addUrl
-  //       let values_ = values
-  //
-  //       if (record?.[id_] && editUrl) {
-  //         values_[id_] = record?.[id_]
-  //         url_ = editUrl
-  //       }
-  //       await ajax(url_, values_, (data: any) => {
-  //         // 刷新页面
-  //         actionRef.current?.reload();
-  //         message.success(setMsg(data));
-  //         isSuccess = true
-  //       })
-  //       return isSuccess
-  //     }}
-  //     layoutType="ModalForm"
-  //     rowProps={{
-  //       gutter: [16, 16],
-  //     }}
-  //     colProps={{
-  //       span: 12,
-  //     }}
-  //     grid={true}
-  //     {...addFormProFieldProps}
-  //   />
-  // }
   let BaseForm: FC<{ children?: any; record?: any, id?: string, title?: string }> = ({
                                                                                        children,
                                                                                        record,
@@ -358,7 +320,7 @@ const TablePro: FC<{
     return data?.proConfig?.isKeyword
   }, columnsTemp);
 
-  console.log(666,keywordModel)
+
 
   return (
     <ProProviderPro>
@@ -522,7 +484,7 @@ const TablePro: FC<{
 
             {...fieldProps}
             options={{
-              ...(keywordModel ? {search: {name: keywordModel.dataIndex, placeholder: `请输入${keywordModel.title}`}} : {}),
+              ...(keywordModel ? {search: {name: keywordModel.dataIndex, placeholder: `请输入${keywordModel.title}`,allowClear:true}} : {}),
               setting: {
                 listsHeight: 400,
               },
