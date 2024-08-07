@@ -195,6 +195,7 @@ const TablePro: FC<{
       }) => {
   // 表格其他的
   const [tableParams, setTableParams] = useState({})
+  // 将搜索的数据保存下来，全局的时候有需要用到
   const [searchValues, setSearchValues] = useState({})
   // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
@@ -341,11 +342,6 @@ const TablePro: FC<{
                   }
                 })
 
-                // tableParams.current = {
-                //   ...tableParams.current,
-                //   ...treeParamsFun(selectedKeys)
-                // }
-                // formRef.current.setFieldsValue(cloneDeep({...formRef.current.getFieldsValue(),...treeParamsFun(selectedKeys)}))
                 actionRef.current?.reload();
               },
               ...treeFieldProps.fieldProps
@@ -484,7 +480,8 @@ const TablePro: FC<{
 
             {...fieldProps}
             options={{
-              ...(keywordModel ? {search: {name: keywordModel.dataIndex, placeholder: `请输入${keywordModel.title}`,allowClear:true}} : {}),
+              // keywordModel.formItemProps.name当搜索和表格不是用同一个字段的时候，也需要做一下字段的处理
+              ...(keywordModel ? {search: {name: keywordModel.formItemProps?keywordModel.formItemProps.name:keywordModel.dataIndex, placeholder: `请输入${keywordModel.title}`,allowClear:true}} : {}),
               setting: {
                 listsHeight: 400,
               },

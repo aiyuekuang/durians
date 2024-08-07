@@ -33,7 +33,6 @@ export const commonFormHandler = (columns: any, ajax: any) => {
     if (!i.request) {
       if (i.valueType === "select" || i.valueType === "treeSelect") {
         i.request = async (params: any, props: any) => {
-          console.log(22122, params, proConfig.params)
           let arr: any = []
           await ajax(proConfig.url, {...params, ...(typeof proConfig.params === "function" ? proConfig.params(params, props) : (proConfig.params || {}))}, (data: any) => {
             arr = proConfig.setData(data)
