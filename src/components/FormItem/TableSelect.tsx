@@ -26,14 +26,14 @@ const Index: React.FC<{
    * ModalPro的参数配置
    * */
   modalFieldProps?: any;
-
 }> = ({
         title = "选择", tableFieldProps = {}, modalFieldProps = {}, value = [], onChange
       }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState(value);
 
   useEffect(() => {
-    setSelectedRowKeys(value)
+    console.log(6666888,value)
+    // setSelectedRowKeys(value)
   }, [value]);
 
   const onSelectChange = (newSelectedRowKeys: any) => {

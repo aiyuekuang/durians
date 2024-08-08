@@ -57,7 +57,7 @@ const App: React.FC<{
 
   return (
     <>
-      <div onClick={showModal}>
+      <div onClick={showModal} style={{width:"max-content"}}>
         {children}
       </div>
       <Modal title={title} open={isModalOpen} onOk={handleOk_} onCancel={handleCancel} {...fieldProps}>
