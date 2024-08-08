@@ -51,8 +51,6 @@ export default () => {
 
       <TablePro
         className={"xlb_table_demo"}
-        // rowHeight={200}
-
         bordered={true}
         fieldProps={{
           rowKey:"key",
