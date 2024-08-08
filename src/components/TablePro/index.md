@@ -50,7 +50,6 @@ export default () => {
     }}>
 
       <TablePro
-        treeFieldProps={{}}
         className={"xlb_table_demo"}
         // rowHeight={200}
         tableAlertOptionRenderPro={[(props)=>{
@@ -111,50 +110,50 @@ export default () => {
               key: '1',
               width: 500,
             },
-            // {
-            //   title: 'Column 2',
-            //   dataIndex: '2',
-            //   key: '2',
-            //   width: 150,
-            // },
-            // {
-            //   title: 'Column 3',
-            //   dataIndex: '3',
-            //   key: '3',
-            //   width: 150,
-            // },
-            // {
-            //   title: 'Column 4',
-            //   dataIndex: '4',
-            //   key: '4',
-            //   width: 150,
-            // },
-            // {
-            //   title: 'Column 5',
-            //   dataIndex: '5',
-            //   key: '5',
-            //   width: 150,
-            // },
-            // {
-            //   title: 'Column 6',
-            //   dataIndex: '6',
-            //   key: '6',
-            //   width: 150,
-            // },
-            // {
-            //   title: 'Column 7',
-            //   dataIndex: '7',
-            //   key: '7',
-            //   width: 150,
-            // },
-            // {title: 'Column 8', dataIndex: '8', key: '8'},
-            // {
-            //   title: 'Action',
-            //   dataIndex: 'operation',
-            //   key: 'operation',
-            //   width: 100,
-            //   render: () => <a>action</a>,
-            // },
+            {
+              title: 'Column 2',
+              dataIndex: '2',
+              key: '2',
+              width: 150,
+            },
+            {
+              title: 'Column 3',
+              dataIndex: '3',
+              key: '3',
+              width: 150,
+            },
+            {
+              title: 'Column 4',
+              dataIndex: '4',
+              key: '4',
+              width: 150,
+            },
+            {
+              title: 'Column 5',
+              dataIndex: '5',
+              key: '5',
+              width: 150,
+            },
+            {
+              title: 'Column 6',
+              dataIndex: '6',
+              key: '6',
+              width: 150,
+            },
+            {
+              title: 'Column 7',
+              dataIndex: '7',
+              key: '7',
+              width: 150,
+            },
+            {title: 'Column 8', dataIndex: '8', key: '8'},
+            {
+              title: 'Action',
+              dataIndex: 'operation',
+              key: 'operation',
+              width: 100,
+              render: () => <a>action</a>,
+            },
           ]
         }}
       />

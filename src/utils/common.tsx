@@ -23,7 +23,7 @@ export const ajaxCommon = (url: string, params: object, callback: Function, isAp
 //通用处理Form的columns
 export const commonFormHandler = (columns: any, ajax: any) => {
   for (let i of columns) {
-    let proConfig = i.proConfig
+    let proConfig = i?.proConfig
     // 处理一下搜索框时，上面搜索就不要了，因为参数一致，会冲突导致上面的失效
     if(proConfig?.isKeyword){
       i.hideInSearch = true
