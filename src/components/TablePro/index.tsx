@@ -197,6 +197,7 @@ const TablePro: FC<{
   const [tableParams, setTableParams] = useState({})
   // 将搜索的数据保存下来，全局的时候有需要用到
   const [searchValues, setSearchValues] = useState({})
+  const [pageSize, setPageSize] = useState(fieldProps?.pagination?.pageSize || 10)
   // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
@@ -322,7 +323,7 @@ const TablePro: FC<{
   }, columnsTemp);
 
 
-
+console.log(666,pageSize)
   return (
     <ProProviderPro>
       <div className="durians_table_body">
@@ -472,13 +473,15 @@ const TablePro: FC<{
               // },
               syncToUrl: false
             }}
-            pagination={{
-              pageSize: 10,
-              onChange: (page) => console.log(page),
-            }}
             dateFormatter="string"
-
             {...fieldProps}
+            pagination={{
+              pageSize: pageSize,
+              onChange: (page,pageSize) => {
+                console.log(3332,pageSize)
+                setPageSize(pageSize)
+              },
+            }}
             options={{
               // keywordModel.formItemProps.name当搜索和表格不是用同一个字段的时候，也需要做一下字段的处理
               ...(keywordModel ? {search: {name: keywordModel.formItemProps?keywordModel.formItemProps.name:keywordModel.dataIndex, placeholder: `请输入${keywordModel.title}`,allowClear:true}} : {}),
