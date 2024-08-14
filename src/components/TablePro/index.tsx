@@ -476,8 +476,12 @@ console.log(666,pageSize)
             dateFormatter="string"
             {...fieldProps}
             pagination={{
+              ...fieldProps?.pagination,
               pageSize: pageSize,
               onChange: (page,pageSize) => {
+                if(fieldProps?.pagination?.onChange) {
+                  fieldProps?.pagination?.onChange(page,pageSize)
+                }
                 console.log(3332,pageSize)
                 setPageSize(pageSize)
               },
