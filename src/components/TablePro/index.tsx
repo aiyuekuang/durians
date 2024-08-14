@@ -502,13 +502,9 @@ console.log(666,pageSize)
               actionWidth,
               render: action
             }] : [])]}
-            search={fieldProps.search ? {
+            search={{
               labelWidth: 'auto',
-              span: 4,
-              defaultCollapsed: false,
-              ...(fieldProps.search || {})
-            } : {
-              labelWidth: 'auto',
+              ...(fieldProps?.search || {})
             }}
             toolBarRender={(action) => {
               return [
