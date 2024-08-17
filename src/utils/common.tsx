@@ -28,6 +28,13 @@ export const commonFormHandler = (columns: any, ajax: any) => {
     if(proConfig?.isKeyword){
       i.hideInSearch = true
     }
+    if(i.valueType === "select"){
+      i.fieldProps={
+        maxTagCount:3,
+        ...i.fieldProps
+      }
+    }
+
 
     // 树形和下拉的特殊处理
     if (!i.request) {
@@ -69,7 +76,6 @@ let decrypted = (encrypted: string, secretValue: string, ivValue: string) => {
     // iv: iv,
     // mode 支持 CBC, CFB,CTB,ECB,OFB,OFB, 默认CBC
     mode: CryptoJS.mode.ECB,
-
     // NoPadding, zeropadding 默认Pkcs7 即 pkcs5
     padding: CryptoJS.pad.Pkcs7
   });
