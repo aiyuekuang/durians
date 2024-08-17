@@ -28,17 +28,19 @@ export const commonFormHandler = (columns: any, ajax: any) => {
     if(proConfig?.isKeyword){
       i.hideInSearch = true
     }
-    if(i.valueType === "select"){
-      i.fieldProps={
-        maxTagCount:3,
-        ...i.fieldProps
-      }
-    }
+
 
 
     // 树形和下拉的特殊处理
     if (!i.request) {
       if (i.valueType === "select" || i.valueType === "treeSelect") {
+
+        // 选择多的时候，只在当前行展示最多的标签个数
+        i.fieldProps={
+          maxTagCount:'responsive',
+          ...i.fieldProps
+        }
+
         i.request = async (params: any, props: any) => {
           let arr: any = []
           await ajax(proConfig.url, {...params, ...(typeof proConfig.params === "function" ? proConfig.params(params, props) : (proConfig.params || {}))}, (data: any) => {
