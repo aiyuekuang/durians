@@ -9,7 +9,7 @@ const App: React.FC<{
    */
   title?: string;
   /**
-   * 点击OK的时候，会有一个callback回调函数，在你的函数中执行callback可以传递ture或者false打开或者关闭弹窗
+   * 点击OK的时候，会有一个callback回调函数，在你的函数中执行callback可以传递ture或者false打开或者关闭弹窗,setIsModalOpen,isModalOpen
    * @default (callback: any) => {
    *           callback()
    *         }
@@ -61,7 +61,7 @@ const App: React.FC<{
         {children}
       </div>
       <Modal title={title} open={isModalOpen} onOk={handleOk_} onCancel={handleCancel} {...fieldProps}>
-        <Content isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+        {typeof Content === "function" ?<Content isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>:Content}
       </Modal>
     </>
   );

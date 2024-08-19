@@ -31,31 +31,23 @@ const Index: React.FC<{
       }) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState(value);
 
-  useEffect(() => {
-    console.log(6666888,value)
-    // setSelectedRowKeys(value)
-  }, [value]);
-
-  const onSelectChange = (newSelectedRowKeys: any) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
-
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-
+  console.log(2122,selectedRowKeys)
 
   return (
     <ModalPro
-      Content={() => <TablePro
+      Content={<TablePro
         {...tableFieldProps}
-        fieldProps={{...tableFieldProps.fieldProps, rowSelection}}
+        value={value}
+        onSelectChange={(data:any)=> {
+          console.log(6666,data)
+          setSelectedRowKeys(data)
+        }}
+        fieldProps={{...tableFieldProps.fieldProps}}
       />}
       {...modalFieldProps}
-      handleOk={() => {
-        onChange(onChange(selectedRowKeys))
+      handleOk={(hide:any) => {
+        onChange(selectedRowKeys)
+        hide()
       }}
     >
       <Button type="link">

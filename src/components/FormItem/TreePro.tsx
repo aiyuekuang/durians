@@ -1,19 +1,20 @@
 import {Dropdown, MenuProps, message, Tree} from 'antd';
-import React, {useEffect, useState} from 'react';
-import {EditOutlined, EllipsisOutlined, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
+import React, {FC, useEffect, useState} from 'react';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EllipsisOutlined,
+  FormOutlined,
+  PlusOutlined,
+  UnorderedListOutlined
+} from "@ant-design/icons";
 import {FormPro} from "durians";
 import {ajaxCommon} from "../../utils/common";
 import {addChildToNode} from "../FormItem/TreeSelectPro";
 
 
-const initTreeData = [
-  {title: 'Expand to load', key: '0'},
-  {title: 'Expand to load', key: '1'},
-  {title: 'Tree Node', key: '2', isLeaf: true},
-];
-
 // 脚手架示例组件
-const Index: React.FC<{
+const Index: FC<{
   /**
    * 名称
    * */
@@ -76,7 +77,7 @@ const Index: React.FC<{
    * @default {}
    */
   params?: any;
-  fieldProps: any;
+  fieldProps?: any;
   setMsg?: any;
   editField?: string;
   isSelect: boolean;
@@ -102,10 +103,12 @@ const Index: React.FC<{
         setMsg = (data: any) => {
           return data.msg
         },
-        editField, fieldProps = {
-    fieldNames: {title: "title", key: "key", children: "children"}, onSelect: () => {
-    },
-  },
+        editField,
+        fieldProps = {
+          fieldNames: {title: "title", key: "key", children: "children"},
+          onSelect: () => {
+          },
+        },
         isSelect = false,
         detail = true
 
@@ -183,7 +186,7 @@ const Index: React.FC<{
   }
 
   let FormNode = (props: any) => {
-    const {children, addFormProFieldProps, ajax, addUrl, record,fieldProps} = props;
+    const {children, addFormProFieldProps, ajax, addUrl, record} = props;
 
     let url_ = addUrl
     let _params: any = {}
@@ -203,7 +206,6 @@ const Index: React.FC<{
         url={url_}
         {...addFormProFieldProps}
         fieldProps={{
-          ...fieldProps,
           ...addFormProFieldProps.fieldProps
         }}
         params={{..._params, ...(addFormProFieldProps?.params || {})}}
@@ -219,8 +221,8 @@ const Index: React.FC<{
       key: '1',
       label: (
         <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}} fieldProps={{
-          initialValues:nodeData,
-          readonly:true
+          initialValues: nodeData,
+          readonly: true
         }}>
           <a>
             详情
@@ -233,7 +235,7 @@ const Index: React.FC<{
       key: '2',
       label: (
         <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}} fieldProps={{
-          initialValues:nodeData
+          initialValues: nodeData
         }}>
           <a>
             编辑
@@ -252,11 +254,10 @@ const Index: React.FC<{
           删除
         </a>
       ),
-      icon: <EditOutlined/>,
+      icon: <DeleteOutlined />,
       disabled: !deleteUrl,
     }]
   }
-
 
 
   return (
@@ -276,24 +277,31 @@ const Index: React.FC<{
           onSelect={onSelect}
           fieldNames={fieldNames}
           loadData={onLoadData}
-          treeData={treeData}
-          titleRender={(nodeData) => {
-            console.log(789666, nodeData)
-            return (
-              <div className="durians_tree_body_title_node" key={nodeData.key}>
-                <div className="durians_tree_body_title_node_l">
-                  {nodeData.title}
-                </div>
-                <div className="durians_tree_body_title_node_r">
-                  <Dropdown menu={{items: menuItem(nodeData)}} getPopupContainer={()=>document.body}>
-                    <a onClick={(e:any) => e.preventDefault()}>
-                      <EllipsisOutlined/>
-                    </a>
-                  </Dropdown>
-                </div>
-              </div>
-            )
-          }}></Tree>
+          treeData={treeData.map((data:any) => {
+            return {
+              ...data,
+              switcherIcon: <Dropdown menu={{items: menuItem(data)}} getPopupContainer={() => document.body}>
+                <a onClick={(e: any) => e.preventDefault()}>
+                  <FormOutlined />
+                </a>
+              </Dropdown>
+            }
+          })}
+          // titleRender={(nodeData:any) => {
+          //   console.log(789666, nodeData)
+          //   return (
+          //     <div className="durians_tree_body_title_node" key={nodeData.key}>
+          //       <div className="durians_tree_body_title_node_l">
+          //         {nodeData.title}
+          //       </div>
+          //       <div className="durians_tree_body_title_node_r">
+          //
+          //       </div>
+          //     </div>
+          //   )
+          // }}
+          {...fieldProps}
+        ></Tree>
       </div>
     </div>
   );

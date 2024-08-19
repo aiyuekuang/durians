@@ -1,7 +1,7 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {ActionType, ProTable} from '@ant-design/pro-components';
 import {Button, Divider, message, Popconfirm, Space, Table} from 'antd';
-import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
+import React, {FC, Fragment, memo, useEffect, useRef, useState} from 'react';
 import {ajaxCommon, arrHasKey, commonFormHandler} from "../../utils/common";
 import {FormPro, ModalPro, TreePro} from "durians";
 import ProProviderPro from '../ProProviderPro';
@@ -150,6 +150,11 @@ const TablePro: FC<{
   paramsFun?: any;
   treeParamsFun?: Function;
   treeWidth?: number
+  /**
+   *
+   * */
+  value: any
+  onSelectChange:any
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -191,12 +196,33 @@ const TablePro: FC<{
             treeId: data
           }
         },
-        treeWidth = 200
+        treeWidth = 200,
+        value = [],
+                        onSelectChange=null
       }) => {
   // 表格其他的
   const [tableParams, setTableParams] = useState({})
   // 将搜索的数据保存下来，全局的时候有需要用到
   const [searchValues, setSearchValues] = useState({})
+
+  useEffect(() => {
+    console.log(6666888, value)
+    // setSelectedRowKeys(value)
+  }, [value]);
+
+  const onSelectChange_ = (newSelectedRowKeys: any) => {
+    console.log('selectedRowKeys changed: ', newSelectedRowKeys);
+    if(onSelectChange ){
+      onSelectChange(newSelectedRowKeys)
+    }
+  };
+
+  const rowSelection = {
+    // selectedRowKeys,
+    onChange: onSelectChange_,
+  };
+
+
   const [pageSize, setPageSize] = useState(fieldProps?.pagination?.pageSize || 10)
   // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
@@ -323,7 +349,7 @@ const TablePro: FC<{
   }, columnsTemp);
 
 
-console.log(666,pageSize)
+  console.log(666, pageSize)
   return (
     <ProProviderPro>
       <div className="durians_table_body">
@@ -359,11 +385,12 @@ console.log(666,pageSize)
             formRef={formRef}
             defaultSize="small"
             scroll={{x: "100%"}}
-            rowSelection={deleteUrl || tableAlertOptionRenderPro.length ? {
+            rowSelection={deleteUrl || tableAlertOptionRenderPro.length || onSelectChange? {
               // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
               // 注释该行则默认不显示下拉选项
               selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
               preserveSelectedRowKeys: true,
+              ...rowSelection
             } : false}
             tableAlertRender={({
                                  selectedRowKeys,
@@ -478,17 +505,23 @@ console.log(666,pageSize)
             pagination={{
               ...fieldProps?.pagination,
               pageSize: pageSize,
-              onChange: (page,pageSize) => {
-                if(fieldProps?.pagination?.onChange) {
-                  fieldProps?.pagination?.onChange(page,pageSize)
+              onChange: (page, pageSize) => {
+                if (fieldProps?.pagination?.onChange) {
+                  fieldProps?.pagination?.onChange(page, pageSize)
                 }
-                console.log(3332,pageSize)
+                console.log(3332, pageSize)
                 setPageSize(pageSize)
               },
             }}
             options={{
               // keywordModel.formItemProps.name当搜索和表格不是用同一个字段的时候，也需要做一下字段的处理
-              ...(keywordModel ? {search: {name: keywordModel.formItemProps?keywordModel.formItemProps.name:keywordModel.dataIndex, placeholder: `请输入${keywordModel.title}`,allowClear:true}} : {}),
+              ...(keywordModel ? {
+                search: {
+                  name: keywordModel.formItemProps ? keywordModel.formItemProps.name : keywordModel.dataIndex,
+                  placeholder: `请输入${keywordModel.title}`,
+                  allowClear: true
+                }
+              } : {}),
               setting: {
                 listsHeight: 400,
               },
@@ -520,7 +553,6 @@ console.log(666,pageSize)
                   </BaseForm>
                 ] : []),
                 ...(fieldProps.toolBarRender?.map((Comp: any) => {
-                  console.log(7656, typeof Comp)
                   if (typeof Comp === "function") {
                     return <Comp action={action} formRef={formRef} searchValues={searchValues}/>
                   } else {
@@ -536,4 +568,10 @@ console.log(666,pageSize)
   );
 };
 
-export default TablePro
+const areEqual = (prevProps:any, nextProps:any) => {
+
+  // 自定义比较逻辑
+  return prevProps.value !== nextProps.value;
+};
+
+export default memo(TablePro, areEqual);
