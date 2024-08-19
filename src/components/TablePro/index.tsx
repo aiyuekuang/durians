@@ -154,7 +154,7 @@ const TablePro: FC<{
    *
    * */
   value: any
-  onSelectChange:any
+  onSelectChange: any
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -197,31 +197,25 @@ const TablePro: FC<{
           }
         },
         treeWidth = 200,
-        value = [],
-                        onSelectChange=null
+        value = null,
+        onSelectChange = null
       }) => {
   // 表格其他的
   const [tableParams, setTableParams] = useState({})
   // 将搜索的数据保存下来，全局的时候有需要用到
   const [searchValues, setSearchValues] = useState({})
+  // const [selectedRowKeys, setSelectedRowKeys] = useState(value)
 
-  useEffect(() => {
-    console.log(6666888, value)
-    // setSelectedRowKeys(value)
-  }, [value]);
+  // useEffect(() => {
+  //   setSelectedRowKeys(value)
+  // }, [value]);
 
   const onSelectChange_ = (newSelectedRowKeys: any) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
-    if(onSelectChange ){
+    if (onSelectChange) {
       onSelectChange(newSelectedRowKeys)
     }
   };
-
-  const rowSelection = {
-    // selectedRowKeys,
-    onChange: onSelectChange_,
-  };
-
 
   const [pageSize, setPageSize] = useState(fieldProps?.pagination?.pageSize || 10)
   // const tableParams = useRef({})
@@ -348,8 +342,6 @@ const TablePro: FC<{
     return data?.proConfig?.isKeyword
   }, columnsTemp);
 
-
-  console.log(666, pageSize)
   return (
     <ProProviderPro>
       <div className="durians_table_body">
@@ -385,12 +377,13 @@ const TablePro: FC<{
             formRef={formRef}
             defaultSize="small"
             scroll={{x: "100%"}}
-            rowSelection={deleteUrl || tableAlertOptionRenderPro.length || onSelectChange? {
+            rowSelection={deleteUrl || tableAlertOptionRenderPro.length || onSelectChange ? {
               // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
               // 注释该行则默认不显示下拉选项
               selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
               preserveSelectedRowKeys: true,
-              ...rowSelection
+              ...(value ? {selectedRowKeys: value} : {}),
+              onChange: onSelectChange_,
             } : false}
             tableAlertRender={({
                                  selectedRowKeys,
@@ -568,10 +561,4 @@ const TablePro: FC<{
   );
 };
 
-const areEqual = (prevProps:any, nextProps:any) => {
-
-  // 自定义比较逻辑
-  return prevProps.value !== nextProps.value;
-};
-
-export default memo(TablePro, areEqual);
+export default TablePro;

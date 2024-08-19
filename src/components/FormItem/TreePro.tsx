@@ -1,13 +1,6 @@
 import {Dropdown, MenuProps, message, Tree} from 'antd';
 import React, {FC, useEffect, useState} from 'react';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  EllipsisOutlined,
-  FormOutlined,
-  PlusOutlined,
-  UnorderedListOutlined
-} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, FormOutlined, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
 import {FormPro} from "durians";
 import {ajaxCommon} from "../../utils/common";
 import {addChildToNode} from "../FormItem/TreeSelectPro";
@@ -254,11 +247,10 @@ const Index: FC<{
           删除
         </a>
       ),
-      icon: <DeleteOutlined />,
+      icon: <DeleteOutlined/>,
       disabled: !deleteUrl,
     }]
   }
-
 
   return (
     <div className="durians_tree_body">
@@ -277,12 +269,12 @@ const Index: FC<{
           onSelect={onSelect}
           fieldNames={fieldNames}
           loadData={onLoadData}
-          treeData={treeData.map((data:any) => {
+          treeData={treeData.map((data: any) => {
             return {
               ...data,
               switcherIcon: <Dropdown menu={{items: menuItem(data)}} getPopupContainer={() => document.body}>
                 <a onClick={(e: any) => e.preventDefault()}>
-                  <FormOutlined />
+                  <FormOutlined/>
                 </a>
               </Dropdown>
             }
@@ -295,7 +287,7 @@ const Index: FC<{
           //         {nodeData.title}
           //       </div>
           //       <div className="durians_tree_body_title_node_r">
-          //
+          //         {nodeData.switcherIcon}
           //       </div>
           //     </div>
           //   )
