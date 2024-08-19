@@ -502,7 +502,6 @@ const TablePro: FC<{
                 if (fieldProps?.pagination?.onChange) {
                   fieldProps?.pagination?.onChange(page, pageSize)
                 }
-                console.log(3332, pageSize)
                 setPageSize(pageSize)
               },
             }}
