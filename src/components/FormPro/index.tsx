@@ -58,7 +58,7 @@ const Index: FC<{
           await ajax(url, _values, (data: any) => {
             // 刷新页面
             message.success(setMsg(data));
-            finishFun()
+            finishFun(data,_values)
             isSuccess = true
           })
           return isSuccess

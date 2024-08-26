@@ -128,7 +128,7 @@ const LoginPro: FC<{
         passwordField = "password",
         captchaField = "captcha",
         extraPasswordText = "",
-        secretKey = "",
+        secretKey =null,
         setData = (data: any) => {
           return data.data
         },
@@ -154,7 +154,7 @@ const LoginPro: FC<{
 
   let loginFun = (values: any) => {
     let _values = {...values};
-    _values[passwordField] = encrypted(_values[passwordField] + extraPasswordText, secretKey, secretKey);
+    _values[passwordField] = secretKey?encrypted(_values[passwordField] + extraPasswordText, secretKey, secretKey):_values[passwordField];
     ajax(url, _values, (data: any) => {
       cuns(tokenField, setData(data))
 
