@@ -43,10 +43,11 @@ const Index: FC<{
           },
           captcha: {
             renderFormItem: (text, props: any) => {
-              const {
-                ajax=ajaxCommon, url, phoneName = "phone", name = "captcha"} = props;
+              console.log(66766,props)
+                const {ajax=ajaxCommon, url="", phoneName = "phone", name = "captcha"} = props?.fieldProps || {};
               return (
                 <ProFormCaptcha
+                  noStyle
                   captchaProps={{}}
                   fieldProps={{
                     prefix: <MailTwoTone/>,

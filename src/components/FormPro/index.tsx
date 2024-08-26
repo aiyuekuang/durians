@@ -1,8 +1,13 @@
 import {Button, message} from 'antd';
-import React, {FC} from 'react';
+import React, {FC, ReactNode} from 'react';
 import {BetaSchemaForm} from "@ant-design/pro-components";
 import {ajaxCommon, commonFormHandler} from "../../utils/common";
 import ProProviderPro from "../ProProviderPro"
+
+type BetaSchemaFormType = typeof BetaSchemaForm;
+
+type BetaSchemaFormProps = Parameters<BetaSchemaFormType>[0];
+
 
 
 // 脚手架示例组件
@@ -12,17 +17,17 @@ const Index: FC<{
    * @default "ModalForm"
    */
   layoutType?: any;
+  children?: any;
   /**
    * @description 高级表单自带的参数
    * @default {}
    */
-  fieldProps?: any;
+  fieldProps?: Omit<BetaSchemaFormProps, 'trigger'>;
   url?: string;
   detailUrl?: string;
   ajax?: Function;
   finishFun?: Function;
   setMsg?: Function;
-  children?: any;
   params?: any;
   detailSetData?: any;
 }> = ({
@@ -35,7 +40,6 @@ const Index: FC<{
   return (
     <ProProviderPro>
       <BetaSchemaForm
-        trigger={children}
         layoutType={layoutType}
         {...(fieldProps?.params ? {
           request: async (record) => {
@@ -67,6 +71,7 @@ const Index: FC<{
             drawerProps: {destroyOnClose: true},
           })}
         {...fieldProps}
+        trigger={children}
         columns={commonFormHandler(fieldProps?.columns, ajax)}
       />
     </ProProviderPro>
