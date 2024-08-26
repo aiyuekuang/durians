@@ -26,6 +26,11 @@ const Index: FC<{
    */
   url?: string;
   /**
+   * @description 获取详情数据的URL
+   * @default -
+   */
+  detailUrl?: string;
+  /**
    * @description 新增的表单URL
    * @default -
    */
@@ -103,8 +108,7 @@ const Index: FC<{
           },
         },
         isSelect = false,
-        detail = true
-
+        detail = true,
       }) => {
   const [treeData, setTreeData]: any = useState([]);
   const {
@@ -179,7 +183,7 @@ const Index: FC<{
   }
 
   let FormNode = (props: any) => {
-    const {children, addFormProFieldProps, ajax, addUrl, record} = props;
+    const {children, addFormProFieldProps, ajax, addUrl, record, fieldProps} = props;
 
     let url_ = addUrl
     let _params: any = {}
@@ -190,6 +194,7 @@ const Index: FC<{
       }
     }
 
+
     return (
       <FormPro
         finishFun={() => {
@@ -199,7 +204,8 @@ const Index: FC<{
         url={url_}
         {...addFormProFieldProps}
         fieldProps={{
-          ...addFormProFieldProps.fieldProps
+          ...addFormProFieldProps.fieldProps,
+          ...fieldProps
         }}
         params={{..._params, ...(addFormProFieldProps?.params || {})}}
       >
@@ -213,10 +219,13 @@ const Index: FC<{
     return [{
       key: '1',
       label: (
-        <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}} fieldProps={{
-          initialValues: nodeData,
-          readonly: true
-        }}>
+        <FormNode {...treeProps}
+                  addUrl={addUrl}
+                  record={{id: nodeData.key}}
+                  fieldProps={{
+                    readonly: true,
+                    params:{id: nodeData.key}
+                  }}>
           <a>
             详情
           </a>
@@ -228,7 +237,7 @@ const Index: FC<{
       key: '2',
       label: (
         <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}} fieldProps={{
-          initialValues: nodeData
+          params:{id: nodeData.key}
         }}>
           <a>
             编辑
@@ -259,7 +268,7 @@ const Index: FC<{
           {title}
         </div>
         <div className="durians_tree_body_title_r">
-          <FormNode {...treeProps} addUrl={addUrl}>
+          <FormNode {...treeProps}>
             <PlusOutlined/>
           </FormNode>
         </div>

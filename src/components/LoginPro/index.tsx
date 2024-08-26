@@ -87,7 +87,7 @@ const LoginPro: FC<{
    */
   extraPasswordText?: string;
   /**
-   * @description 秘钥
+   * @description 秘钥,AES加密
    * @default ""
    */
   secretKey?: string;
@@ -112,6 +112,10 @@ const LoginPro: FC<{
    *   }
    */
   tokenField?: string;
+  usernameField?: string;
+  passwordField?: string;
+  captchaField?: string;
+  BottomDom?: any;
 }> = ({
         ajax = ajaxCommon,
         url,
@@ -120,6 +124,9 @@ const LoginPro: FC<{
         hasSmsLogin = false,
         hasAccountLogin = true,
         phoneField = "mobile",
+        usernameField = "username",
+        passwordField = "password",
+        captchaField = "captcha",
         extraPasswordText = "",
         secretKey = "",
         setData = (data: any) => {
@@ -128,6 +135,7 @@ const LoginPro: FC<{
         tokenField = "token",
         callback = () => {
         },
+        BottomDom = (props: any) => <></>
       }) => {
 
   const {token} = theme.useToken();
@@ -146,7 +154,7 @@ const LoginPro: FC<{
 
   let loginFun = (values: any) => {
     let _values = {...values};
-    _values.password = encrypted(_values.password + extraPasswordText, secretKey, secretKey);
+    _values[passwordField] = encrypted(_values[passwordField] + extraPasswordText, secretKey, secretKey);
     ajax(url, _values, (data: any) => {
       cuns(tokenField, setData(data))
 
@@ -167,8 +175,8 @@ const LoginPro: FC<{
         title="登录"
         subTitle="欢迎登录系统"
         initialValues={{
-          username: "",
-          password: ""
+          [usernameField]: "",
+          [passwordField]: ""
         }}
         onFinish={async (values) => {
           const val1 = await formRef.current.validateFields();
@@ -190,7 +198,7 @@ const LoginPro: FC<{
         {loginType === 'account' && (
           <>
             <ProFormText
-              name="username"
+              name={usernameField}
               fieldProps={{
                 size: 'large',
                 prefix: <UserOutlined className={'prefixIcon'}/>,
@@ -204,7 +212,7 @@ const LoginPro: FC<{
               ]}
             />
             <ProFormText.Password
-              name="password"
+              name={passwordField}
               fieldProps={{
                 size: 'large',
                 prefix: <LockOutlined className={'prefixIcon'}/>,
@@ -286,7 +294,7 @@ const LoginPro: FC<{
                 return '获取验证码';
               }}
               phoneName={phoneField}
-              name="captcha"
+              name={captchaField}
               rules={[
                 {
                   required: true,
@@ -319,6 +327,7 @@ const LoginPro: FC<{
             忘记密码
           </a>
         </div>
+        <BottomDom/>
       </LoginForm>
     </div>
   );

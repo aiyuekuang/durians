@@ -204,11 +204,6 @@ const TablePro: FC<{
   const [tableParams, setTableParams] = useState({})
   // 将搜索的数据保存下来，全局的时候有需要用到
   const [searchValues, setSearchValues] = useState({})
-  // const [selectedRowKeys, setSelectedRowKeys] = useState(value)
-
-  // useEffect(() => {
-  //   setSelectedRowKeys(value)
-  // }, [value]);
 
   const onSelectChange_ = (newSelectedRowKeys: any) => {
     console.log('selectedRowKeys changed: ', newSelectedRowKeys);
@@ -290,13 +285,12 @@ const TablePro: FC<{
 
 
   let action = (_: any, record: any) => {
-
     return (
       <div className="durians_table_pro_action">
         {actionBarComponent.map((Comp, i) => {
           return (
             <Fragment key={i}>
-              <Comp record={record}/>
+              <Comp record={record} formRef={formRef}/>
               {actionBarComponent.length > 1 && i < actionBarComponent.length - 1 ?
                 <Divider type="vertical"/> : null}
             </Fragment>
@@ -360,7 +354,6 @@ const TablePro: FC<{
                     ...treeParamsFun(selectedKeys)
                   }
                 })
-
                 actionRef.current?.reload();
               },
               ...treeFieldProps.fieldProps

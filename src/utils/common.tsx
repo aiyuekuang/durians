@@ -3,19 +3,18 @@ import {message, Space, Tag} from "antd";
 import CryptoJS from "crypto-js";
 import React from "react";
 
-export const ajaxCommon = (url: string, params: object, callback: Function, isApi = true) => {
-  let api_ = "";
-  if (isApi) {
-    api_ = "api";
-  }
+export const ajaxCommon = (url: string, params: object, callback: Function, error=(data:any)=>{}) => {
 
-  return request.post(api_ + url, {data: params}).then((data) => {
+
+  return request.post(url, {data: params}).then((data:any) => {
     if (data.code == 0) {
       callback(data)
     } else {
+      error(data)
       message.error(data.msg)
     }
   }).catch(function (error) {
+    error(error)
     console.log(error);
   })
 }
