@@ -25,10 +25,18 @@ const Index: FC<{
               <TreeSelectPro {...props}/>
             ),
           }, uploadPro: {
-            // render: (props) => <>{}</>,
-            renderFormItem: (text, props) => (
-              <UploadPro {...props}/>
-            ),
+            render: (props) => {
+              console.log(6566,props)
+              return (<UploadPro value={props} fieldPropsUpload={{
+                disabled:true
+              }}/>)
+            },
+            renderFormItem: (text, props) => {
+              console.log(67655,props)
+              return (
+                <UploadPro {...props.fieldProps}/>
+              )
+            },
           },
           tableSelect: {
             renderFormItem: (text, props) => {

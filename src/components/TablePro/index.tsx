@@ -1,11 +1,16 @@
 import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
-import {ActionType, ProTable} from '@ant-design/pro-components';
-import {Button, Divider, message, Popconfirm, Space, Table} from 'antd';
-import React, {FC, Fragment, memo, useEffect, useRef, useState} from 'react';
+import {ActionType, ProTable, ProTableProps} from '@ant-design/pro-components';
+import {Button, Divider, message, PaginationProps, Popconfirm, Space, Table} from 'antd';
+import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
 import {ajaxCommon, arrHasKey, commonFormHandler} from "../../utils/common";
 import {FormPro, ModalPro, TreePro} from "durians";
 import ProProviderPro from '../ProProviderPro';
 import {cloneDeep} from "lodash-es";
+
+
+type LocalProTableProps = Omit<ProTableProps<any, any>, 'pagination'> & { pagination?: PaginationProps };
+
+type Columns = LocalProTableProps['columns'] & { proConfig?: { url?: string, setData?: Function, isKeyword?: boolean } }
 
 
 const columns_: any = [
@@ -94,10 +99,17 @@ const TablePro: FC<{
    */
   deleteParams?: any;
   /**
+   * @description 隐藏批量删除
+   * @default {}
+   */
+  deleteBatchHidden?: boolean;
+  /**
    * @description pro-table的props参数，包括columns，dataSource等
    * @default {}
    */
-  fieldProps?: any;
+  fieldProps?: Omit<LocalProTableProps, 'columns'> & {
+    columns: Columns | ((type: 'table' | 'add') => Columns);
+  };
   /**
    * @description BetaSchemaForm的props参数
    * @default {}
@@ -165,6 +177,7 @@ const TablePro: FC<{
         deleteField = null,
         deleteFieldIsArr = false,
         deleteParams = {},
+        deleteBatchHidden = false,
         addFormProFieldProps = {},
         actionWidth = 100,
         fieldProps = {
@@ -216,7 +229,7 @@ const TablePro: FC<{
   // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
-  let id_ = fieldProps.rowKey || "id"
+  let id_:any = fieldProps.rowKey || "id"
   let actionBarComponent = [...(editUrl ? [({record}: any) => <BaseForm title="编辑" id={id_}
                                                                         record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(deleteUrl ? [({record}: any) =>
     <Popconfirm
@@ -240,7 +253,7 @@ const TablePro: FC<{
   }, []);
 
 
-  let BaseForm: FC<{ children?: any; record?: any, id?: string, title?: string }> = ({
+  let BaseForm: FC<{ children?: any; record?: any, id?: any, title?: string }> = ({
                                                                                        children,
                                                                                        record,
                                                                                        id,
@@ -315,7 +328,8 @@ const TablePro: FC<{
       if (deleteField) {
         params_[deleteField] = keys
       } else {
-        params_[fieldProps.rowKey || "id"] = keys
+        let _rowKey = typeof fieldProps?.rowKey =="function"?fieldProps?.rowKey({}):fieldProps?.rowKey
+        params_[_rowKey as string || "id"] = keys
       }
     }
 
@@ -370,7 +384,7 @@ const TablePro: FC<{
             formRef={formRef}
             defaultSize="small"
             scroll={{x: "100%"}}
-            rowSelection={deleteUrl || tableAlertOptionRenderPro.length || onSelectChange ? {
+            rowSelection={(deleteUrl && !deleteBatchHidden) || tableAlertOptionRenderPro.length || onSelectChange ? {
               // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
               // 注释该行则默认不显示下拉选项
               selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
@@ -402,7 +416,7 @@ const TablePro: FC<{
                                      }) => {
               return (
                 <Space size={16}>
-                  {deleteUrl ?
+                  {deleteUrl && !deleteBatchHidden?
                     <ModalPro
                       title="是否确定删除？"
                       Content={() => "确定删除？"}
@@ -524,7 +538,14 @@ const TablePro: FC<{
               labelWidth: 'auto',
               ...(fieldProps?.search || {})
             }}
+            // @ts-ignore
             toolBarRender={(action) => {
+
+              const toolBarRender = fieldProps.toolBarRender
+
+              if (toolBarRender === false ) {
+                return false
+              }
               return [
                 ...(addUrl ? [
                   <BaseForm>
@@ -537,7 +558,8 @@ const TablePro: FC<{
                     </Button>
                   </BaseForm>
                 ] : []),
-                ...(fieldProps.toolBarRender?.map((Comp: any) => {
+                // @ts-ignore
+                ...(toolBarRender?.map((Comp: any) => {
                   if (typeof Comp === "function") {
                     return <Comp action={action} formRef={formRef} searchValues={searchValues}/>
                   } else {

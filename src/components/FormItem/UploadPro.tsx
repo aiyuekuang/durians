@@ -1,5 +1,5 @@
 import {Button, message, Upload} from 'antd';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {UploadOutlined} from "@ant-design/icons";
 
 
@@ -12,15 +12,11 @@ const Index: React.FC<{
   /**
    * antd上传自己的API
    * */
-  fieldProps?: any;
+  fieldPropsUpload?: any;
   /**
    * URL
    * */
   url?: string;
-  /**
-   * 头部
-   * */
-  headers?: any;
   /**
    * 变化后的函数
    * */
@@ -29,29 +25,80 @@ const Index: React.FC<{
    * 接口请求完成后的数据处理
    * */
   setData?: any;
-}> = ({title = "上传", fieldProps = {},url="/upload",headers={}}) => {
+  value?: any;
+  ajaxSuccess?: any;
+  ajaxError?: any;
+}> = ({
+        title = "上传", fieldPropsUpload = {}, url = "/upload", setData = () => {
+  }, onChange = () => {
+  }, value = [], ajaxSuccess = (data: any, callback = () => {
+  }) => {
+    if (data.code === 0) {
+      callback()
+    }
+  }, ajaxError = (data: any, callback = () => {
+  }) => {
+    if (data.code !== 0) {
+      callback()
+    }
+  }
+      }) => {
+
+  const [_fileList, _setFileList]: any = useState([])
+
+  useEffect(() => {
+    _setFileList(changeValue(value))
+  }, []);
+
+
+  const changeValue: any = (data: any) => {
+    if (data && data.length) {
+      if (typeof data === "string") {
+        return JSON.parse(data)
+      } else {
+        return JSON.stringify(data)
+      }
+    } else {
+      return data
+    }
+  }
+
+
+  console.log(555, fieldPropsUpload, url, value)
+
 
   const uploadProps = {
     name: 'file',
     action: url,
-    headers: {
-      // authorization: 'authorization-text',
-      ...headers
-    },
-    onChange(info:any) {
+    fileList: _fileList,
+    onChange(info: any) {
+
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
       if (info.file.status === 'done') {
-        message.success(`${info.file.name} 上传成功`);
+        ajaxSuccess(info.file.response, (data: any) => {
+          onChange(changeValue(info.fileList.map((data: any) => {
+            return {
+              ...data,
+              url: setData(info.file.response)
+            }
+          })))
+          message.success(`${info.file.name} 上传成功`);
+        })
+        ajaxError(info.file.response, (data: any) => {
+          message.error(data.msg)
+        })
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 上传失败`);
       }
+      _setFileList(info.fileList)
     },
+    ...fieldPropsUpload
   };
 
   return (
-    <Upload {...fieldProps} {...uploadProps}>
+    <Upload  {...uploadProps}>
       <Button icon={<UploadOutlined/>}>{title}</Button>
     </Upload>
   );
