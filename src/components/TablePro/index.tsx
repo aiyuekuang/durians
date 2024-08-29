@@ -8,7 +8,7 @@ import ProProviderPro from '../ProProviderPro';
 import {cloneDeep} from "lodash-es";
 
 
-type LocalProTableProps = Omit<ProTableProps<any, any>, 'pagination'> & { pagination?: PaginationProps };
+type LocalProTableProps = Omit<ProTableProps<any, any>, 'pagination'> & { pagination?: PaginationProps, } & any;
 
 type Columns = LocalProTableProps['columns'] & { proConfig?: { url?: string, setData?: Function, isKeyword?: boolean } }
 
@@ -165,8 +165,8 @@ const TablePro: FC<{
   /**
    *
    * */
-  value: any
-  onSelectChange: any
+  value?: any
+  onSelectChange?: any
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',

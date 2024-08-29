@@ -1,4 +1,4 @@
-import {Dropdown, MenuProps, message, Tree} from 'antd';
+import {Dropdown, MenuProps, message, Popconfirm, Tree} from 'antd';
 import React, {FC, useEffect, useState} from 'react';
 import {DeleteOutlined, EditOutlined, FormOutlined, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
 import {FormPro} from "durians";
@@ -249,12 +249,17 @@ const Index: FC<{
     }, {
       key: '3',
       label: (
-        <a onClick={() => {
-          deleteHandle([nodeData.key])
-        }}
+        <Popconfirm
+          title="删除"
+          description="确定删除这条数据吗？"
+          onConfirm={() => {
+            deleteHandle([nodeData.key])
+          }}
+          okText="是"
+          cancelText="否"
         >
-          删除
-        </a>
+          <a style={{color: "red"}}>删除</a>
+        </Popconfirm>
       ),
       icon: <DeleteOutlined/>,
       disabled: !deleteUrl,
