@@ -1,5 +1,5 @@
 import {Button, message} from 'antd';
-import React, {FC, ReactNode} from 'react';
+import React, {FC} from 'react';
 import {BetaSchemaForm} from "@ant-design/pro-components";
 import {ajaxCommon, commonFormHandler} from "../../utils/common";
 import ProProviderPro from "../ProProviderPro"
@@ -7,7 +7,6 @@ import ProProviderPro from "../ProProviderPro"
 type BetaSchemaFormType = typeof BetaSchemaForm;
 
 type BetaSchemaFormProps = Parameters<BetaSchemaFormType>[0];
-
 
 
 // 脚手架示例组件
@@ -58,7 +57,7 @@ const Index: FC<{
           await ajax(url, _values, (data: any) => {
             // 刷新页面
             message.success(setMsg(data));
-            finishFun(data,_values)
+            finishFun(data, _values)
             isSuccess = true
           })
           return isSuccess

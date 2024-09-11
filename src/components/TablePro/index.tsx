@@ -253,13 +253,11 @@ const TablePro: FC<{
   }, []);
 
 
-  let BaseForm: FC<{ children?: any; record?: any, id?: any, title?: string }> = ({
-                                                                                       children,
+  let BaseForm: FC<{ children?: any; record?: any, id?: any, title?: string }> = ({children,
                                                                                        record,
                                                                                        id,
                                                                                        title = "新增"
                                                                                      }) => {
-
     let columns_ = typeof fieldProps.columns === "function" ? fieldProps.columns("add") : fieldProps.columns;
     let url_ = addUrl
     let _params: any = {}
@@ -378,9 +376,9 @@ const TablePro: FC<{
           ...(treeFieldProps ? {maxWidth: `calc(100% - ${treeWidth + 8}px)`} : {})
         }}>
           <ProTable
-            onSubmit={(values) => {
-              setSearchValues(values);
-            }}
+            // onSubmit={(values) => {
+            //   setSearchValues(values);
+            // }}
             formRef={formRef}
             defaultSize="small"
             scroll={{x: "100%"}}
@@ -456,6 +454,8 @@ const TablePro: FC<{
               let _params: any = {...tableParams}
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
+
+              setSearchValues(_params);
 
               if (url) {
                 await ajax(url, paramsFun({
