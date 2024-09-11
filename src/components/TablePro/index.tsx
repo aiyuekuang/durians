@@ -229,7 +229,7 @@ const TablePro: FC<{
   // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
-  let id_:any = fieldProps.rowKey || "id"
+  let id_: any = fieldProps.rowKey || "id"
   let actionBarComponent = [...(editUrl ? [({record}: any) => <BaseForm title="编辑" id={id_}
                                                                         record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(deleteUrl ? [({record}: any) =>
     <Popconfirm
@@ -253,11 +253,12 @@ const TablePro: FC<{
   }, []);
 
 
-  let BaseForm: FC<{ children?: any; record?: any, id?: any, title?: string }> = ({children,
-                                                                                       record,
-                                                                                       id,
-                                                                                       title = "新增"
-                                                                                     }) => {
+  let BaseForm: FC<{ children?: any; record?: any, id?: any, title?: string }> = ({
+                                                                                    children,
+                                                                                    record,
+                                                                                    id,
+                                                                                    title = "新增"
+                                                                                  }) => {
     let columns_ = typeof fieldProps.columns === "function" ? fieldProps.columns("add") : fieldProps.columns;
     let url_ = addUrl
     let _params: any = {}
@@ -326,7 +327,7 @@ const TablePro: FC<{
       if (deleteField) {
         params_[deleteField] = keys
       } else {
-        let _rowKey = typeof fieldProps?.rowKey =="function"?fieldProps?.rowKey({}):fieldProps?.rowKey
+        let _rowKey = typeof fieldProps?.rowKey == "function" ? fieldProps?.rowKey({}) : fieldProps?.rowKey
         params_[_rowKey as string || "id"] = keys
       }
     }
@@ -414,7 +415,7 @@ const TablePro: FC<{
                                      }) => {
               return (
                 <Space size={16}>
-                  {deleteUrl && !deleteBatchHidden?
+                  {deleteUrl && !deleteBatchHidden ?
                     <ModalPro
                       title="是否确定删除？"
                       Content={() => "确定删除？"}
@@ -451,16 +452,16 @@ const TablePro: FC<{
             actionRef={actionRef}
             request={async (params, sort, filter) => {
               let result = fieldProps.dataSource
-              let _params: any = {...tableParams}
+              let _params: any = {...tableParams, ...params}
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
 
+              // 收集参数
               setSearchValues(_params);
 
               if (url) {
                 await ajax(url, paramsFun({
                   ..._params,
-                  ...params,
                 }), (data: any) => {
                   console.log(data)
                   result = data
@@ -543,7 +544,7 @@ const TablePro: FC<{
 
               const toolBarRender = fieldProps.toolBarRender
 
-              if (toolBarRender === false ) {
+              if (toolBarRender === false) {
                 return false
               }
               return [
