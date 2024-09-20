@@ -55,7 +55,7 @@
   ],
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
-    "@ant-design/pro-components": "^2.7.15",
+    "@ant-design/pro-components": "^2.7.16",
     "@types/crypto-js": "^4.2.2",
     "@types/lodash-es": "^4.17.12",
     "antd": "^5.20.0",

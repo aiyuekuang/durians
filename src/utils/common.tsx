@@ -1,12 +1,12 @@
 import request from "umi-request";
-import {message, Space, Tag} from "antd";
+import {message} from "antd";
 import CryptoJS from "crypto-js";
-import React from "react";
 
-export const ajaxCommon = (url: string, params: object, callback: Function, error=(data:any)=>{}) => {
+export const ajaxCommon = (url: string, params: object, callback: Function, error = (data: any) => {
+}) => {
 
 
-  return request.post(url, {data: params}).then((data:any) => {
+  return request.post(url, {data: params}).then((data: any) => {
     if (data.code == 0) {
       callback(data)
     } else {
@@ -24,19 +24,17 @@ export const commonFormHandler = (columns: any, ajax: any) => {
   for (let i of columns) {
     let proConfig = i?.proConfig
     // 处理一下搜索框时，上面搜索就不要了，因为参数一致，会冲突导致上面的失效
-    if(proConfig?.isKeyword){
+    if (proConfig?.isKeyword) {
       i.hideInSearch = true
     }
-
-
 
     // 树形和下拉的特殊处理
     if (!i.request) {
       if (i.valueType === "select" || i.valueType === "treeSelect") {
 
         // 选择多的时候，只在当前行展示最多的标签个数
-        i.fieldProps={
-          maxTagCount:'responsive',
+        i.fieldProps = {
+          maxTagCount: 'responsive',
           ...i.fieldProps
         }
 
@@ -83,7 +81,7 @@ let decrypted = (encrypted: string, secretValue: string, ivValue: string) => {
 }
 
 //根据提供的字段判断数组中是否包含
-export const arrHasKey = (key:any,arr:any=[])=>{
+export const arrHasKey = (key: any, arr: any = []) => {
   return arr.find((data: any) => {
     return key(data)
   })

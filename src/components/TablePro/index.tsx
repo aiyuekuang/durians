@@ -388,7 +388,7 @@ const TablePro: FC<{
               // 注释该行则默认不显示下拉选项
               selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
               preserveSelectedRowKeys: true,
-              ...(value ? {selectedRowKeys: value} : {}),
+              ...(value ? {selectedRowKeys: value } : {}),
               onChange: onSelectChange_,
             } : false}
             tableAlertRender={({
@@ -488,7 +488,6 @@ const TablePro: FC<{
             //   },
             // }}
             rowKey="id"
-
             form={{
               // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
               // syncToUrl: (values, type) => {
@@ -541,9 +540,7 @@ const TablePro: FC<{
             }}
             // @ts-ignore
             toolBarRender={(action) => {
-
               const toolBarRender = fieldProps.toolBarRender
-
               if (toolBarRender === false) {
                 return false
               }
@@ -559,7 +556,6 @@ const TablePro: FC<{
                     </Button>
                   </BaseForm>
                 ] : []),
-                // @ts-ignore
                 ...(toolBarRender?.map((Comp: any) => {
                   if (typeof Comp === "function") {
                     return <Comp action={action} formRef={formRef} searchValues={searchValues}/>
