@@ -582,7 +582,7 @@ const TablePro: FC<{
                     actionRef.current?.reload();
                   },
                   placeholder: `请输入${keywordPlaceholder}`,
-                  ...fieldProps.toolbar.search
+                  ...(fieldProps?.toolbar?.search || {})
                 }
               } : {}),
             }}
