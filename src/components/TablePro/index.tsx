@@ -576,12 +576,14 @@ const TablePro: FC<{
                 search: {
                   onSearch: (value: string) => {
                     setTableParams((org) => {
+                      console.log(666, value)
                       let _org = cloneDeep(org);
-                      return {[keywordField]: value, ..._org}
+                      return {..._org, [keywordField]: value}
                     })
                     actionRef.current?.reload();
                   },
                   placeholder: `请输入${keywordPlaceholder}`,
+                  allowClear: true,
                   ...(fieldProps?.toolbar?.search || {})
                 }
               } : {}),
