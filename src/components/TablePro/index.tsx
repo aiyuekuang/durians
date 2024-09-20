@@ -167,6 +167,8 @@ const TablePro: FC<{
    * */
   value?: any
   onSelectChange?: any
+  keywordField?: string
+  keywordPlaceholder?: string
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
@@ -211,7 +213,9 @@ const TablePro: FC<{
         },
         treeWidth = 200,
         value = null,
-        onSelectChange = null
+        onSelectChange = null,
+        keywordField = null,
+        keywordPlaceholder = null
       }) => {
   // 表格其他的
   const [tableParams, setTableParams] = useState({})
@@ -388,7 +392,7 @@ const TablePro: FC<{
               // 注释该行则默认不显示下拉选项
               selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
               preserveSelectedRowKeys: true,
-              ...(value ? {selectedRowKeys: value } : {}),
+              ...(value ? {selectedRowKeys: value} : {}),
               onChange: onSelectChange_,
             } : false}
             tableAlertRender={({
@@ -452,7 +456,7 @@ const TablePro: FC<{
             actionRef={actionRef}
             request={async (params, sort, filter) => {
               let result = fieldProps.dataSource
-              let _params: any = {...tableParams, ...params}
+              let _params: any = {...params}
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
 
@@ -502,6 +506,7 @@ const TablePro: FC<{
             }}
             dateFormatter="string"
             {...fieldProps}
+            params={{...tableParams, ...(fieldProps?.params || {})}}
             pagination={{
               ...fieldProps?.pagination,
               pageSize: pageSize,
@@ -564,6 +569,22 @@ const TablePro: FC<{
                   }
                 }) || [])
               ]
+            }}
+            toolbar={{
+              ...fieldProps.toolbar,
+              ...(keywordField ? {
+                search: {
+                  onSearch: (value: string) => {
+                    setTableParams((org) => {
+                      let _org = cloneDeep(org);
+                      return {[keywordField]: value, ..._org}
+                    })
+                    actionRef.current?.reload();
+                  },
+                  placeholder: `请输入${keywordPlaceholder}`,
+                  ...fieldProps.toolbar.search
+                }
+              } : {}),
             }}
           />
         </div>
