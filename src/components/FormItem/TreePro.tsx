@@ -101,7 +101,7 @@ const Index: FC<{
         setMsg = (data: any) => {
           return data.msg
         },
-        editField,
+        editField="id",
         fieldProps = {
           fieldNames: {title: "title", key: "key", children: "children"},
           onSelect: () => {
@@ -187,7 +187,7 @@ const Index: FC<{
 
     let url_ = addUrl
     let _params: any = {}
-    if (editField && record.id) {
+    if (editField && record?.id) {
       _params[editField] = record.id
       if (editUrl) {
         url_ = editUrl
