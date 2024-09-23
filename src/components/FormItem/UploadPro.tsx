@@ -33,12 +33,12 @@ const Index: React.FC<{
   }, onChange = () => {
   }, value = [], ajaxSuccess = (data: any, callback = () => {
   }) => {
-    if (data.code === 0) {
+    if (data?.code === 0) {
       callback()
     }
   }, ajaxError = (data: any, callback = () => {
   }) => {
-    if (data.code !== 0) {
+    if (data?.code !== 0) {
       callback()
     }
   }
@@ -73,6 +73,7 @@ const Index: React.FC<{
     fileList: _fileList,
     onChange(info: any) {
 
+      console.log(77877,info)
       if (info.file.status !== 'uploading') {
         console.log(info.file, info.fileList);
       }
@@ -87,7 +88,10 @@ const Index: React.FC<{
           message.success(`${info.file.name} 上传成功`);
         })
         ajaxError(info.file.response, (data: any) => {
-          message.error(data.msg)
+          console.log(666,data)
+          if(data){
+            message.error(data.msg)
+          }
         })
       } else if (info.file.status === 'error') {
         message.error(`${info.file.name} 上传失败`);
