@@ -4,23 +4,25 @@ import CryptoJS from "crypto-js";
 
 export const ajaxCommon = (url: string, params: object, callback: Function, error = (data: any) => {
 }) => {
-
-
-  return request.post(url, {data: params}).then((data: any) => {
-    if (data.code == 0) {
-      callback(data)
-    } else {
-      error(data)
-      message.error(data.msg)
-    }
-  }).catch(function (error) {
-    error(error)
-    console.log(error);
-  })
+  if (url) {
+    return request.post(url, {data: params}).then((data: any) => {
+      if (data.code == 0) {
+        callback(data)
+      } else {
+        error(data)
+        message.error(data.msg)
+      }
+    }).catch(function (error) {
+      error(error)
+      console.log(error);
+    })
+  }else {
+    console.log("没有传递URL")
+  }
 }
 
 //通用处理Form的columns
-export const commonFormHandler = (columns: any, ajax: any,isEdit=false) => {
+export const commonFormHandler = (columns: any, ajax: any, isEdit = false) => {
   for (let i of columns) {
     let proConfig = i?.proConfig
     let fieldProps = {};
