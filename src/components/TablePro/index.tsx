@@ -272,9 +272,9 @@ const TablePro: FC<{
         url_ = editUrl
       }
     }
-
     return (
       <FormPro
+        isEdit={id && record?.[id]}
         ajax={ajax}
         {...addFormProFieldProps}
         url={url_}

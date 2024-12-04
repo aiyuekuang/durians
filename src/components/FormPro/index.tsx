@@ -29,19 +29,21 @@ const Index: FC<{
   setMsg?: Function;
   params?: any;
   detailSetData?: any;
+  isEdit?: boolean
 }> = ({
         params = {}, layoutType = "ModalForm", fieldProps = {}, url, ajax = ajaxCommon, finishFun = () => {
   }, setMsg = (data: any) => {
     return data.msg
-  }, children = <Button>点击我</Button>, detailUrl, detailSetData
+  }, children = <Button>点击我</Button>, detailUrl, detailSetData, isEdit = false
       }) => {
 
   return (
     <ProProviderPro>
       <BetaSchemaForm
         layoutType={layoutType}
-        {...(fieldProps?.params ? {
+        {...(detailUrl && isEdit ? {
           request: async (record) => {
+            console.log(66777, record)
             /*传递的参数中，有params说明有详情要请求，否则就不请求 */
             let result = null;
             await ajax(detailUrl, {...record}, (data: any) => {
@@ -70,8 +72,9 @@ const Index: FC<{
             drawerProps: {destroyOnClose: true},
           })}
         {...fieldProps}
+        params={{...(fieldProps?.params || {}), ...params}}
         trigger={children}
-        columns={commonFormHandler(fieldProps?.columns, ajax)}
+        columns={commonFormHandler(fieldProps?.columns, ajax, isEdit)}
       />
     </ProProviderPro>
   );

@@ -80,6 +80,7 @@ const Index: FC<{
   editField?: string;
   isSelect: boolean;
   detail: boolean;
+  rowKey:string
 }> = ({
         title = "选择",
         ajax = ajaxCommon,
@@ -109,6 +110,7 @@ const Index: FC<{
         },
         isSelect = false,
         detail = true,
+                     rowKey="id"
       }) => {
   const [treeData, setTreeData]: any = useState([]);
   const {
@@ -187,8 +189,8 @@ const Index: FC<{
 
     let url_ = addUrl
     let _params: any = {}
-    if (editField && record?.id) {
-      _params[editField] = record.id
+    if (editField && record?.[rowKey]) {
+      _params[editField] = record?.[rowKey]
       if (editUrl) {
         url_ = editUrl
       }
@@ -197,6 +199,7 @@ const Index: FC<{
 
     return (
       <FormPro
+        isEdit={editField && record?.[rowKey]}
         finishFun={() => {
           onLoadData({}, {...params({})})
         }}

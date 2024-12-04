@@ -20,22 +20,27 @@ export const ajaxCommon = (url: string, params: object, callback: Function, erro
 }
 
 //通用处理Form的columns
-export const commonFormHandler = (columns: any, ajax: any) => {
+export const commonFormHandler = (columns: any, ajax: any,isEdit=false) => {
   for (let i of columns) {
     let proConfig = i?.proConfig
+    let fieldProps = {};
     // 处理一下搜索框时，上面搜索就不要了，因为参数一致，会冲突导致上面的失效
     if (proConfig?.isKeyword) {
       i.hideInSearch = true
     }
 
+    if (i.editable === false && isEdit) {
+      fieldProps = {...fieldProps, ...(i.editable === false ? {disabled: true} : {})}
+    }
     // 树形和下拉的特殊处理
     if (!i.request) {
       if (i.valueType === "select" || i.valueType === "treeSelect") {
 
         // 选择多的时候，只在当前行展示最多的标签个数
-        i.fieldProps = {
+        fieldProps = {
+          ...fieldProps,
           maxTagCount: 'responsive',
-          ...i.fieldProps
+          ...i.fieldProps,
         }
 
         i.request = async (params: any, props: any) => {
@@ -47,6 +52,8 @@ export const commonFormHandler = (columns: any, ajax: any) => {
         }
       }
     }
+    i.fieldProps = fieldProps;
+
   }
   return columns
 }
