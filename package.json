@@ -58,7 +58,7 @@
     "@ant-design/pro-components": "^2.8.2",
     "@types/crypto-js": "^4.2.2",
     "@types/lodash-es": "^4.17.12",
-    "antd": "^5.20.0",
+    "antd": "^5.22.2",
     "crypto-js": "^4.2.0",
     "esn": "^2.0.29",
     "fs": "^0.0.1-security",

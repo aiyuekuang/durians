@@ -5,7 +5,7 @@ import UploadPro from "../FormItem/UploadPro";
 import TableSelect from "../FormItem/TableSelect";
 import {MailTwoTone} from "@ant-design/icons";
 import {message} from "antd";
-import {ajaxCommon} from "durians/utils/common";
+import {ajaxCommon} from "../../utils/common";
 
 const Index: FC<{
   children: any
