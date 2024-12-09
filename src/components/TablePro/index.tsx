@@ -353,6 +353,7 @@ const TablePro: FC<{
     return data?.proConfig?.isKeyword
   }, columnsTemp);
 
+  console.log(678,actionWidth)
   return (
     <ProProviderPro>
       <div className="durians_table_body">
@@ -430,6 +431,7 @@ const TablePro: FC<{
                       }}
                     >
                       <Button
+                        variant="solid"
                         size="small"
                         key="danger"
                         icon={<DeleteOutlined/>}
@@ -553,6 +555,7 @@ const TablePro: FC<{
                 ...(addUrl ? [
                   <BaseForm>
                     <Button
+                      variant="solid"
                       key="button"
                       icon={<PlusOutlined/>}
                       type="primary"

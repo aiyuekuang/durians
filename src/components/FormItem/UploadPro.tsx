@@ -103,7 +103,7 @@ const Index: React.FC<{
 
   return (
     <Upload  {...uploadProps}>
-      <Button icon={<UploadOutlined/>}>{title}</Button>
+      <Button variant="solid" icon={<UploadOutlined/>}>{title}</Button>
     </Upload>
   );
 };

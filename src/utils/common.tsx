@@ -35,7 +35,7 @@ export const commonFormHandler = (columns: any, ajax: any, isEdit = false) => {
       fieldProps = {...fieldProps, ...(i.editable === false ? {disabled: true} : {})}
     }
     // 树形和下拉的特殊处理
-    if (!i.request) {
+    if (!i.request && proConfig?.url) {
       if (i.valueType === "select" || i.valueType === "treeSelect") {
 
         // 选择多的时候，只在当前行展示最多的标签个数

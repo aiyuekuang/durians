@@ -52,7 +52,7 @@ const Index: React.FC<{
         hide()
       }}
     >
-      <Button type="link">
+      <Button type="link" variant="link">
         {value && value.length ? `已选择${value.length}个` : title}
       </Button>
     </ModalPro>
