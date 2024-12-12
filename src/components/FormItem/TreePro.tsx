@@ -80,7 +80,12 @@ const Index: FC<{
   editField?: string;
   isSelect: boolean;
   detail: boolean;
-  rowKey:string
+  rowKey: string;
+  /**
+   * @description 是否按需加载数，默认不是
+   * @default false
+   */
+  isLoadData: boolean
 }> = ({
         title = "选择",
         ajax = ajaxCommon,
@@ -102,20 +107,20 @@ const Index: FC<{
         setMsg = (data: any) => {
           return data.msg
         },
-        editField="id",
+        editField = "id",
         fieldProps = {
           fieldNames: {title: "title", key: "key", children: "children"},
-          onSelect: () => {
-          },
+          // onSelect: () => {
+          // },
         },
         isSelect = false,
         detail = true,
-                     rowKey="id"
+        rowKey = "id",
+        isLoadData = false
       }) => {
   const [treeData, setTreeData]: any = useState([]);
   const {
-    fieldNames, onSelect = () => {
-    }
+    fieldNames
   } = fieldProps;
 
 
@@ -162,17 +167,26 @@ const Index: FC<{
     return ajax(url, {...params(_params), ...values}, (data: any) => {
       let result = setData(data);
 
-      if (fieldNames) {
-        result = result.map((value: any) => {
-          value.title = value[fieldNames.title]
-          value.key = value[fieldNames.key]
+      // if (fieldNames) {
+      //   result = result.map((value: any) => {
+      //     value.title = value[fieldNames.title]
+      //     value.key = value[fieldNames.key]
+      //
+      //     if (isSelect) {
+      //       value.isLeaf = true
+      //     }
+      //     return value
+      //   })
+      // }
 
-          if (isSelect) {
-            value.isLeaf = true
-          }
-          return value
-        })
-      }
+
+      // setTreeData((org: any) => {
+      //   if (_params.key) {
+      //     return addChildToNode(org, _params.key, result, fieldNames.key)
+      //   } else {
+      //     return result
+      //   }
+      // })
 
       setTreeData((org: any) => {
         if (_params.key) {
@@ -181,8 +195,11 @@ const Index: FC<{
           return result
         }
       })
+
+
     })
   }
+
 
   let FormNode = (props: any) => {
     const {children, addFormProFieldProps, ajax, addUrl, record, fieldProps} = props;
@@ -227,7 +244,7 @@ const Index: FC<{
                   record={{id: nodeData.key}}
                   fieldProps={{
                     readonly: true,
-                    params:{id: nodeData.key}
+                    params: {id: nodeData.key}
                   }}>
           <a>
             详情
@@ -240,7 +257,7 @@ const Index: FC<{
       key: '2',
       label: (
         <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}} fieldProps={{
-          params:{id: nodeData.key}
+          params: {id: nodeData.key}
         }}>
           <a>
             编辑
@@ -269,6 +286,29 @@ const Index: FC<{
     }]
   }
 
+
+  let _terrData = treeData.map((data: any) => {
+    return {
+      ...data,
+      switcherIcon: <Dropdown menu={{items: menuItem(data)}} getPopupContainer={() => document.body}>
+        <a onClick={(e: any) => e.preventDefault()}>
+          <FormOutlined/>
+        </a>
+      </Dropdown>
+    }
+  })
+  console.log(6677, _terrData)
+
+  const titleRender = (nodeData:any) => {
+    return (
+      <Dropdown menu={{items: menuItem(nodeData)}} getPopupContainer={() => document.body} trigger={['contextMenu']}>
+        <span>
+          {nodeData[fieldNames.title]}
+        </span>
+      </Dropdown>
+    );
+  };
+
   return (
     <div className="durians_tree_body">
       <div className="durians_tree_body_title">
@@ -283,19 +323,11 @@ const Index: FC<{
       </div>
       <div className="durians_tree_body_tree">
         <Tree
-          onSelect={onSelect}
-          fieldNames={fieldNames}
-          loadData={onLoadData}
-          treeData={treeData.map((data: any) => {
-            return {
-              ...data,
-              switcherIcon: <Dropdown menu={{items: menuItem(data)}} getPopupContainer={() => document.body}>
-                <a onClick={(e: any) => e.preventDefault()}>
-                  <FormOutlined/>
-                </a>
-              </Dropdown>
-            }
-          })}
+          // onSelect={onSelect}
+          // fieldNames={fieldNames}
+          {...(isLoadData ? {loadData: onLoadData} : {})}
+          treeData={treeData}
+          titleRender={titleRender}
           // titleRender={(nodeData:any) => {
           //   console.log(789666, nodeData)
           //   return (
