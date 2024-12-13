@@ -1,6 +1,6 @@
 import {Dropdown, MenuProps, message, Popconfirm, Tree} from 'antd';
 import React, {FC, useEffect, useState} from 'react';
-import {DeleteOutlined, EditOutlined, FormOutlined, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
+import {DeleteOutlined, EditOutlined, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
 import {FormPro} from "durians";
 import {ajaxCommon} from "../../utils/common";
 import {addChildToNode} from "../FormItem/TreeSelectPro";
@@ -123,6 +123,8 @@ const Index: FC<{
     fieldNames
   } = fieldProps;
 
+  const [rankKey, setRankKey] = useState(Math.random())
+
 
   const treeProps = {
     ajax,
@@ -201,8 +203,9 @@ const Index: FC<{
   }
 
 
-  let FormNode = (props: any) => {
-    const {children, addFormProFieldProps, ajax, addUrl, record, fieldProps} = props;
+  let FormNode = (formProps: any) => {
+    const {children, ajax, addUrl, record, fieldProps} = formProps;
+    const [isEdit, setIsEdit] = useState(editField && record?.[rowKey])
 
     let url_ = addUrl
     let _params: any = {}
@@ -216,7 +219,7 @@ const Index: FC<{
 
     return (
       <FormPro
-        isEdit={editField && record?.[rowKey]}
+        isEdit={isEdit}
         finishFun={() => {
           onLoadData({}, {...params({})})
         }}
@@ -225,7 +228,14 @@ const Index: FC<{
         {...addFormProFieldProps}
         fieldProps={{
           ...addFormProFieldProps.fieldProps,
-          ...fieldProps
+          ...fieldProps,
+          onOpenChange:()=>{
+            if(!record){
+              setIsEdit(false)
+            }else {
+              setIsEdit(editField && record?.[rowKey])
+            }
+          }
         }}
         params={{..._params, ...(addFormProFieldProps?.params || {})}}
       >
@@ -239,13 +249,16 @@ const Index: FC<{
     return [{
       key: '1',
       label: (
-        <FormNode {...treeProps}
-                  addUrl={addUrl}
-                  record={{id: nodeData.key}}
-                  fieldProps={{
-                    readonly: true,
-                    params: {id: nodeData.key}
-                  }}>
+        <FormNode
+          {...treeProps}
+          addUrl={addUrl}
+          record={{id: nodeData[rowKey]}}
+          fieldProps={{
+            initialValues: nodeData,
+            readonly: true,
+            params: {id: nodeData[rowKey]}
+          }}
+        >
           <a>
             详情
           </a>
@@ -256,9 +269,15 @@ const Index: FC<{
     }, {
       key: '2',
       label: (
-        <FormNode {...treeProps} addUrl={addUrl} record={{id: nodeData.key}} fieldProps={{
-          params: {id: nodeData.key}
-        }}>
+        <FormNode
+          {...treeProps}
+          addUrl={addUrl}
+          record={{id: nodeData[rowKey]}}
+          fieldProps={{
+            initialValues: nodeData,
+            params: {id: nodeData[rowKey]}
+          }}
+        >
           <a>
             编辑
           </a>
@@ -273,7 +292,7 @@ const Index: FC<{
           title="删除"
           description="确定删除这条数据吗？"
           onConfirm={() => {
-            deleteHandle([nodeData.key])
+            deleteHandle([nodeData[rowKey]])
           }}
           okText="是"
           cancelText="否"
@@ -287,19 +306,19 @@ const Index: FC<{
   }
 
 
-  let _terrData = treeData.map((data: any) => {
-    return {
-      ...data,
-      switcherIcon: <Dropdown menu={{items: menuItem(data)}} getPopupContainer={() => document.body}>
-        <a onClick={(e: any) => e.preventDefault()}>
-          <FormOutlined/>
-        </a>
-      </Dropdown>
-    }
-  })
-  console.log(6677, _terrData)
+  // let _terrData = treeData.map((data: any) => {
+  //   return {
+  //     ...data,
+  //     switcherIcon: <Dropdown menu={{items: menuItem(data)}} getPopupContainer={() => document.body}>
+  //       <a onClick={(e: any) => e.preventDefault()}>
+  //         <FormOutlined/>
+  //       </a>
+  //     </Dropdown>
+  //   }
+  // })
 
-  const titleRender = (nodeData:any) => {
+
+  const titleRender = (nodeData: any) => {
     return (
       <Dropdown menu={{items: menuItem(nodeData)}} getPopupContainer={() => document.body} trigger={['contextMenu']}>
         <span>
@@ -309,6 +328,8 @@ const Index: FC<{
     );
   };
 
+
+  console.log('treeProps', treeProps)
   return (
     <div className="durians_tree_body">
       <div className="durians_tree_body_title">
@@ -316,7 +337,9 @@ const Index: FC<{
           {title}
         </div>
         <div className="durians_tree_body_title_r">
-          <FormNode {...treeProps}>
+          <FormNode
+            {...treeProps}
+          >
             <PlusOutlined/>
           </FormNode>
         </div>
@@ -342,7 +365,7 @@ const Index: FC<{
           //   )
           // }}
           {...fieldProps}
-        ></Tree>
+        />
       </div>
     </div>
   );

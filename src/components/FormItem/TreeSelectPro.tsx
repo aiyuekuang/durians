@@ -4,7 +4,6 @@ import {ajaxCommon} from "../../utils/common";
 import {cloneDeep} from "lodash-es";
 
 
-
 export function addChildToNode(tree: any, id: any, newNode: any, rowKey: string = "value", children: string = "children") {
   let _tree = cloneDeep(tree);
   for (let i of _tree) {
@@ -21,7 +20,7 @@ export function addChildToNode(tree: any, id: any, newNode: any, rowKey: string 
 
 
 const Index: FC<any> = (props) => {
-  const {ajax = ajaxCommon} = props;
+  const {ajax = ajaxCommon, rowKey = "value"} = props;
   const {
     fieldNames, params = (data: any) => {
       return {}
@@ -35,20 +34,20 @@ const Index: FC<any> = (props) => {
 
 
   const onLoadData = (_params: any, values: any = {}) => {
-    return ajax(url, {...params(_params),...values}, (data: any) => {
+    return ajax(url, {...params(_params), ...values}, (data: any) => {
       let result = setData(data);
 
-      if (fieldNames) {
-        result = result.map((value: any) => {
-          value.label = value[fieldNames.label]
-          value.value = value[fieldNames.value]
-          return value
-        })
-      }
+      // if (fieldNames) {
+      //   result = result.map((value: any) => {
+      //     value.label = value[fieldNames.label]
+      //     value.value = value[fieldNames.value]
+      //     return value
+      //   })
+      // }
 
       setTreeData((org: any) => {
-        if (_params.value) {
-          return addChildToNode(org, _params.value, result)
+        if (_params[rowKey]) {
+          return addChildToNode(org, _params[rowKey], result, rowKey)
         } else {
           return result
         }
@@ -58,11 +57,11 @@ const Index: FC<any> = (props) => {
 
   return (
     <TreeSelect
-      {...props?.fieldProps}
+      placeholder="请选择"
       treeDataSimpleMode
       style={{width: '100%'}}
       dropdownStyle={{maxHeight: 400, overflow: 'auto'}}
-      placeholder="请选择"
+      {...props?.fieldProps}
       loadData={onLoadData}
       treeData={treeData}
     />

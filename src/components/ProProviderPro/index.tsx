@@ -21,9 +21,12 @@ const Index: FC<{
         valueTypeMap: {
           treeSelectPro: {
             // render: (props) => <>{}</>,
-            renderFormItem: (text, props) => (
-              <TreeSelectPro {...props}/>
-            ),
+            renderFormItem: (text, props) => {
+              console.log(7666,props)
+              return (
+                <TreeSelectPro {...props}/>
+              )
+            },
           }, uploadPro: {
             render: (props) => {
               console.log(6566,props)

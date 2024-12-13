@@ -37,13 +37,15 @@ const Index: FC<{
   }, children = <Button>点击我</Button>, detailUrl, detailSetData, isEdit = false
       }) => {
 
+  console.log(888,isEdit)
+
+
   return (
     <ProProviderPro>
       <BetaSchemaForm
         layoutType={layoutType}
         {...(detailUrl && isEdit ? {
           request: async (record) => {
-            console.log(66777, record)
             /*传递的参数中，有params说明有详情要请求，否则就不请求 */
             let result = null;
             await ajax(detailUrl, {...record}, (data: any) => {

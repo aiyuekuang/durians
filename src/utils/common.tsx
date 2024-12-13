@@ -16,23 +16,29 @@ export const ajaxCommon = (url: string, params: object, callback: Function, erro
       error(error)
       console.log(error);
     })
-  }else {
+  } else {
     console.log("没有传递URL")
   }
 }
 
 //通用处理Form的columns
 export const commonFormHandler = (columns: any, ajax: any, isEdit = false) => {
+
   for (let i of columns) {
     let proConfig = i?.proConfig
-    let fieldProps = {};
+    let fieldProps = {...i.fieldProps};
     // 处理一下搜索框时，上面搜索就不要了，因为参数一致，会冲突导致上面的失效
     if (proConfig?.isKeyword) {
       i.hideInSearch = true
     }
 
-    if (i.editable === false && isEdit) {
-      fieldProps = {...fieldProps, ...(i.editable === false ? {disabled: true} : {})}
+    // 是否允许编辑，并且要是false，不是空
+    if (i.editable === false) {
+      if (isEdit) {
+        fieldProps = {...fieldProps, disabled: true}
+      } else {
+        fieldProps = {...fieldProps, disabled: false}
+      }
     }
     // 树形和下拉的特殊处理
     if (!i.request && proConfig?.url) {
@@ -55,6 +61,7 @@ export const commonFormHandler = (columns: any, ajax: any, isEdit = false) => {
       }
     }
     i.fieldProps = fieldProps;
+    console.log(7889888, fieldProps, i.fieldProps)
 
   }
   return columns
