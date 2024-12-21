@@ -237,7 +237,7 @@ const Index: FC<{
             }
           }
         }}
-        params={{..._params, ...(addFormProFieldProps?.params || {})}}
+        record={{..._params, ...(addFormProFieldProps?.params || {})}}
       >
         {children}
       </FormPro>

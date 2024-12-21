@@ -61,7 +61,6 @@ export const commonFormHandler = (columns: any, ajax: any, isEdit = false) => {
       }
     }
     i.fieldProps = fieldProps;
-    console.log(7889888, fieldProps, i.fieldProps)
 
   }
   return columns

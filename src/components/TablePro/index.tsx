@@ -250,7 +250,6 @@ const TablePro: FC<{
     </Popconfirm>] : [])]
 
   useEffect(() => {
-    console.log(67666, formRef.current.getFieldsValue())
     if (formRef?.current) {
       setSearchValues(formRef.current.getFieldsValue())
     }
@@ -281,9 +280,9 @@ const TablePro: FC<{
         finishFun={() => {
           actionRef.current?.reload();
         }}
-        params={{..._params, ...addFormProFieldProps.params}}
+        record={{...record, ...tableParams,..._params}}
+        // params={{..._params, ...addFormProFieldProps.params}}
         fieldProps={{
-          initialValues: {...record, ...tableParams},
           columns: columns_.map((data: any) => {
             return {
               ...data,
@@ -306,7 +305,7 @@ const TablePro: FC<{
         {actionBarComponent.map((Comp, i) => {
           return (
             <Fragment key={i}>
-              <Comp record={record} formRef={formRef}/>
+              <Comp record={record} formRef={formRef} action={actionRef.current}/>
               {actionBarComponent.length > 1 && i < actionBarComponent.length - 1 ?
                 <Divider type="vertical"/> : null}
             </Fragment>
