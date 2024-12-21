@@ -21,7 +21,7 @@ const Index: FC<{
    * @description 高级表单自带的参数
    * @default {}
    */
-  fieldProps?: Omit<BetaSchemaFormProps, 'trigger'>;
+  fieldProps?: any;
   url?: string;
   detailUrl?: string;
   record?: any;
@@ -41,10 +41,9 @@ const Index: FC<{
 
   const formRef: any = React.useRef();
 
-  useEffect(() => {
-    // 一般的的场景是在编辑的时候，需要把值传递进去，所以这里需要判断一下
-    formRef?.current?.setFieldsValue(record);
-  }, [record]);
+
+
+
 
   return (
     <ProProviderPro>
@@ -59,7 +58,6 @@ const Index: FC<{
               result = detailSetData(data)
             })
           }
-          console.log(78875666, result, record, _record)
           return result || {};
         }}
         onFinish={async (values: any = {}) => {
@@ -77,17 +75,20 @@ const Index: FC<{
 
           return isSuccess
         }}
+        {...fieldProps}
         {...(layoutType === 'ModalForm'
           ? {
             modalProps: {
               // destroyOnClose: true,
               getContainer: document.getElementById("root")
             },
+            onOpenChange: (visible: boolean) => {
+              fieldProps?.onOpenChange && fieldProps.onOpenChange(visible)
+            }
           }
           : {
             drawerProps: {destroyOnClose: true},
           })}
-        {...fieldProps}
         params={{...record, ...(fieldProps?.params || {})}}
         trigger={children}
         columns={commonFormHandler(fieldProps?.columns, ajax, isEdit)}

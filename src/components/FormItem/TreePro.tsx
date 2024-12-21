@@ -237,7 +237,7 @@ const Index: FC<{
             }
           }
         }}
-        record={{..._params, ...(addFormProFieldProps?.params || {})}}
+        record={{...record,..._params, ...(addFormProFieldProps?.record || {})}}
       >
         {children}
       </FormPro>
@@ -252,11 +252,9 @@ const Index: FC<{
         <FormNode
           {...treeProps}
           addUrl={addUrl}
-          record={{id: nodeData[rowKey]}}
+          record={{...nodeData,id: nodeData[rowKey]}}
           fieldProps={{
-            initialValues: nodeData,
             readonly: true,
-            params: {id: nodeData[rowKey]}
           }}
         >
           <a>
@@ -272,11 +270,7 @@ const Index: FC<{
         <FormNode
           {...treeProps}
           addUrl={addUrl}
-          record={{id: nodeData[rowKey]}}
-          fieldProps={{
-            initialValues: nodeData,
-            params: {id: nodeData[rowKey]}
-          }}
+          record={{...nodeData,id: nodeData[rowKey]}}
         >
           <a>
             编辑
