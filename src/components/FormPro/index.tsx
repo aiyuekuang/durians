@@ -39,10 +39,8 @@ const Index: FC<{
   }, children = <Button>点击我</Button>, detailUrl, detailSetData, isEdit = false, record = {}
       }) => {
 
+  //
   const formRef: any = React.useRef();
-
-
-
 
 
   return (
