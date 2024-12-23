@@ -7,7 +7,7 @@ import {addChildToNode} from "../FormItem/TreeSelectPro";
 
 
 // 脚手架示例组件
-const Index: FC<{
+const TreePro: FC<{
   /**
    * 名称
    * */
@@ -117,7 +117,7 @@ const Index: FC<{
 }> = ({
         title = "选择",
         ajax = ajaxCommon,
-        url = 'https://proapi.azurewebsites.net/github/issues',
+        url = null,
         params = (data: any) => {
           return {}
         },
@@ -148,7 +148,7 @@ const Index: FC<{
       }) => {
   const [treeData, setTreeData]: any = useState("loading");
   const {
-    fieldNames
+    fieldNames={title: "title", key: "key", children: "children"},
   } = fieldProps;
 
   const [rankKey, setRankKey] = useState(Math.random())
@@ -168,7 +168,11 @@ const Index: FC<{
   };
 
   useEffect(() => {
-    onLoadData({}, {...params({})})
+    if (url) {
+      onLoadData({}, {...params({})})
+    } else {
+      setTreeData([])
+    }
   }, []);
 
 
@@ -225,8 +229,6 @@ const Index: FC<{
           return result
         }
       })
-
-
     })
   }
 
@@ -367,7 +369,7 @@ const Index: FC<{
         </div>
       </div>
       <div className="durians_tree_body_tree">
-        {treeData === "loading" ? <Spin style={{
+        {treeData === "loading" && url ? <Spin style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -399,4 +401,4 @@ const Index: FC<{
   );
 };
 
-export default Index;
+export default TreePro;

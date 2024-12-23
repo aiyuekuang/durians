@@ -117,7 +117,7 @@ const Index: FC<{
 }> = ({
         title = "选择",
         ajax = ajaxCommon,
-        url = 'https://proapi.azurewebsites.net/github/issues',
+        url,
         params = (data: any) => {
           return {}
         },

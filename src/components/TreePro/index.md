@@ -1,13 +1,11 @@
 ---
-title: TreePro 示例
+title: TreePro
 group:
   title: 组件
   order: 2
 ---
 
-# TreePro 示例
-
-此示例演示了 `TreePro` 组件的基本用法，包括可选择和可勾选的节点。
+# TreePro 高级表格
 
 ```jsx
 /**
@@ -15,7 +13,7 @@ group:
  */
 
 import React from 'react';
-import { TreePro } from 'durians';
+import {TreePro} from 'durians';
 
 const treeData = [
   {
@@ -50,14 +48,9 @@ const TreeProExample = () => {
   };
 
   return (
-    <TreePro
-      checkable
-      defaultExpandAll
-      onSelect={onSelect}
-      onCheck={onCheck}
-      treeData={treeData}
-    />
-  );
+    <TreePro fieldProps={{treeData}}/>);
 };
 
 export default TreeProExample;
+```
+<API id="TreePro"></API>

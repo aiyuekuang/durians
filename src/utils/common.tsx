@@ -12,9 +12,9 @@ export const ajaxCommon = (url: string, params: object, callback: Function, erro
         error(data)
         message.error(data.msg)
       }
-    }).catch(function (error) {
-      error(error)
-      console.log(error);
+    }).catch(function (_error) {
+      error(_error)
+      console.log(_error);
     })
   } else {
     console.log("没有传递URL")

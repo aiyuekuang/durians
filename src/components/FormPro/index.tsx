@@ -89,7 +89,7 @@ const Index: FC<{
           })}
         params={{...record, ...(fieldProps?.params || {})}}
         trigger={children}
-        columns={commonFormHandler(fieldProps?.columns, ajax, isEdit)}
+        columns={commonFormHandler(fieldProps?.columns || [], ajax, isEdit)}
       />
     </ProProviderPro>
   );
