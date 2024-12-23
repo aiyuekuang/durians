@@ -38,137 +38,184 @@ const columns_: any = [
 
 const TablePro: FC<{
   /**
-   * @description 通用ajax实现方法
-   * @default (url: string, params: object, callback: Function, isApi = true) => {
-   *     let api_ = "";
-   *     if (isApi) {
-   *         api_ = "api";
-   *     }
-   *
-   *     return request.post(api_ + url, {data: params}).then((data) => {
-   *         if (data.code == 0) {
-   *             callback(data)
-   *         } else {
-   *             message.error(data.msg)
-   *         }
-   *     }).catch(function (error) {
-   *         console.log(error);
-   *     })
-   * }
-   * }
-   */
-  ajax?: Function;
-  /**
-   * @description 获取数据的URL,例子，/api/new_find
-   * @default -
-   */
-  url?: string;
-  /**
-   * @description 新增的表单URL
-   * @default -
-   */
-  addUrl?: string;
-  /**
-   * @description 编辑的表单URL
-   * @default -
-   */
-  editUrl?: string;
-  /**
-   * @description 删除数据的URL
-   * @default -
-   */
-  deleteUrl?: string;
-  /**
-   * @description 批量删除数据的字段名
-   * @default idList
-   */
-  deleteField?: string;
-  /**
-   * @description 批量删除需要传递的字段
-   * @default idLists
-   */
-  deleteFields?: string;
-  /**
-   * @description 单个删除的时候是不是需要传递数组
-   * @default false
-   */
-  deleteFieldIsArr?: boolean;
-  /**
-   * @description 删除需要传递的额外参数
-   * @default {}
-   */
-  deleteParams?: any;
-  /**
-   * @description 隐藏批量删除
-   * @default {}
-   */
-  deleteBatchHidden?: boolean;
-  /**
-   * @description pro-table的props参数，包括columns，dataSource等
-   * @default {}
-   */
-  fieldProps?: Omit<LocalProTableProps, 'columns'> & {
-    columns: Columns | ((type: 'table' | 'add') => Columns);
-  };
-  /**
-   * @description BetaSchemaForm的props参数
-   * @default {}
-   */
-  addFormProFieldProps?: any;
-  /**
-   * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终拿到的dataSource
-   * @default (data)=>{return data.data}
-   */
-  setData?: Function;
-  /**
-   * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格数据总数据量，分页时用的
-   * @default (data)=>{return data.total}
-   */
-  setTotal?: Function;
-  /**
-   * @description 新增表单提交成功之后，需要返回给页面的一个message弹窗中的提示，返回值是一个字符串
-   * @default (data)=>{return data.message}
-   */
-  setMsg?: Function;
-  /**
-   * @description 表格后面的操作组，类型是个数组，元素是组件，会传递record
-   * @default [({record})=>{return <div>跳转</div>}]
-   */
-  actionBar?: any[];
-  /**
-   * @description 表格操作列的宽度
-   * @default 100
-   */
-  actionWidth?: number;
-  /**
-   * @description ajax接口分页参数的字段别名
-   * @default {pageIndex:"pageIndex",pageSize:"pageSize"}
-   */
-  paginationAlias?: any;
-  /**
-   * @description pro的tableAlertOptionRender，不过这个是传递一个数组，数组中可以传递组件
-   * @default [] 组件的props可以拿到selectedRowKeys,selectedRows,onCleanSelected这三个参数
-   */
-  tableAlertOptionRenderPro?: any[];
-  /**
-   * @description treePro的props参数，包括columns，dataSource等
-   * @default null
-   */
-  treeFieldProps?: any;
-  /**
-   * @description 在请求分页接口的时候，进行的参数的处理
-   * @default （data）=>{return data}
-   */
-  paramsFun?: any;
-  treeParamsFun?: Function;
-  treeWidth?: number
-  /**
-   *
-   * */
-  value?: any
-  onSelectChange?: any
-  keywordField?: string
-  keywordPlaceholder?: string
+ * @description 通用ajax实现方法
+ * @type Function
+ * @default (url: string, params: object, callback: Function, isApi = true) => {
+ *     let api_ = "";
+ *     if (isApi) {
+ *         api_ = "api";
+ *     }
+ *
+ *     return request.post(api_ + url, {data: params}).then((data) => {
+ *         if (data.code == 0) {
+ *             callback(data)
+ *         } else {
+ *             message.error(data.msg)
+ *         }
+ *     }).catch(function (error) {
+ *         console.log(error);
+ *     })
+ * }
+ */
+ajax?: Function;
+/**
+ * @description 获取数据的URL,例子，/api/new_find
+ * @type string
+ * @default -
+ */
+url?: string;
+/**
+ * @description 新增的表单URL
+ * @type string
+ * @default -
+ */
+addUrl?: string;
+/**
+ * @description 编辑的表单URL
+ * @type string
+ * @default -
+ */
+editUrl?: string;
+/**
+ * @description 删除数据的URL
+ * @type string
+ * @default -
+ */
+deleteUrl?: string;
+/**
+ * @description 批量删除数据的字段名
+ * @type string
+ * @default idList
+ */
+deleteField?: string;
+/**
+ * @description 批量删除需要传递的字段
+ * @type string
+ * @default idLists
+ */
+deleteFields?: string;
+/**
+ * @description 单个删除的时候是不是需要传递数组
+ * @type boolean
+ * @default false
+ */
+deleteFieldIsArr?: boolean;
+/**
+ * @description 删除需要传递的额外参数
+ * @type object
+ * @default {}
+ */
+deleteParams?: any;
+/**
+ * @description 隐藏批量删除
+ * @type boolean
+ * @default false
+ */
+deleteBatchHidden?: boolean;
+/**
+ * @description pro-table的props参数，包括columns，dataSource等
+ * @type Omit<LocalProTableProps, 'columns'> & { columns: Columns | ((type: 'table' | 'add') => Columns); }
+ * @default {}
+ */
+fieldProps?: Omit<LocalProTableProps, 'columns'> & {
+  columns: Columns | ((type: 'table' | 'add') => Columns);
+};
+/**
+ * @description BetaSchemaForm的props参数
+ * @type object
+ * @default {}
+ */
+addFormProFieldProps?: any;
+/**
+ * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终���到的dataSource
+ * @type Function
+ * @default (data)=>{return data.data}
+ */
+setData?: Function;
+/**
+ * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格数据总数据量，分页时用的
+ * @type Function
+ * @default (data)=>{return data.total}
+ */
+setTotal?: Function;
+/**
+ * @description 新增表单提交成功之后，需要返回给页面的一个message弹窗中的提示，返回值是一个字符串
+ * @type Function
+ * @default (data)=>{return data.message}
+ */
+setMsg?: Function;
+/**
+ * @description 表格后面的操作组，类型是个数组，元素是组件，会传递record
+ * @type any[]
+ * @default [({record})=>{return <div>跳转</div>}]
+ */
+actionBar?: any[];
+/**
+ * @description 表格操作列的宽度
+ * @type number
+ * @default 100
+ */
+actionWidth?: number;
+/**
+ * @description ajax接口分页参数的字段别名
+ * @type object
+ * @default {pageIndex:"pageIndex",pageSize:"pageSize"}
+ */
+paginationAlias?: any;
+/**
+ * @description pro的tableAlertOptionRender，不过这个是传递一个数组，数组中可以传递组件
+ * @type any[]
+ * @default [] 组件的props可以拿到selectedRowKeys,selectedRows,onCleanSelected这三个参数
+ */
+tableAlertOptionRenderPro?: any[];
+/**
+ * @description treePro的props参数，包括columns，dataSource等
+ * @type object
+ * @default null
+ */
+treeFieldProps?: any;
+/**
+ * @description 在请求分页接口的时候，进行的参数的处理
+ * @type Function
+ * @default (data)=>{return data}
+ */
+paramsFun?: any;
+/**
+ * @description treePro的参数处理函数
+ * @type Function
+ * @default (data)=>{return {treeId: data}}
+ */
+treeParamsFun?: Function;
+/**
+ * @description treePro的宽度
+ * @type number
+ * @default 200
+ */
+treeWidth?: number;
+/**
+ * @description 选中的值
+ * @type any
+ * @default null
+ */
+value?: any;
+/**
+ * @description 选中值变化时的回调
+ * @type Function
+ * @default null
+ */
+onSelectChange?: any;
+/**
+ * @description 关键词字段
+ * @type string
+ * @default null
+ */
+keywordField?: string;
+/**
+ * @description 关键词占位符
+ * @type string
+ * @default null
+ */
+keywordPlaceholder?: string;
 }> = ({
         ajax = ajaxCommon,
         url = 'https://proapi.azurewebsites.net/github/issues',
