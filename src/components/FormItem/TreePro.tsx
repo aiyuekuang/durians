@@ -74,15 +74,43 @@ const Index: FC<{
    * @description 额外的参数
    * @default {}
    */
+  /**
+   * @description 额外的参数
+   * @default {}
+   */
   params?: any;
+  /**
+   * @description 表单的字段属性
+   * @default {}
+   */
   fieldProps?: any;
+  /**
+   * @description 设置消息的函数
+   * @default (data) => data.msg
+   */
   setMsg?: any;
+  /**
+   * @description 编辑字段上传接口的字段
+   * @default "id"
+   */
   editField?: string;
+  /**
+   * @description 是否选择
+   * @default false
+   */
   isSelect: boolean;
+  /**
+   * @description 是否显示详情
+   * @default true
+   */
   detail: boolean;
+  /**
+   * @description 行的唯一标识字段
+   * @default "id"
+   */
   rowKey: string;
   /**
-   * @description 是否按需加载数，默认不是
+   * @description 是否按需加载树子的数据，默认不是
    * @default false
    */
   isLoadData: boolean
@@ -229,15 +257,15 @@ const Index: FC<{
         fieldProps={{
           ...addFormProFieldProps.fieldProps,
           ...fieldProps,
-          onOpenChange:()=>{
-            if(!record){
+          onOpenChange: () => {
+            if (!record) {
               setIsEdit(false)
-            }else {
+            } else {
               setIsEdit(editField && record?.[rowKey])
             }
           }
         }}
-        record={{...record,..._params, ...(addFormProFieldProps?.record || {})}}
+        record={{...record, ..._params, ...(addFormProFieldProps?.record || {})}}
       >
         {children}
       </FormPro>
@@ -252,7 +280,7 @@ const Index: FC<{
         <FormNode
           {...treeProps}
           addUrl={addUrl}
-          record={{...nodeData,id: nodeData[rowKey]}}
+          record={{...nodeData, id: nodeData[rowKey]}}
           fieldProps={{
             readonly: true,
           }}
@@ -270,7 +298,7 @@ const Index: FC<{
         <FormNode
           {...treeProps}
           addUrl={addUrl}
-          record={{...nodeData,id: nodeData[rowKey]}}
+          record={{...nodeData, id: nodeData[rowKey]}}
         >
           <a>
             编辑
