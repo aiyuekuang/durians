@@ -1,4 +1,4 @@
-import {Dropdown, MenuProps, message, Popconfirm, Tree} from 'antd';
+import {Dropdown, MenuProps, message, Popconfirm, Spin, Tree} from 'antd';
 import React, {FC, useEffect, useState} from 'react';
 import {DeleteOutlined, EditOutlined, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
 import {FormPro} from "durians";
@@ -146,7 +146,7 @@ const Index: FC<{
         rowKey = "id",
         isLoadData = false
       }) => {
-  const [treeData, setTreeData]: any = useState([]);
+  const [treeData, setTreeData]: any = useState("loading");
   const {
     fieldNames
   } = fieldProps;
@@ -367,7 +367,12 @@ const Index: FC<{
         </div>
       </div>
       <div className="durians_tree_body_tree">
-        <Tree
+        {treeData === "loading" ? <Spin style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: 200
+        }}/> : <Tree
           // onSelect={onSelect}
           // fieldNames={fieldNames}
           {...(isLoadData ? {loadData: onLoadData} : {})}
@@ -387,7 +392,8 @@ const Index: FC<{
           //   )
           // }}
           {...fieldProps}
-        />
+        />}
+
       </div>
     </div>
   );
