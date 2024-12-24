@@ -151,9 +151,6 @@ const TreePro: FC<{
     fieldNames={title: "title", key: "key", children: "children"},
   } = fieldProps;
 
-  const [rankKey, setRankKey] = useState(Math.random())
-
-
   const treeProps = {
     ajax,
     addUrl,
@@ -200,27 +197,6 @@ const TreePro: FC<{
   const onLoadData = (_params: any, values: any = {}) => {
     return ajax(url, {...params(_params), ...values}, (data: any) => {
       let result = setData(data);
-
-      // if (fieldNames) {
-      //   result = result.map((value: any) => {
-      //     value.title = value[fieldNames.title]
-      //     value.key = value[fieldNames.key]
-      //
-      //     if (isSelect) {
-      //       value.isLeaf = true
-      //     }
-      //     return value
-      //   })
-      // }
-
-
-      // setTreeData((org: any) => {
-      //   if (_params.key) {
-      //     return addChildToNode(org, _params.key, result, fieldNames.key)
-      //   } else {
-      //     return result
-      //   }
-      // })
 
       setTreeData((org: any) => {
         if (_params.key) {
@@ -330,18 +306,6 @@ const TreePro: FC<{
   }
 
 
-  // let _terrData = treeData.map((data: any) => {
-  //   return {
-  //     ...data,
-  //     switcherIcon: <Dropdown menu={{items: menuItem(data)}} getPopupContainer={() => document.body}>
-  //       <a onClick={(e: any) => e.preventDefault()}>
-  //         <FormOutlined/>
-  //       </a>
-  //     </Dropdown>
-  //   }
-  // })
-
-
   const titleRender = (nodeData: any) => {
     return (
       <Dropdown menu={{items: menuItem(nodeData)}} getPopupContainer={() => document.body} trigger={['contextMenu']}>
@@ -375,24 +339,9 @@ const TreePro: FC<{
           alignItems: "center",
           height: 200
         }}/> : <Tree
-          // onSelect={onSelect}
-          // fieldNames={fieldNames}
           {...(isLoadData ? {loadData: onLoadData} : {})}
           treeData={treeData}
           titleRender={titleRender}
-          // titleRender={(nodeData:any) => {
-          //   console.log(789666, nodeData)
-          //   return (
-          //     <div className="durians_tree_body_title_node" key={nodeData.key}>
-          //       <div className="durians_tree_body_title_node_l">
-          //         {nodeData.title}
-          //       </div>
-          //       <div className="durians_tree_body_title_node_r">
-          //         {nodeData.switcherIcon}
-          //       </div>
-          //     </div>
-          //   )
-          // }}
           {...fieldProps}
         />}
 
