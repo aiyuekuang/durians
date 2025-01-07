@@ -116,6 +116,7 @@ const LoginPro: FC<{
   passwordField?: string;
   captchaField?: string;
   BottomDom?: any;
+  encrypt?: Function
 }> = ({
         ajax = ajaxCommon,
         url,
@@ -128,14 +129,15 @@ const LoginPro: FC<{
         passwordField = "password",
         captchaField = "captcha",
         extraPasswordText = "",
-        secretKey =null,
+        secretKey = null,
         setData = (data: any) => {
           return data.data
         },
         tokenField = "token",
         callback = () => {
         },
-        BottomDom = (props: any) => <></>
+        BottomDom = (props: any) => <></>,
+                        encrypt
       }) => {
 
   const {token} = theme.useToken();
@@ -154,7 +156,10 @@ const LoginPro: FC<{
 
   let loginFun = (values: any) => {
     let _values = {...values};
-    _values[passwordField] = secretKey?encrypted(_values[passwordField] + extraPasswordText, secretKey, secretKey):_values[passwordField];
+    _values[passwordField] = secretKey ? encrypted(_values[passwordField] + extraPasswordText, secretKey, secretKey) : _values[passwordField];
+    if(encrypt){
+      _values[passwordField] = encrypt(_values[passwordField])
+    }
     ajax(url, _values, (data: any) => {
       cuns(tokenField, setData(data))
 
