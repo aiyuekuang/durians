@@ -137,7 +137,7 @@ const LoginPro: FC<{
         callback = () => {
         },
         BottomDom = (props: any) => <></>,
-                        encrypt
+        encrypt
       }) => {
 
   const {token} = theme.useToken();
@@ -157,7 +157,7 @@ const LoginPro: FC<{
   let loginFun = (values: any) => {
     let _values = {...values};
     _values[passwordField] = secretKey ? encrypted(_values[passwordField] + extraPasswordText, secretKey, secretKey) : _values[passwordField];
-    if(encrypt){
+    if (encrypt) {
       _values[passwordField] = encrypt(_values[passwordField])
     }
     ajax(url, _values, (data: any) => {
