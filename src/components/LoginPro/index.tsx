@@ -112,10 +112,30 @@ const LoginPro: FC<{
    *   }
    */
   tokenField?: string;
+  /**
+   * @description 用户名字段
+   * @default -
+   */
   usernameField?: string;
+  /**
+   * @description 密码字段
+   * @default -
+   */
   passwordField?: string;
+  /**
+   * @description 验证码字段
+   * @default -
+   */
   captchaField?: string;
+  /**
+   * @description 底部自定义组件
+   * @default -
+   */
   BottomDom?: any;
+  /**
+   * @description 自定义加密函数，第一个参数是密码，第二个参数是秘钥，返回一个加密后的密码
+   * @default -
+   */
   encrypt?: Function
 }> = ({
         ajax = ajaxCommon,
