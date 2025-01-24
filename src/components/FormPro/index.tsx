@@ -4,9 +4,7 @@ import {BetaSchemaForm} from "@ant-design/pro-components";
 import {ajaxCommon, commonFormHandler} from "../../utils/common";
 import ProProviderPro from "../ProProviderPro"
 
-type BetaSchemaFormType = typeof BetaSchemaForm;
 
-type BetaSchemaFormProps = Parameters<BetaSchemaFormType>[0];
 
 
 // 脚手架示例组件
@@ -94,12 +92,95 @@ const Index: FC<{
    * */
   beforeSubmit?: Function;
 }> = ({
-        // params = {},
-        layoutType = "ModalForm", fieldProps = {}, url, ajax = ajaxCommon, finishFun = () => {
-  }, setMsg = (data: any) => {
-    return data.msg
-  }, children = <Button>点击我</Button>, detailUrl, detailSetData, isEdit = false, record = {}
-      }, beforeSubmit) => {
+        /**
+         * @description 高级表单类型，默认为 "ModalForm"。可以是 "ModalForm" 或 "DrawerForm" 等。
+         * @type any
+         * @default "ModalForm"
+         */
+        layoutType = "ModalForm",
+
+        /**
+         * @description 表单字段的属性，包括布局和其他配置。
+         * @type object
+         * @default {}
+         */
+        fieldProps = {},
+
+        /**
+         * @description 提交表单数据的 URL。
+         * @type string
+         * @default undefined
+         */
+        url,
+
+        /**
+         * @description 自定义的 AJAX 请求函数，用于提交表单数据。
+         * @type Function
+         * @default ajaxCommon
+         */
+        ajax = ajaxCommon,
+
+        /**
+         * @description 表单提交成功后的回调函数。
+         * @type Function
+         * @default () => {}
+         */
+        finishFun = () => {
+        },
+
+        /**
+         * @description 自定义的消息提示函数，用于显示表单提交后的消息。
+         * @type Function
+         * @default (data: any) => data.msg
+         */
+        setMsg = (data: any) => {
+          return data.msg
+        },
+
+        /**
+         * @description 表单的子组件，可以是按钮或其他触发表单显示的组件。
+         * @type any
+         * @default <Button>点击我</Button>
+         */
+        children = <Button>点击我</Button>,
+
+        /**
+         * @description 获取表单详情数据的 URL。
+         * @type string
+         * @default undefined
+         */
+        detailUrl,
+
+        /**
+         * @description 处理详情数据的函数，用于在获取详情数据后进行处理。
+         * @type Function
+         * @default undefined
+         */
+        detailSetData,
+
+        /**
+         * @description 是否为编辑模式，默认为 false。
+         * @type boolean
+         * @default false
+         */
+        isEdit = false,
+
+        /**
+         * @description 表单的初始数据，通常用于编辑时填充表单。
+         * @type object
+         * @default {}
+         */
+        record = {},
+
+        /**
+         * @description 表单提交之前的钩子函数，用于自定义表单提交前的逻辑，返回一个最终参数。
+         * @type Function
+         * @default () => {}
+         */
+        beforeSubmit = (data:any) => {
+          return data;
+        }
+      }) => {
 
   //
   const formRef: any = React.useRef();
@@ -125,7 +206,7 @@ const Index: FC<{
           let isSuccess = false
           let _values = {...record, ...values}
           console.log(values);
-          await ajax(url, beforeSubmit(_values,record), (data: any) => {
+          await ajax(url, beforeSubmit(_values, record,values), (data: any) => {
 
             // 刷新页面
             message.success(setMsg(data));
