@@ -266,6 +266,7 @@ const TablePro: FC<{
       }) => {
   // 表格其他的
   const [tableParams, setTableParams] = useState({})
+  console.log('treeFieldProps', tableParams)
   // 将搜索的数据保存下来，全局的时候有需要用到
   const [searchValues, setSearchValues] = useState({})
 
@@ -555,7 +556,8 @@ const TablePro: FC<{
             dateFormatter="string"
             {...fieldProps}
             params={{...tableParams, ...(fieldProps?.params || {})}}
-            pagination={{
+            // 分页参数
+            {...(fieldProps.pagination ? {
               ...fieldProps?.pagination,
               pageSize: pageSize,
               onChange: (page, pageSize) => {
@@ -564,7 +566,7 @@ const TablePro: FC<{
                 }
                 setPageSize(pageSize)
               },
-            }}
+            } : {})}
             options={{
               // keywordModel.formItemProps.name当搜索和表格不是用同一个字段的时候，也需要做一下字段的处理
               ...(keywordModel ? {

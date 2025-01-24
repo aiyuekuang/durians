@@ -317,7 +317,6 @@ const TreePro: FC<{
   };
 
 
-  console.log('treeProps', treeProps)
   return (
     <div className="durians_tree_body">
       <div className="durians_tree_body_title">
