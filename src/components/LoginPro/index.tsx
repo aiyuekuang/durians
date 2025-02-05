@@ -4,24 +4,11 @@ import {message, Tabs, theme} from 'antd';
 import React, {FC, useEffect, useRef, useState} from 'react';
 import "./index.less"
 import {ajaxCommon, encrypted} from "../../utils/common";
-import CryptoJS from "crypto-js";
-import {createMap, cun, cuns, quObj} from "esn";
+import {cun, cuns, quObj} from "esn";
 
 
 type LoginType = 'phone' | 'account';
 
-
-const encryptionMap = createMap([{
-  id: "SHA256",
-  fun: (data: any) => {
-    return CryptoJS.SHA256(data).toString(CryptoJS.enc.Base64)
-  }
-}, {
-  id: "MD5",
-  fun: (data: any) => {
-    return CryptoJS.MD5(data).toString(CryptoJS.enc.Hex)
-  }
-},])
 
 let autoLogin = "autoLogin";
 
@@ -45,7 +32,7 @@ const LoginPro: FC<{
    *     })
    * }
    */
-  ajax?: Function;
+  ajax?: any;
   /**
    * @description 点击登录的url
    * @default -
@@ -104,7 +91,7 @@ const LoginPro: FC<{
    *
    *   }
    */
-  callback?: Function;
+  callback?: any;
   /**
    * @description 返回结果的处理
    * @default (data:any)=>{
@@ -136,7 +123,22 @@ const LoginPro: FC<{
    * @description 自定义加密函数，第一个参数是密码，第二个参数是秘钥，返回一个加密后的密码
    * @default -
    */
-  encrypt?: Function
+  encrypt?: any
+  /**
+   * @description 忘记密码的DOM
+   * @default - () => {
+   *           return (
+   *             <a
+   *               style={{
+   *                 float: 'right',
+   *               }}
+   *             >
+   *               忘记密码
+   *             </a>
+   *           )
+   *         }
+   */
+  ForGetPassword?: any
 }> = ({
         ajax = ajaxCommon,
         url,
@@ -156,23 +158,25 @@ const LoginPro: FC<{
         tokenField = "token",
         callback = () => {
         },
-        BottomDom = (props: any) => <></>,
-        encrypt
+        BottomDom = () => <></>,
+        encrypt,
+        ForGetPassword = () => {
+          return (
+            <a
+              style={{
+                float: 'right',
+              }}
+            >
+              忘记密码
+            </a>
+          )
+        }
       }) => {
 
   const {token} = theme.useToken();
   const [loginType, setLoginType] = useState<LoginType>('account');
 
   const formRef: any = useRef();
-
-
-  useEffect(() => {
-    let autoLoginValues = quObj(autoLogin);
-    if (autoLoginValues) {
-      loginFun(quObj(autoLogin))
-    }
-  }, []);
-
 
   let loginFun = (values: any) => {
     let _values = {...values};
@@ -190,6 +194,14 @@ const LoginPro: FC<{
       callback(data)
     }, false)
   }
+
+  useEffect(() => {
+    let autoLoginValues = quObj(autoLogin);
+    if (autoLoginValues) {
+      loginFun(quObj(autoLogin))
+    }
+  }, []);
+
 
   return (
 
@@ -344,13 +356,8 @@ const LoginPro: FC<{
           <ProFormCheckbox noStyle name="autoLogin">
             自动登录
           </ProFormCheckbox>
-          <a
-            style={{
-              float: 'right',
-            }}
-          >
-            忘记密码
-          </a>
+
+          <ForGetPassword/>
         </div>
         <BottomDom/>
       </LoginForm>
