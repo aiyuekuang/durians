@@ -2,7 +2,7 @@ import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import {ActionType, ProTable, ProTableProps} from '@ant-design/pro-components';
 import {Button, Divider, message, PaginationProps, Popconfirm, Space, Table} from 'antd';
 import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
-import {ajaxCommon, arrHasKey, commonFormHandler} from "../../utils/common";
+import {ajaxCommon, arrHasKey, commonFormHandler, objToSort} from "../../utils/common";
 import {FormPro, ModalPro, TreePro} from "durians";
 import ProProviderPro from '../ProProviderPro';
 import {cloneDeep} from "lodash-es";
@@ -400,7 +400,6 @@ const TablePro: FC<{
     return data?.proConfig?.isKeyword
   }, columnsTemp);
 
-  console.log(678, actionWidth)
   return (
     <ProProviderPro>
       <div className="durians_table_body">
@@ -509,6 +508,13 @@ const TablePro: FC<{
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
 
+              console.log(6666, params,sort, filter)
+              // sort有值，并且不为{}
+              if (sort && Object.keys(sort).length) {
+                _params.sort = objToSort(sort)
+              }else {
+                _params.sort = null
+              }
               // 收集参数
               setSearchValues(_params);
 

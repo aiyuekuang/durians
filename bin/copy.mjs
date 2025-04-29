@@ -44,8 +44,12 @@ function copyFolder(sourcePath, destPath) {
 // 示例用法
 // 替换下面的路径为你的实际路径
 const srcDir = 'D:\\code\\durians\\dist';
-const destDir = 'D:\\code\\demo\\web\\my_crm_web\\node_modules\\durians\\dist';
-const cache = 'D:\\code\\demo\\web\\my_crm_web\\node_modules\\.cache';
+// const destDir = 'D:\\code\\demo\\web\\my_crm_web\\node_modules\\durians\\dist';
+// const cache = 'D:\\code\\demo\\web\\my_crm_web\\node_modules\\.cache';
+
+
+const destDir = 'D:\\code\\mobile_platform\\node_modules\\durians\\dist';
+const cache = 'D:\\code\\mobile_platform\\node_modules\\.cache';
 
 copyFolder(srcDir, destDir)
 deleteFolderRecursive(cache);

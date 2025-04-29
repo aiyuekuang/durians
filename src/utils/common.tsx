@@ -101,3 +101,11 @@ export const arrHasKey = (key: any, arr: any = []) => {
     return key(data)
   })
 }
+
+//{roles: 'descend'}
+//  将这个对象拆成{sortBy:"roles",sortOrder:"descend"}
+export const objToSort = (obj: any) => {
+  let sortBy = Object.keys(obj)[0]
+  let sortOrder = obj[sortBy]
+  return {sortBy, sortOrder}
+}
