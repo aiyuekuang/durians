@@ -19,10 +19,6 @@ FormPro 是一个基于 [Ant Design Pro Components](https://procomponents.ant.de
 
 ### 基础用法
 
-以下示例展示了 FormPro 的基础列表表单功能：
-
-<code src="./demo/customForm.tsx" title="基础列表表单" description="使用 ProFormList 实现动态表单项，支持添加、删除和设置表单项。"></code>
-
 ## API
 
 ### FormPro

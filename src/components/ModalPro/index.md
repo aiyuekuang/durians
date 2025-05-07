@@ -18,10 +18,6 @@ ModalPro 是一个基于 [Ant Design Modal](https://ant.design/components/modal-
 
 ## 代码示例
 
-### 基础用法
-
-<code src="./demo/basic.tsx" title="基础使用" description="最简单的弹窗示例，点击按钮打开弹窗。"></code>
-
 ### 自定义内容和控制
 
 ```tsx

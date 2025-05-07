@@ -18,9 +18,6 @@ LoginPro 是一个基于 [Ant Design Pro Components](https://procomponents.ant.d
 
 ## 代码示例
 
-### 基础用法
-
-<code src="./demo/basic.tsx" title="默认登录表单" description="展示了基础的账号密码登录功能，默认不启用手机验证码登录模式。"></code>
 
 ### 手机验证码登录
 
