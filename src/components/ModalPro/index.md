@@ -7,41 +7,79 @@ group:
 
 # ModalPro 高级弹窗
 
-ModalPro 是一个基于 [Ant Design Modal](https://ant.design/components/modal-cn) 的高级弹窗组件，提供了更简便的使用方式和更灵活的控制方法。
+ModalPro 是一个基于 [Ant Design Modal](https://ant.design/components/modal-cn) 的高级弹窗组件，提供了更便捷的使用方式和更灵活的控制方法。通过简单的配置即可实现复杂的弹窗交互逻辑。
 
 ## 何时使用
 
-- 需要快速创建一个弹窗
-- 需要在弹窗内部控制弹窗的显示状态
+- 需要快速创建一个可控的弹窗组件
+- 需要在弹窗内部动态控制弹窗的显示状态
 - 需要自定义弹窗的触发元素
+- 需要处理弹窗的异步操作和表单提交
 - 需要对弹窗进行二次封装和扩展
 
 ## 代码示例
 
-### 自定义内容和控制
+### 基础用法
+
+最简单的弹窗使用方式。
 
 ```tsx
 import { ModalPro } from 'durians';
-import { Button, Form, Input } from 'antd';
+import { Button } from 'antd';
 
-const Demo: FC = () => {
+const Demo = () => {
   return (
     <ModalPro
-      title="自定义表单"
+      title="基础弹窗"
+      Content={() => <div>这是一个基础弹窗示例</div>}
+    >
+      <Button type="primary">打开弹窗</Button>
+    </ModalPro>
+  );
+};
+
+export default Demo;
+```
+
+### 表单提交
+
+在弹窗中使用表单，并控制提交后的弹窗关闭。
+
+```tsx
+import { ModalPro } from 'durians';
+import { Button, Form, Input, message } from 'antd';
+
+const Demo = () => {
+  return (
+    <ModalPro
+      title="表单提交"
       Content={({ setIsModalOpen }) => (
         <Form
           onFinish={(values) => {
-            console.log(values);
+            console.log('表单值：', values);
+            message.success('提交成功');
             setIsModalOpen(false);
-          }}
-        >
-          <Form.Item name="name" label="姓名">
+          }}.Item 
+            name="username" 
+            label="用户名"
+            rules={[{ required: true, message: '请输入用户名' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="邮箱"
+            rules={[
+              { required: true, message: '请输入邮箱' },
+              { type: 'email', message: '请输入有效的邮箱' }
+            ]}
+          >
             <Input />
           </Form.Item>
         </Form>
       )}
       handleOk={(callback) => {
-        console.log('点击了确定');
+        // 表单通过 Content 内部提交，这里只需关闭弹窗
         callback(true);
       }}
     >
@@ -53,117 +91,220 @@ const Demo: FC = () => {
 export default Demo;
 ```
 
+### 异步处理
+
+处理异步操作并控制弹窗状态。
+
+```tsx
+import { ModalPro } from 'durians';
+import { Button, Spin, message } from 'antd';
+import { useState } from 'react';
+
+const Demo = () => {
+  const [loading, setLoading] = useState(false);
+
+  return (
+    <ModalPro
+      title="异步操作"
+      Content={() => (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          {loading ? <Spin /> : '点击确定模拟异步操作'}
+        </div>
+      )}
+      handleOk={async (callback) => {
+        setLoading(true);
+        try {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          message.success('操作成功');
+          callback(true);
+        } catch (error) {
+          message.error('操作失败');
+        } finally {
+          setLoading(false);
+        }
+      }}
+      fieldProps={{
+        confirmLoading: loading
+      }}
+    >
+      <Button type="primary">异步操作</Button>
+    </ModalPro>
+  );
+};
+
+export default Demo;
+```
+
 ## API
 
 ### ModalPro
 
-```typescript
-import { ModalPro } from 'durians';
-```
-
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | title | 弹窗标题 | `string` | `'基础'` |
-| handleOk | 点击确定按钮的回调 | `(callback: (close?: boolean) => void) => void` | `(callback) => callback()` |
-| Content | 弹窗内容组件 | `ReactNode \| ((props: { isModalOpen: boolean; setIsModalOpen: (open: boolean) => void }) => ReactNode)` | `() => <div>示例</div>` |
-| children | 触发弹窗的元素 | `ReactNode` | `<div>点击</div>` |
-| fieldProps | Modal 组件的属性配置，继承自 [Ant Design Modal](https://ant.design/components/modal-cn#api) | `ModalProps` | `{}` |
+| handleOk | 点击确定按钮的回调函数。接收一个 callback 参数，执行 callback(true) 关闭弹窗，callback(false) 保持弹窗打开 | `(callback: (close?: boolean) => void) => void` | `(callback) => callback()` |
+| Content | 弹窗内容组件。可以是 ReactNode 或函数组件，函数组件会接收 isModalOpen 和 setIsModalOpen 作为参数 | `ReactNode \| ((props: ContentProps) => ReactNode)` | `() => <div>示例</div>` |
+| children | 触发弹窗显示的元素 | `ReactNode` | `<div>点击</div>` |
+| fieldProps | Modal 组件的属性配置，完整继承自 antd Modal 的所有属性 | [`ModalProps`](https://ant.design/components/modal-cn#api) | `{}` |
 
 ### Content 组件 Props
 
 ```typescript
 interface ContentProps {
+  /**
+   * 当前弹窗的显示状态
+   */
   isModalOpen: boolean;
+  /**
+   * 控制弹窗显示/隐藏的函数
+   */
   setIsModalOpen: (open: boolean) => void;
+}
+```
+
+### 类型定义
+
+```typescript
+import { ReactNode } from 'react';
+import { ModalProps } from 'antd';
+
+interface ModalProProps {
+  title?: string;
+  handleOk?: (callback: (close?: boolean) => void) => void;
+  Content?: ReactNode | ((props: ContentProps) => ReactNode);
+  children?: ReactNode;
+  fieldProps?: ModalProps;
 }
 ```
 
 ### 依赖说明
 
-- [Ant Design](https://ant.design/components/overview-cn/) - ^5.0.0
-  - Modal 组件: [文档链接](https://ant.design/components/modal-cn)
+- [Ant Design](https://ant.design/) ^5.0.0
+  - Modal 组件：[详细文档](https://ant.design/components/modal-cn)
 
 ## FAQ
 
-### 1. 如何在弹窗内部关闭弹窗？
+### 1. 如何在 Content 中获取最新的外部数据？
 
 ```tsx
-const Demo: FC = () => {
+import { ModalPro } from 'durians';
+import { Button } from 'antd';
+import { useState } from 'react';
+
+const Demo = () => {
+  const [count, setCount] = useState(0);
+
   return (
     <ModalPro
-      Content={({ setIsModalOpen }) => (
-        <Button onClick={() => setIsModalOpen(false)}>
-          关闭弹窗
-        </Button>
+      Content={() => (
+        <div>
+          <p>当前计数：{count}</p>
+          <Button onClick={() => setCount(c => c + 1)}>增加</Button>
+        </div>
       )}
     >
       <Button>打开弹窗</Button>
     </ModalPro>
   );
 };
+
 export default Demo;
 ```
 
-### 2. 如何自定义确认按钮的逻辑？
+### 2. 如何自定义弹窗的按钮文案和样式？
 
 ```tsx
-const Demo: FC = () => {
-  return (
-    <ModalPro
-      handleOk={(callback) => {
-        // 执行自定义逻辑
-        setTimeout(() => {
-          console.log('处理完成');
-          callback(true); // 传入 true 关闭弹窗
-        }, 1000);
-      }}
-    >
-      <Button>打开弹窗</Button>
-    </ModalPro>
-  );
-};
-export default Demo;
-```
+import { ModalPro } from 'durians';
+import { Button } from 'antd';
 
-### 3. 如何自定义弹窗样式？
-
-```tsx
-const Demo: FC = () => {
+const Demo = () => {
   return (
     <ModalPro
       fieldProps={{
-        width: 800,
-        centered: true,
-        className: 'custom-modal',
-        maskClosable: false
-      }}
-    >
-      <Button>打开弹窗</Button>
-    </ModalPro>
-  );
-};
-export default Demo;
-```
-
-### 4. 如何在弹窗中实现异步操作？
-
-```tsx
-const Demo: FC = () => {
-  return (
-    <ModalPro
-      handleOk={async (callback) => {
-        try {
-          await fetch('/api/submit');
-          callback(true); // 成功后关闭弹窗
-        } catch (error) {
-          console.error(error);
-          callback(false); // 失败不关闭弹窗
+        okText: '确认提交',
+        cancelText: '取消操作',
+        okButtonProps: {
+          type: 'primary',
+          danger: true
+        },
+        cancelButtonProps: {
+          type: 'default'
         }
       }}
     >
-      <Button>打开弹窗</Button>
+      <Button>自定义按钮</Button>
     </ModalPro>
   );
 };
+
+export default Demo;
+```
+
+### 3. 如何在弹窗中进行数据校验？
+
+```tsx
+import { ModalPro } from 'durians';
+import { Button, Form, Input, message } from 'antd';
+
+const Demo = () => {
+  const [form] = Form.useForm();
+
+  return (
+    <ModalPro
+      Content={() => (
+        <Form form={form}>
+          <Form.Item
+            name="email"
+            rules={[
+              { required: true },
+              { type: 'email' }
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      )}
+      handleOk={async (callback) => {
+        try {
+          await form.validateFields();
+          callback(true);
+        } catch {
+          message.error('请完成表单校验');
+        }
+      }}
+    >
+      <Button>表单校验</Button>
+    </ModalPro>
+  );
+};
+
+export default Demo;
+```
+
+### 4. 如何在关闭弹窗时重置状态？
+
+```tsx
+import { ModalPro } from 'durians';
+import { Button } from 'antd';
+import { useState } from 'react';
+
+const Demo = () => {
+  const [data, setData] = useState([]);
+
+  return (
+    <ModalPro
+      fieldProps={{
+        afterClose: () => setData([]),
+        destroyOnClose: true
+      }}
+      Content={() => (
+        <div>当前数据：{JSON.stringify(data)}</div>
+      )}
+    >
+      <Button>状态重置</Button>
+    </ModalPro>
+  );
+};
+
 export default Demo;
 ```
