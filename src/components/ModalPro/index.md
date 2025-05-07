@@ -7,7 +7,8 @@ group:
 
 # ModalPro 高级弹窗
 
-ModalPro 是一个基于 [Ant Design Modal](https://ant.design/components/modal-cn) 的高级弹窗组件，提供了更便捷的使用方式和更灵活的控制方法。通过简单的配置即可实现复杂的弹窗交互逻辑。
+ModalPro 是一个基于 [Ant Design Modal](https://ant.design/components/modal-cn)
+的高级弹窗组件，提供了更便捷的使用方式和更灵活的控制方法。通过简单的配置即可实现复杂的弹窗交互逻辑。
 
 ## 何时使用
 
@@ -24,8 +25,8 @@ ModalPro 是一个基于 [Ant Design Modal](https://ant.design/components/modal-
 最简单的弹窗使用方式。
 
 ```tsx
-import { ModalPro } from 'durians';
-import { Button } from 'antd';
+import {ModalPro} from 'durians';
+import {Button} from 'antd';
 
 const Demo = () => {
   return (
@@ -46,35 +47,37 @@ export default Demo;
 在弹窗中使用表单，并控制提交后的弹窗关闭。
 
 ```tsx
-import { ModalPro } from 'durians';
-import { Button, Form, Input, message } from 'antd';
+import {ModalPro} from 'durians';
+import {Button, Form, Input, message} from 'antd';
+import React, {FC} from 'react';
 
-const Demo = () => {
+const Demo: FC = () => {
   return (
     <ModalPro
       title="表单提交"
-      Content={({ setIsModalOpen }) => (
+      Content={({setIsModalOpen}) => (
         <Form
           onFinish={(values) => {
             console.log('表单值：', values);
             message.success('提交成功');
             setIsModalOpen(false);
-          }}.Item 
-            name="username" 
+          }}>
+          <Form.Item
+            name="username"
             label="用户名"
-            rules={[{ required: true, message: '请输入用户名' }]}
+            rules={[{required: true, message: '请输入用户名'}]}
           >
-            <Input />
+            <Input/>
           </Form.Item>
           <Form.Item
             name="email"
             label="邮箱"
             rules={[
-              { required: true, message: '请输入邮箱' },
-              { type: 'email', message: '请输入有效的邮箱' }
+              {required: true, message: '请输入邮箱'},
+              {type: 'email', message: '请输入有效的邮箱'}
             ]}
           >
-            <Input />
+            <Input/>
           </Form.Item>
         </Form>
       )}
@@ -96,9 +99,9 @@ export default Demo;
 处理异步操作并控制弹窗状态。
 
 ```tsx
-import { ModalPro } from 'durians';
-import { Button, Spin, message } from 'antd';
-import { useState } from 'react';
+import {ModalPro} from 'durians';
+import {Button, Spin, message} from 'antd';
+import {useState} from 'react';
 
 const Demo = () => {
   const [loading, setLoading] = useState(false);
@@ -107,8 +110,8 @@ const Demo = () => {
     <ModalPro
       title="异步操作"
       Content={() => (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
-          {loading ? <Spin /> : '点击确定模拟异步操作'}
+        <div style={{textAlign: 'center', padding: '20px'}}>
+          {loading ? <Spin/> : '点击确定模拟异步操作'}
         </div>
       )}
       handleOk={async (callback) => {
@@ -139,13 +142,13 @@ export default Demo;
 
 ### ModalPro
 
-| 参数 | 说明 | 类型 | 默认值 |
-| --- | --- | --- | --- |
-| title | 弹窗标题 | `string` | `'基础'` |
-| handleOk | 点击确定按钮的回调函数。接收一个 callback 参数，执行 callback(true) 关闭弹窗，callback(false) 保持弹窗打开 | `(callback: (close?: boolean) => void) => void` | `(callback) => callback()` |
-| Content | 弹窗内容组件。可以是 ReactNode 或函数组件，函数组件会接收 isModalOpen 和 setIsModalOpen 作为参数 | `ReactNode \| ((props: ContentProps) => ReactNode)` | `() => <div>示例</div>` |
-| children | 触发弹窗显示的元素 | `ReactNode` | `<div>点击</div>` |
-| fieldProps | Modal 组件的属性配置，完整继承自 antd Modal 的所有属性 | [`ModalProps`](https://ant.design/components/modal-cn#api) | `{}` |
+| 参数         | 说明                                                                         | 类型                                                         | 默认值                        |
+|------------|----------------------------------------------------------------------------|------------------------------------------------------------|----------------------------|
+| title      | 弹窗标题                                                                       | `string`                                                   | `'基础'`                     |
+| handleOk   | 点击确定按钮的回调函数。接收一个 callback 参数，执行 callback(true) 关闭弹窗，callback(false) 保持弹窗打开 | `(callback: (close?: boolean) => void) => void`            | `(callback) => callback()` |
+| Content    | 弹窗内容组件。可以是 ReactNode 或函数组件，函数组件会接收 isModalOpen 和 setIsModalOpen 作为参数       | `ReactNode \| ((props: ContentProps) => ReactNode)`        | `() => <div>示例</div>`      |
+| children   | 触发弹窗显示的元素                                                                  | `ReactNode`                                                | `<div>点击</div>`            |
+| fieldProps | Modal 组件的属性配置，完整继承自 antd Modal 的所有属性                                       | [`ModalProps`](https://ant.design/components/modal-cn#api) | `{}`                       |
 
 ### Content 组件 Props
 
@@ -165,8 +168,8 @@ interface ContentProps {
 ### 类型定义
 
 ```typescript
-import { ReactNode } from 'react';
-import { ModalProps } from 'antd';
+import {ReactNode} from 'react';
+import {ModalProps} from 'antd';
 
 interface ModalProProps {
   title?: string;
@@ -187,9 +190,9 @@ interface ModalProProps {
 ### 1. 如何在 Content 中获取最新的外部数据？
 
 ```tsx
-import { ModalPro } from 'durians';
-import { Button } from 'antd';
-import { useState } from 'react';
+import {ModalPro} from 'durians';
+import {Button} from 'antd';
+import {useState} from 'react';
 
 const Demo = () => {
   const [count, setCount] = useState(0);
@@ -214,8 +217,8 @@ export default Demo;
 ### 2. 如何自定义弹窗的按钮文案和样式？
 
 ```tsx
-import { ModalPro } from 'durians';
-import { Button } from 'antd';
+import {ModalPro} from 'durians';
+import {Button} from 'antd';
 
 const Demo = () => {
   return (
@@ -243,8 +246,8 @@ export default Demo;
 ### 3. 如何在弹窗中进行数据校验？
 
 ```tsx
-import { ModalPro } from 'durians';
-import { Button, Form, Input, message } from 'antd';
+import {ModalPro} from 'durians';
+import {Button, Form, Input, message} from 'antd';
 
 const Demo = () => {
   const [form] = Form.useForm();
@@ -256,11 +259,11 @@ const Demo = () => {
           <Form.Item
             name="email"
             rules={[
-              { required: true },
-              { type: 'email' }
+              {required: true},
+              {type: 'email'}
             ]}
           >
-            <Input />
+            <Input/>
           </Form.Item>
         </Form>
       )}
@@ -284,9 +287,9 @@ export default Demo;
 ### 4. 如何在关闭弹窗时重置状态？
 
 ```tsx
-import { ModalPro } from 'durians';
-import { Button } from 'antd';
-import { useState } from 'react';
+import {ModalPro} from 'durians';
+import {Button} from 'antd';
+import {useState} from 'react';
 
 const Demo = () => {
   const [data, setData] = useState([]);
