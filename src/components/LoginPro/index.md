@@ -192,7 +192,7 @@ export default Demo;
 
 ### 2. 如何自定义表单校验规则？
 
-```tsx
+```js
 import { LoginPro } from 'durians';
 
 const Demo = () => {
@@ -202,7 +202,7 @@ const Demo = () => {
       loginFormFieldProps={{
         form: {
           validateMessages: {
-            required: '${label}不能为空',
+            required: `${label}不能为空`,
             types: {
               email: '请输入有效的邮箱地址',
               number: '请输入数字'
