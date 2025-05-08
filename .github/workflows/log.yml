@@ -37,8 +37,8 @@ jobs:
 
       - name: Commit changes
         run: |
-          git config --local user.email "2092186738@qq.com"
-          git config --local user.name "ztao"
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git add CHANGELOG.md
           git commit -m "docs: update changelog" || echo "No changes to commit"
           git push
