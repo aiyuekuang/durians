@@ -1,14 +1,127 @@
 ---
 title: ModalPro 高级弹窗
+order: 3
 group:
   title: 组件
   order: 1
+nav:
+  title: 组件
+  order: 2
 ---
 
 # ModalPro 高级弹窗
 
-ModalPro 是一个基于 [Ant Design Modal](https://ant.design/components/modal-cn)
-的高级弹窗组件，提供了更便捷的使用方式和更灵活的控制方法。通过简单的配置即可实现复杂的弹窗交互逻辑。
+ModalPro 是一个基于 [Ant Design Modal](https://ant.design/components/modal-cn) 的高级弹窗组件，提供了更便捷的使用方式和更灵活的控制方法。通过简单的配置即可实现复杂的弹窗交互逻辑。
+
+## 基础用法
+
+最简单的弹窗使用方式。
+
+```tsx
+import React from 'react';
+import { ModalPro } from 'durians';
+import { Button } from 'antd';
+
+export default () => {
+  return (
+    <ModalPro
+      title="用户详情"
+      Content={() => (
+        <div>
+          <p><strong>姓名:</strong> 张三</p>
+          <p><strong>邮箱:</strong> zhangsan@example.com</p>
+          <p><strong>部门:</strong> 技术部</p>
+          <p><strong>职位:</strong> 前端工程师</p>
+        </div>
+      )}
+    >
+      <Button type="primary">查看详情</Button>
+    </ModalPro>
+  );
+};
+```
+
+## 自定义内容
+
+可以传入任何 React 组件作为弹窗内容。
+
+```tsx
+import React, { useState } from 'react';
+import { ModalPro } from 'durians';
+import { Button, Form, Input, Select, message } from 'antd';
+
+const UserForm = () => {
+  const [form] = Form.useForm();
+
+  const handleSubmit = (values) => {
+    console.log('表单数据:', values);
+    message.success('保存成功');
+  };
+
+  return (
+    <Form
+      form={form}
+      layout="vertical"
+      onFinish={handleSubmit}
+      initialValues={{
+        name: '李四',
+        email: 'lisi@example.com',
+        department: '产品部',
+      }}
+    >
+      <Form.Item
+        label="姓名"
+        name="name"
+        rules={[{ required: true, message: '请输入姓名' }]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label="邮箱"
+        name="email"
+        rules={[
+          { required: true, message: '请输入邮箱' },
+          { type: 'email', message: '请输入正确的邮箱格式' },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label="部门"
+        name="department"
+        rules={[{ required: true, message: '请选择部门' }]}
+      >
+        <Select>
+          <Select.Option value="技术部">技术部</Select.Option>
+          <Select.Option value="产品部">产品部</Select.Option>
+          <Select.Option value="运营部">运营部</Select.Option>
+          <Select.Option value="市场部">市场部</Select.Option>
+        </Select>
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          保存
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default () => {
+  return (
+    <ModalPro
+      title="编辑用户"
+      Content={UserForm}
+      fieldProps={{
+        width: 600,
+        footer: null, // 隐藏默认的确定/取消按钮
+      }}
+    >
+      <Button>编辑用户</Button>
+    </ModalPro>
+  );
+};
+```
 
 ## 何时使用
 

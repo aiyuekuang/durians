@@ -5,8 +5,8 @@ import {cloneDeep} from "lodash-es";
 
 
 export function addChildToNode(tree: any, id: any, newNode: any, rowKey: string = "value", children: string = "children") {
-  let _tree = cloneDeep(tree);
-  for (let i of _tree) {
+  const _tree = cloneDeep(tree);
+  for (const i of _tree) {
     if (i[rowKey] === id) {
       i.children = newNode
     } else {
@@ -35,7 +35,7 @@ const Index: FC<any> = (props) => {
 
   const onLoadData = (_params: any, values: any = {}) => {
     return ajax(url, {...params(_params), ...values}, (data: any) => {
-      let result = setData(data);
+      const result = setData(data);
 
       // if (fieldNames) {
       //   result = result.map((value: any) => {

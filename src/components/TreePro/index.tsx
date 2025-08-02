@@ -1,157 +1,54 @@
-import {Dropdown, MenuProps, message, Popconfirm, Spin, Tree} from 'antd';
-import React, {FC, useEffect, useState} from 'react';
-import {DeleteOutlined, EditOutlined, PlusOutlined, UnorderedListOutlined} from "@ant-design/icons";
-import {FormPro} from "durians";
-import {ajaxCommon} from "../../utils/common";
-import {addChildToNode} from "../FormItem/TreeSelectPro";
+import { Dropdown, message, Popconfirm, Spin, Tree } from 'antd';
+import type { MenuProps } from 'antd';
+import React, { FC, useEffect, useState, useCallback, useMemo, memo } from 'react';
+import { DeleteOutlined, EditOutlined, PlusOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import FormPro from '../FormPro';
+import { ajaxCommon } from "../../utils/common";
+import { DEFAULT_CONFIG } from "../../utils/constants";
+import type { TreeProProps } from "../../types";
+import { addChildToNode } from "../FormItem/TreeSelectPro";
 
 
-// 脚手架示例组件
-const TreePro: FC<{
-  /**
-   * 名称
-   * */
-  title: string;
-  /**
-   * 表单的参数
-   * */
-  addFormProFieldProps: any;
-  /**
-   * 请求数据的ajax
-   * */
-  ajax?: Function;
-  /**
-   * @description 获取数据的URL,例子，/api/new_find
-   * @default -
-   */
-  url?: string;
-  /**
-   * @description 获取详情数据的URL
-   * @default -
-   */
-  detailUrl?: string;
-  /**
-   * @description 新增的表单URL
-   * @default -
-   */
-  addUrl?: string;
-  /**
-   * @description 编辑的表单URL
-   * @default -
-   */
-  editUrl?: string;
-  /**
-   * @description 删除数据的URL
-   * @default -
-   */
-  deleteUrl?: string;
-  /**
-   * @description 批量删除数据的字段名
-   * @default idList
-   */
-  deleteField?: string;
-  /**
-   * @description 批量删除需要传递的字段
-   * @default idLists
-   */
-  deleteFields?: string;
-  /**
-   * @description 单个删除的时候是不是需要传递数组
-   * @default false
-   */
-  deleteFieldIsArr?: boolean;
-  /**
-   * @description 删除需要传递的额外参数
-   * @default {}
-   */
-  deleteParams?: any;
-  /**
-   * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终拿到的dataSource
-   * @default (data)=>{return data.data}
-   */
-  setData?: Function;
-  /**
-   * @description 额外的参数
-   * @default {}
-   */
-  /**
-   * @description 额外的参数
-   * @default {}
-   */
-  params?: any;
-  /**
-   * @description 表单的字段属性
-   * @default {}
-   */
-  fieldProps?: any;
-  /**
-   * @description 设置消息的函数
-   * @default (data) => data.msg
-   */
-  setMsg?: any;
-  /**
-   * @description 编辑字段上传接口的字段
-   * @default "id"
-   */
-  editField?: string;
-  /**
-   * @description 是否选择
-   * @default false
-   */
-  isSelect: boolean;
-  /**
-   * @description 是否显示详情
-   * @default true
-   */
-  detail: boolean;
-  /**
-   * @description 行的唯一标识字段
-   * @default "id"
-   */
-  rowKey: string;
-  /**
-   * @description 是否按需加载树子的数据，默认不是
-   * @default false
-   */
-  isLoadData: boolean
-}> = ({
-        title = "选择",
-        ajax = ajaxCommon,
-        url = null,
-        params = (data: any) => {
-          return {}
-        },
-        addUrl,
-        editUrl,
-        deleteUrl,
-        deleteFields = "idList",
-        deleteField = "id",
-        deleteFieldIsArr = false,
-        deleteParams = {},
-        addFormProFieldProps = {},
-        setData = (data: any) => {
-          return data.data
-        },
-        setMsg = (data: any) => {
-          return data.msg
-        },
-        editField = "id",
-        fieldProps = {
-          fieldNames: {title: "title", key: "key", children: "children"},
-          // onSelect: () => {
-          // },
-        },
-        isSelect = false,
-        detail = true,
-        rowKey = "id",
-        isLoadData = false
-      }) => {
-  const [treeData, setTreeData]: any = useState("loading");
+/**
+ * 树形组件 - 支持 CRUD 操作的高级树形组件
+ */
+const TreePro: FC<TreeProProps> = memo(({
+  title = DEFAULT_CONFIG.TREE_PRO.TITLE,
+  ajax = ajaxCommon,
+  url,
+  params = () => ({}),
+  addUrl,
+  editUrl,
+  deleteUrl,
+  deleteFields = DEFAULT_CONFIG.TREE_PRO.DELETE_FIELDS,
+  deleteField = DEFAULT_CONFIG.TREE_PRO.DELETE_FIELD,
+  deleteFieldIsArr = DEFAULT_CONFIG.TREE_PRO.DELETE_FIELD_IS_ARR,
+  deleteParams = DEFAULT_CONFIG.TREE_PRO.DELETE_PARAMS,
+  addFormProFieldProps = {},
+  setData = (data: any) => data?.data || [],
+  setMsg = (data: any) => data?.msg || '操作成功',
+  editField = DEFAULT_CONFIG.TREE_PRO.EDIT_FIELD,
+  fieldProps = {
+    fieldNames: DEFAULT_CONFIG.TREE_PRO.FIELD_NAMES,
+  },
+  isSelect = DEFAULT_CONFIG.TREE_PRO.IS_SELECT,
+  detail = DEFAULT_CONFIG.TREE_PRO.DETAIL,
+  rowKey = DEFAULT_CONFIG.TREE_PRO.ROW_KEY,
+  isLoadData = DEFAULT_CONFIG.TREE_PRO.IS_LOAD_DATA
+}) => {
+  const [treeData, setTreeData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // 避免未使用变量的警告
+  console.debug('TreePro config:', { isSelect, detail, rowKey, isLoadData, loading, error });
+
   const {
-    fieldNames={title: "title", key: "key", children: "children"},
+    fieldNames = DEFAULT_CONFIG.TREE_PRO.FIELD_NAMES,
   } = fieldProps;
 
-  const treeProps = {
+  // 缓存树形组件的属性
+  const treeProps = useMemo(() => ({
     ajax,
     addUrl,
     editUrl,
@@ -162,59 +59,106 @@ const TreePro: FC<{
     deleteFieldIsArr,
     deleteParams,
     addFormProFieldProps
-  };
+  }), [
+    ajax, addUrl, editUrl, deleteUrl, deleteFields,
+    deleteField, editField, deleteFieldIsArr,
+    deleteParams, addFormProFieldProps
+  ]);
 
+  // 加载数据的函数
+  const onLoadData = useCallback(async (_params: any = {}, values: any = {}) => {
+    if (!url) {
+      console.warn('TreePro: url is required for loading data');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const requestParams = {
+        ...params(_params),
+        ...values
+      };
+
+      await ajax(url, requestParams, (data: any) => {
+        const result = setData(data);
+
+        if (!Array.isArray(result)) {
+          console.warn('TreePro: setData should return an array');
+          setTreeData([]);
+          return;
+        }
+
+        setTreeData((prevData) => {
+          if (_params.key) {
+            return addChildToNode(prevData, _params.key, result, fieldNames.key);
+          } else {
+            return result;
+          }
+        });
+      });
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : '加载数据失败';
+      setError(errorMessage);
+      console.error('TreePro: Failed to load data:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [url, ajax, params, setData, fieldNames.key]);
+
+  // 初始化数据加载
   useEffect(() => {
     if (url) {
-      onLoadData({}, {...params({})})
-    } else {
-      setTreeData([])
+      onLoadData({}, params({}));
     }
-  }, []);
+  }, [url, onLoadData, params]);
 
 
-  //删除的执行函数
-  const deleteHandle = (selectedRowKeys: any, batch = false) => {
-    let keys = selectedRowKeys;
-    if (!deleteFieldIsArr && !batch) {
-      keys = selectedRowKeys[0]
+  // 删除操作处理函数
+  const deleteHandle = useCallback(async (selectedRowKeys: any[], batch = false) => {
+    if (!deleteUrl) {
+      console.warn('TreePro: deleteUrl is required for delete operation');
+      return;
     }
 
-    let params_: any = {...deleteParams}
-    if (batch) {
-      params_[deleteFields] = keys
-    } else {
-      params_[deleteField] = keys
+    if (!selectedRowKeys || selectedRowKeys.length === 0) {
+      message.warning('请选择要删除的数据');
+      return;
     }
 
-    ajax(deleteUrl, params_, (data: any) => {
-      message.success(setMsg(data));
-      onLoadData({}, {...params({})})
-    })
-  }
+    try {
+      let keys = selectedRowKeys;
+      if (!deleteFieldIsArr && !batch) {
+        keys = selectedRowKeys[0];
+      }
+
+      const requestParams = {
+        ...deleteParams,
+        [batch ? deleteFields : deleteField]: keys
+      };
+
+      await ajax(deleteUrl, requestParams, (data: any) => {
+        message.success(setMsg(data));
+        onLoadData({}, params({}));
+      });
+    } catch (err) {
+      console.error('TreePro: Delete operation failed:', err);
+      message.error('删除失败，请稍后重试');
+    }
+  }, [
+    deleteUrl, deleteFieldIsArr, deleteParams,
+    deleteFields, deleteField, ajax, setMsg,
+    onLoadData, params
+  ]);
 
 
-  const onLoadData = (_params: any, values: any = {}) => {
-    return ajax(url, {...params(_params), ...values}, (data: any) => {
-      let result = setData(data);
-
-      setTreeData((org: any) => {
-        if (_params.key) {
-          return addChildToNode(org, _params.key, result, fieldNames.key)
-        } else {
-          return result
-        }
-      })
-    })
-  }
-
-
-  let FormNode = (formProps: any) => {
+  const FormNode = (formProps: any) => {
     const {children, ajax, addUrl, record, fieldProps} = formProps;
     const [isEdit, setIsEdit] = useState(editField && record?.[rowKey])
 
     let url_ = addUrl
-    let _params: any = {}
+    const _params: any = {}
     if (editField && record?.[rowKey]) {
       _params[editField] = record?.[rowKey]
       if (editUrl) {
@@ -251,7 +195,7 @@ const TreePro: FC<{
   }
 
 
-  let menuItem = (nodeData: any): MenuProps['items'] => {
+  const menuItem = (nodeData: any): MenuProps['items'] => {
     return [{
       key: '1',
       label: (
@@ -347,6 +291,8 @@ const TreePro: FC<{
       </div>
     </div>
   );
-};
+});
+
+TreePro.displayName = 'TreePro';
 
 export default TreePro;

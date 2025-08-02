@@ -4,13 +4,13 @@ import {message, Tabs, theme} from 'antd';
 import React, {FC, useEffect, useRef, useState} from 'react';
 import "./index.less"
 import {ajaxCommon, encrypted} from "../../utils/common";
-import {cun, cuns, quObj} from "esn";
+import {cun, cuns, quObj} from "../../utils/storage";
 
 
 type LoginType = 'phone' | 'account';
 
 
-let autoLogin = "autoLogin";
+const autoLogin = "autoLogin";
 
 const LoginPro: FC<{
   /**
@@ -178,8 +178,8 @@ const LoginPro: FC<{
 
   const formRef: any = useRef();
 
-  let loginFun = (values: any) => {
-    let _values = {...values};
+  const loginFun = (values: any) => {
+    const _values = {...values};
     _values[passwordField] = secretKey ? encrypted(_values[passwordField] + extraPasswordText, secretKey, secretKey) : _values[passwordField];
     if (encrypt) {
       _values[passwordField] = encrypt(_values[passwordField])
@@ -196,7 +196,7 @@ const LoginPro: FC<{
   }
 
   useEffect(() => {
-    let autoLoginValues = quObj(autoLogin);
+    const autoLoginValues = quObj(autoLogin);
     if (autoLoginValues) {
       formRef.current.setFieldsValue(quObj(autoLogin))
     }
@@ -338,7 +338,7 @@ const LoginPro: FC<{
                 },
               ]}
               onGetCaptcha={async (phone) => {
-                let obj: any = {};
+                const obj: any = {};
                 obj[phoneField] = phone
                 ajax(captchaUrl, {...obj}, (data: any) => {
                   message.success('验证码已发送，请查看手机短信');

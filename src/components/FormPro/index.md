@@ -1,13 +1,159 @@
 ---
 title: FormPro 高级表单
+order: 2
 group:
   title: 组件
   order: 1
+nav:
+  title: 组件
+  order: 2
 ---
 
-# FormPro 高级表单的 pro 版本
+# FormPro 高级表单
 
 FormPro 是一个基于 [Ant Design Pro Components](https://procomponents.ant.design/) 的高级表单组件，它封装了常见的表单场景，支持模态框、抽屉等多种布局形式，并提供了丰富的配置项和自定义组件。
+
+## 基础用法
+
+最简单的模态框表单使用方式。
+
+```tsx
+import React from 'react';
+import { FormPro } from 'durians';
+import { Button } from 'antd';
+
+export default () => {
+  return (
+    <FormPro
+      layoutType="ModalForm"
+      url="/api/users"
+      fieldProps={{
+        columns: [
+          {
+            title: '姓名',
+            dataIndex: 'name',
+            valueType: 'text',
+            formItemProps: {
+              rules: [{ required: true, message: '请输入姓名' }],
+            },
+          },
+          {
+            title: '邮箱',
+            dataIndex: 'email',
+            valueType: 'text',
+            formItemProps: {
+              rules: [
+                { required: true, message: '请输入邮箱' },
+                { type: 'email', message: '请输入正确的邮箱格式' },
+              ],
+            },
+          },
+          {
+            title: '部门',
+            dataIndex: 'department',
+            valueType: 'select',
+            valueEnum: {
+              '技术部': { text: '技术部' },
+              '产品部': { text: '产品部' },
+              '运营部': { text: '运营部' },
+              '市场部': { text: '市场部' },
+              '人事部': { text: '人事部' },
+            },
+            formItemProps: {
+              rules: [{ required: true, message: '请选择部门' }],
+            },
+          },
+        ],
+      }}
+    >
+      <Button type="primary">新增用户</Button>
+    </FormPro>
+  );
+};
+```
+
+## 抽屉表单
+
+使用抽屉布局的表单示例。
+
+```tsx
+import React from 'react';
+import { FormPro } from 'durians';
+import { Button, message } from 'antd';
+
+export default () => {
+  return (
+    <FormPro
+      layoutType="DrawerForm"
+      url="/api/products"
+      fieldProps={{
+        title: '新增产品',
+        width: 600,
+        columns: [
+          {
+            title: '产品名称',
+            dataIndex: 'name',
+            valueType: 'text',
+            formItemProps: {
+              rules: [{ required: true, message: '请输入产品名称' }],
+            },
+          },
+          {
+            title: '产品描述',
+            dataIndex: 'description',
+            valueType: 'textarea',
+            fieldProps: {
+              rows: 4,
+            },
+          },
+          {
+            title: '价格',
+            dataIndex: 'price',
+            valueType: 'money',
+            formItemProps: {
+              rules: [{ required: true, message: '请输入价格' }],
+            },
+          },
+          {
+            title: '分类',
+            dataIndex: 'category',
+            valueType: 'select',
+            valueEnum: {
+              '电子产品': { text: '电子产品' },
+              '服装鞋帽': { text: '服装鞋帽' },
+              '家居用品': { text: '家居用品' },
+              '图书音像': { text: '图书音像' },
+              '运动户外': { text: '运动户外' },
+            },
+            formItemProps: {
+              rules: [{ required: true, message: '请选择分类' }],
+            },
+          },
+          {
+            title: '品牌',
+            dataIndex: 'brand',
+            valueType: 'text',
+          },
+          {
+            title: '库存',
+            dataIndex: 'stock',
+            valueType: 'digit',
+            fieldProps: {
+              min: 0,
+            },
+          },
+        ],
+      }}
+      finishFun={(data, values) => {
+        message.success('产品创建成功');
+        console.log('创建结果:', data, values);
+      }}
+    >
+      <Button type="primary">新增产品</Button>
+    </FormPro>
+  );
+};
+```
 
 ## 何时使用
 
@@ -345,7 +491,7 @@ export default Demo;
 import { FormPro } from 'durians';
 import { Button } from 'antd';
 import React, { FC } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const Demo: FC = () => {
   return (
@@ -353,7 +499,7 @@ const Demo: FC = () => {
       url="/api/submit"
       beforeSubmit={(values) => ({
         ...values,
-        birthday: moment(values.birthday).format('YYYY-MM-DD'),
+        birthday: dayjs(values.birthday).format('YYYY-MM-DD'),
         age: Number(values.age)
       })}
     >

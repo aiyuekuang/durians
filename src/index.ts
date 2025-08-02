@@ -1,5 +1,8 @@
 import "./styles/index.less";
 
+// 初始化简化的 Mock 服务
+import './mock/simple';
+
 // 组件导出
 export { default as TablePro } from './components/TablePro';
 export { default as ModalPro } from './components/ModalPro';
@@ -19,6 +22,12 @@ export type {
   LocalProTableProps,
   Columns,
   ColumnConfig,
+  VirtualScrollOptions,
+  CacheOptions,
+  ErrorRetryOptions,
+  DataTransformOptions,
+  AccessibilityOptions,
+  PerformanceMonitoringOptions,
 } from './types';
 
 // 工具函数导出
@@ -32,6 +41,10 @@ export {
   debounce,
   throttle,
 } from './utils/common';
+
+// Hooks 导出
+export { useErrorHandler } from './hooks/useErrorHandler';
+export { useAsyncOperation } from './hooks/useAsyncOperation';
 
 export {
   setLocalStorage,

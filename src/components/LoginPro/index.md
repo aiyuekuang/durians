@@ -1,13 +1,116 @@
 ---
 title: LoginPro 高级登录
+order: 4
 group:
   title: 组件
   order: 1
+nav:
+  title: 组件
+  order: 2
 ---
 
 # LoginPro 高级登录
 
 LoginPro 是一个基于 [Ant Design Pro Components](https://procomponents.ant.design/components/login) 的高级登录组件，提供了账号密码登录和手机验证码登录两种方式，并集成了自动登录、密码加密等功能。
+
+## 基础用法
+
+最简单的登录组件使用方式。
+
+```tsx
+import React from 'react';
+import { LoginPro } from 'durians';
+import { message } from 'antd';
+
+export default () => {
+  return (
+    <div style={{ height: '100vh', background: '#f0f2f5' }}>
+      <LoginPro
+        url="/api/login"
+        onSuccess={(data) => {
+          message.success('登录成功');
+          console.log('登录结果:', data);
+          // 这里可以处理登录成功后的逻辑
+          // 比如跳转到首页或保存用户信息
+        }}
+        onError={(error) => {
+          message.error('登录失败: ' + error.message);
+        }}
+      />
+    </div>
+  );
+};
+```
+
+## 自定义登录表单
+
+可以自定义登录表单的字段和验证规则。
+
+```tsx
+import React from 'react';
+import { LoginPro } from 'durians';
+import { message } from 'antd';
+
+export default () => {
+  return (
+    <div style={{ height: '100vh', background: '#f0f2f5' }}>
+      <LoginPro
+        url="/api/login"
+        title="Durians 管理系统"
+        subTitle="基于 Ant Design Pro 的企业级组件库"
+        logo="https://img1.baidu.com/it/u=2018354835,1125004781&fm=253&fmt=auto&app=138&f=JPEG?w=200&h=200"
+        fieldProps={{
+          username: {
+            placeholder: '请输入用户名',
+            rules: [
+              { required: true, message: '请输入用户名' },
+              { min: 3, message: '用户名至少3个字符' },
+            ],
+          },
+          password: {
+            placeholder: '请输入密码',
+            rules: [
+              { required: true, message: '请输入密码' },
+              { min: 6, message: '密码至少6个字符' },
+            ],
+          },
+        }}
+        onSuccess={(data) => {
+          message.success(`欢迎回来，${data.name}！`);
+          console.log('用户信息:', data);
+          // 保存用户信息到本地存储
+          localStorage.setItem('userInfo', JSON.stringify(data));
+          localStorage.setItem('token', data.token);
+        }}
+        onError={(error) => {
+          message.error('登录失败: ' + error.message);
+        }}
+        // 显示记住我选项
+        rememberMe={true}
+        // 显示忘记密码链接
+        forgotPassword={true}
+        onForgotPassword={() => {
+          message.info('请联系管理员重置密码');
+        }}
+      />
+    </div>
+  );
+};
+```
+
+## 测试账号
+
+为了方便测试，Mock 服务提供了以下测试账号：
+
+- **管理员账号**:
+  - 用户名: `admin`
+  - 密码: `123456`
+  - 权限: 管理员权限
+
+- **普通用户账号**:
+  - 用户名: `user`
+  - 密码: `123456`
+  - 权限: 普通用户权限
 
 ## 何时使用
 

@@ -77,7 +77,7 @@ const Index: FC<{
                   // 如果需要失败可以 throw 一个错误出来，onGetCaptcha 会自动停止
                   // throw new Error("获取验证码错误")
                   onGetCaptcha={async (phone) => {
-                    let _params: any = {};
+                    const _params: any = {};
                     _params[phoneName] = phone
                     ajax(url, _params, (data: any) => {
                       // setData(data)

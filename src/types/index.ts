@@ -30,8 +30,59 @@ export type ColumnConfig = {
 
 export type Columns = LocalProTableProps['columns'] & ColumnConfig;
 
-// TablePro 组件属性类型
-export interface TableProProps {
+// 新增功能接口
+export interface VirtualScrollOptions {
+  /** 每行高度 */
+  itemHeight?: number;
+  /** 启用虚拟滚动的阈值 */
+  threshold?: number;
+  /** 缓冲区大小 */
+  bufferSize?: number;
+}
+
+export interface CacheOptions {
+  /** 是否启用缓存 */
+  enabled?: boolean;
+  /** 缓存时间（毫秒） */
+  ttl?: number;
+  /** 缓存键 */
+  key?: string;
+}
+
+export interface ErrorRetryOptions {
+  /** 是否启用重试 */
+  enabled?: boolean;
+  /** 最大重试次数 */
+  maxRetries?: number;
+  /** 重试延迟（毫秒） */
+  retryDelay?: number;
+}
+
+export interface DataTransformOptions {
+  /** 请求数据转换 */
+  request?: (params: any) => any;
+  /** 响应数据转换 */
+  response?: (data: any) => { list: any[]; total: number };
+}
+
+export interface AccessibilityOptions {
+  /** 是否启用键盘导航 */
+  keyboardNavigation?: boolean;
+  /** 是否宣布变更 */
+  announceChanges?: boolean;
+}
+
+export interface PerformanceMonitoringOptions {
+  /** 是否启用性能监控 */
+  enabled?: boolean;
+  /** 渲染时间回调 */
+  onRenderTime?: (time: number) => void;
+  /** 数据处理时间回调 */
+  onDataProcessTime?: (time: number) => void;
+}
+
+// TablePro 组件属性类型（增强版）
+export interface TableProProps<T = any> {
   /** 通用ajax实现方法 */
   ajax?: AjaxFunction;
   /** 获取数据的URL */
@@ -102,6 +153,32 @@ export interface TableProProps {
   keywordField?: string;
   /** 关键词占位符 */
   keywordPlaceholder?: string;
+
+  // 新增功能属性（可选，保持向后兼容）
+  /** 是否启用虚拟滚动 */
+  virtual?: boolean;
+  /** 虚拟滚动配置 */
+  virtualScrollOptions?: VirtualScrollOptions;
+  /** 缓存配置 */
+  cache?: CacheOptions;
+  /** 错误重试配置 */
+  errorRetry?: ErrorRetryOptions;
+  /** 数据转换配置 */
+  dataTransform?: DataTransformOptions;
+  /** 可访问性配置 */
+  accessibilityOptions?: AccessibilityOptions;
+  /** 性能监控配置 */
+  performanceMonitoring?: PerformanceMonitoringOptions;
+  /** ARIA 标签 */
+  ariaLabel?: string;
+  /** ARIA 描述 */
+  ariaDescribedBy?: string;
+  /** 是否启用调试模式 */
+  debug?: boolean;
+  /** 调试信息回调 */
+  onDebugInfo?: (info: any) => void;
+  /** 国际化文本 */
+  locale?: Record<string, string>;
 }
 
 // FormPro 组件属性类型
@@ -132,7 +209,7 @@ export interface FormProProps {
   beforeSubmit?: (values: any, record: any, originalValues: any) => any;
 }
 
-// ModalPro 组件属性类型
+// ModalPro 组件属性类型（增强版）
 export interface ModalProProps {
   /** 标题 */
   title?: string;
@@ -144,6 +221,34 @@ export interface ModalProProps {
   children?: ReactNode;
   /** antd中modal的fieldProps */
   fieldProps?: Record<string, any>;
+
+  // 新增功能属性（可选，保持向后兼容）
+  /** 是否启用键盘导航 */
+  keyboardNavigation?: boolean;
+  /** 自定义键盘事件处理 */
+  onKeyDown?: (e: React.KeyboardEvent) => void;
+  /** 是否可拖拽 */
+  draggable?: boolean;
+  /** 是否可调整大小 */
+  resizable?: boolean;
+  /** 最大化支持 */
+  maximizable?: boolean;
+  /** 全屏支持 */
+  fullscreen?: boolean;
+  /** 动画配置 */
+  animation?: {
+    enter?: string;
+    exit?: string;
+    duration?: number;
+  };
+  /** 是否启用遮罩层点击关闭 */
+  maskClosable?: boolean;
+  /** 自动聚焦元素选择器 */
+  autoFocus?: string;
+  /** 关闭时的确认提示 */
+  confirmOnClose?: boolean;
+  /** 确认关闭的提示文本 */
+  confirmCloseText?: string;
 }
 
 // LoginPro 组件属性类型

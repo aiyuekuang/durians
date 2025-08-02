@@ -1,40 +1,66 @@
-import {DeleteOutlined, PlusOutlined} from '@ant-design/icons';
-import {ActionType, ProTable, ProTableProps} from '@ant-design/pro-components';
-import {Button, Divider, message, PaginationProps, Popconfirm, Space, Table} from 'antd';
-import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
-import {ajaxCommon, arrHasKey, commonFormHandler, objToSort} from "../../utils/common";
-import FormPro from '../FormPro';
-import ModalPro from '../ModalPro';
-import TreePro from '../TreePro';
-import ProProviderPro from '../ProProviderPro';
-import {cloneDeep} from "lodash-es";
+import React, { useState, useRef, useEffect, FC, Fragment } from "react";
+import { ProTable } from '@ant-design/pro-components';
+import ProProviderPro from "../ProProviderPro";
+import TreePro from "../TreePro";
+import FormPro from "../FormPro";
+import ModalPro from "../ModalPro";
+import type { ProTableProps } from '@ant-design/pro-components';
+import { Button, Space, Divider, Popconfirm, message, Table } from 'antd';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { ajaxCommon, commonFormHandler, arrHasKey, cloneDeep } from "../../utils/common";
+import type { ActionType } from "@ant-design/pro-components";
+import type { AxiosRequestConfig } from "axios";
 
+type LocalProTableProps = ProTableProps<any, any>;
 
-type LocalProTableProps = Omit<ProTableProps<any, any>, 'pagination'> & { pagination?: PaginationProps, } & any;
-
-type Columns = LocalProTableProps['columns'] & { proConfig?: { url?: string, setData?: Function, isKeyword?: boolean } }
-
-
-const columns_: any = [
+const columns_ = [
   {
-    dataIndex: 'index',
-    valueType: 'indexBorder',
-    width: 48,
-  },
-  {
-    title: '标题',
-    dataIndex: 'title',
-    copyable: true,
-    ellipsis: true,
-    tooltip: '标题过长会自动收缩',
+    title: "姓名",
+    dataIndex: "name",
+    valueType: "text",
     formItemProps: {
       rules: [
         {
           required: true,
-          message: '此项为必填项',
+          message: "此项为必填项",
         },
       ],
     },
+  },
+  {
+    title: "年龄",
+    dataIndex: "age",
+    valueType: "digit",
+  },
+  {
+    title: "地址",
+    dataIndex: "address",
+    valueType: "text",
+    hideInSearch: true
+  },
+  {
+    title: "电话",
+    dataIndex: "phone",
+    valueType: "text",
+    hideInSearch: true
+  },
+  {
+    title: "邮箱",
+    dataIndex: "email",
+    valueType: "text",
+    hideInSearch: true
+  },
+  {
+    title: "部门",
+    dataIndex: "department",
+    valueType: "text",
+    hideInSearch: true
+  },
+  {
+    title: "职位",
+    dataIndex: "position",
+    valueType: "text",
+    hideInSearch: true
   },
 ];
 
@@ -129,7 +155,7 @@ const TablePro: FC<{
    */
   addFormProFieldProps?: any;
   /**
-   * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终���到的dataSource
+   * @description 获取查询数据滞后的中间件，处理一下数据，再返回出去就是表格最终到的dataSource
    * @type Function
    * @default (data)=>{return data.data}
    */
@@ -237,13 +263,13 @@ const TablePro: FC<{
           rowKey: "id"
         },
         setData = (data: any) => {
-          return data?.data?.records
+          return data?.data?.records || data?.data?.list || data?.data
         },
         setTotal = (data: any) => {
-          return data?.data?.total
+          return data?.data?.total || data?.data?.length || 0
         },
         setMsg = (data: any) => {
-          return data?.msg
+          return data?.msg || data?.message || '操作成功'
         },
         actionBar = [],
         paginationAlias = {
@@ -283,8 +309,8 @@ const TablePro: FC<{
   // const tableParams = useRef({})
   const actionRef: any = useRef<ActionType>();
   const formRef: any = useRef();
-  let id_: any = fieldProps.rowKey || "id"
-  let actionBarComponent = [...(editUrl ? [({record}: any) => <BaseForm title="编辑" id={id_}
+  const id_: any = fieldProps.rowKey || "id"
+  const actionBarComponent = [...(editUrl ? [({record}: any) => <BaseForm title="编辑" id={id_}
                                                                         record={record}><a>编辑</a></BaseForm>] : []), ...actionBar, ...(deleteUrl ? [({record}: any) =>
     <Popconfirm
       title="删除"
@@ -306,15 +332,15 @@ const TablePro: FC<{
   }, []);
 
 
-  let BaseForm: FC<{ children?: any; record?: any, id?: any, title?: string }> = ({
+  const BaseForm: FC<{ children?: any; record?: any, id?: any, title?: string }> = ({
                                                                                     children,
                                                                                     record,
                                                                                     id,
                                                                                     title = "新增"
                                                                                   }) => {
-    let columns_ = typeof fieldProps.columns === "function" ? fieldProps.columns("add") : fieldProps.columns;
+    const columns_ = typeof fieldProps.columns === "function" ? fieldProps.columns("add") : fieldProps.columns;
     let url_ = addUrl
-    let _params: any = {}
+    const _params: any = {}
     if (id && record?.[id]) {
       _params[id] = record?.[id]
       if (editUrl) {
@@ -349,7 +375,7 @@ const TablePro: FC<{
   }
 
 
-  let action = (_: any, record: any) => {
+  const action = (_: any, record: any) => {
     return (
       <div className="durians_table_pro_action">
         {actionBarComponent.map((Comp, i) => {
@@ -373,14 +399,14 @@ const TablePro: FC<{
       keys = selectedRowKeys[0]
     }
 
-    let params_: any = {...deleteParams}
+    const params_: any = {...deleteParams}
     if (batch) {
       params_[deleteFields] = keys
     } else {
       if (deleteField) {
         params_[deleteField] = keys
       } else {
-        let _rowKey = typeof fieldProps?.rowKey == "function" ? fieldProps?.rowKey({}) : fieldProps?.rowKey
+        const _rowKey = typeof fieldProps?.rowKey === "function" ? fieldProps?.rowKey({}) : fieldProps?.rowKey
         params_[_rowKey as string || "id"] = keys
       }
     }
@@ -394,11 +420,11 @@ const TablePro: FC<{
   }
 
   // 根据columns的类型，进行col数据的转换，table是数据需要塞入的类型，这里用的是塞入表格的
-  let columnsTemp = typeof fieldProps.columns === "function" ? fieldProps.columns("table") : fieldProps.columns || []
+  const columnsTemp = typeof fieldProps.columns === "function" ? fieldProps.columns("table") : fieldProps.columns || []
 
 
   // 判断是否有关键词搜索的
-  let keywordModel = arrHasKey((data: any) => {
+  const keywordModel = arrHasKey((data: any) => {
     return data?.proConfig?.isKeyword
   }, columnsTemp);
 
@@ -414,7 +440,7 @@ const TablePro: FC<{
             fieldProps={{
               onSelect: (selectedKeys: any) => {
                 setTableParams(org => {
-                  let _org = cloneDeep(org);
+                  const _org = cloneDeep(org);
                   return {
                     ..._org,
                     ...treeParamsFun(selectedKeys)
@@ -506,7 +532,7 @@ const TablePro: FC<{
             actionRef={actionRef}
             request={async (params, sort, filter) => {
               let result = fieldProps.dataSource
-              let _params: any = {...params}
+              const _params: any = {...params}
               _params[paginationAlias.pageIndex] = params.current
               _params[paginationAlias.pageSize] = params.pageSize
 
@@ -620,7 +646,7 @@ const TablePro: FC<{
                     </Button>
                   </BaseForm>
                 ] : []),
-                ...(toolBarRender?.map((Comp: any) => {
+                ...((Array.isArray(toolBarRender) ? toolBarRender : []).map((Comp: any) => {
                   if (typeof Comp === "function") {
                     return <Comp action={action} formRef={formRef} searchValues={searchValues}/>
                   } else {
@@ -636,7 +662,7 @@ const TablePro: FC<{
                   onSearch: (value: string) => {
                     setTableParams((org) => {
                       console.log(666, value)
-                      let _org = cloneDeep(org);
+                      const _org = cloneDeep(org);
                       return {..._org, [keywordField]: value}
                     })
                     actionRef.current?.reload();
