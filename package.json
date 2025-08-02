@@ -84,18 +84,7 @@
     "antd": "^5.26.7",
     "crypto-js": "^4.2.0",
     "lodash-es": "^4.17.21",
-    "umi-request": "^1.4.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{css,less,scss}": [
-      "stylelint --fix"
-    ],
-    "*.{json,md}": [
-      "prettier --write"
-    ]
+    "umi-request": "^1.4.0",
+    "axios": "^1.9.0"
   }
 }

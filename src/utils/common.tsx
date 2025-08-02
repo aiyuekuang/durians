@@ -225,3 +225,11 @@ export const throttle = <T extends (...args: any[]) => any>(
     }
   };
 };
+
+//{roles: 'descend'}
+//  将这个对象拆成{sortBy:"roles",sortOrder:"descend"}
+export const objToSort = (obj: any) => {
+  let sortBy = Object.keys(obj)[0]
+  let sortOrder = obj[sortBy]
+  return {sortBy, sortOrder}
+}

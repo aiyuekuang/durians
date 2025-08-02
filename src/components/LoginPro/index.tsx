@@ -198,13 +198,12 @@ const LoginPro: FC<{
   useEffect(() => {
     let autoLoginValues = quObj(autoLogin);
     if (autoLoginValues) {
-      loginFun(quObj(autoLogin))
+      formRef.current.setFieldsValue(quObj(autoLogin))
     }
   }, []);
 
 
   return (
-
     <div style={{backgroundColor: token.colorBgContainer}} className="crm_login_body">
       <LoginForm
         formRef={formRef}
