@@ -1,70 +1,70 @@
-import React, {ElementType, FunctionComponent, ReactDOM, ReactElement, ReactHTML, ReactNode, useState} from 'react';
-import {Modal} from 'antd';
-import "./index.less"
+import React, { memo, useState, useCallback } from 'react';
+import { Modal } from 'antd';
+import type { ModalProProps } from '../../types';
+import { DEFAULT_CONFIG } from '../../utils/constants';
+import "./index.less";
 
-const App: React.FC<{
-  /**
-   * 标题
-   * @default 基础
-   */
-  title?: string;
-  /**
-   * 点击OK的时候，会有一个callback回调函数，在你的函数中执行callback可以传递ture或者false打开或者关闭弹窗,setIsModalOpen,isModalOpen
-   * @default (callback: any) => {
-   *           callback()
-   *         }
-   */
-  handleOk?: Function;
-  /**
-   * 弹窗里的内容
-   * @default () => <div>示例</div>
-   */
-  Content?: any;
-  /**
-   * 触发点击事件弹窗包裹的内容
-   * @default <div>点击</div>
-   */
-  children?: ReactNode;
-  /**
-   * antd中modal的fieldProps-自有属性
-   * @default {}
-   */
-  fieldProps?: object
-}> = ({
-        title = "基础",
-        handleOk = (callback: any) => {
-          callback()
-        },
-        Content = () => <div>示例</div>,
-        children = <div>点击</div>,
-        fieldProps={}
-      }) => {
+const ModalPro: React.FC<ModalProProps> = memo(({
+  title = DEFAULT_CONFIG.MODAL_PRO.TITLE,
+  handleOk = (callback: () => void) => {
+    callback();
+  },
+  Content = () => <div>示例</div>,
+  children = <div>点击</div>,
+  fieldProps = {}
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const showModal = () => {
+  const showModal = useCallback(() => {
     setIsModalOpen(true);
-  };
+  }, []);
 
-  const handleOk_ = () => {
+  const handleOk_ = useCallback(() => {
     handleOk(() => {
       setIsModalOpen(false);
     });
-  };
+  }, [handleOk]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
+
+  const renderContent = useCallback(() => {
+    if (typeof Content === "function") {
+      return <Content isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />;
+    }
+    return Content;
+  }, [Content, isModalOpen]);
 
   return (
     <>
-      <div onClick={showModal} style={{width:"max-content"}}>
+      <div
+        onClick={showModal}
+        style={{ width: "max-content", cursor: "pointer" }}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            showModal();
+          }
+        }}
+      >
         {children}
       </div>
-      <Modal title={title} open={isModalOpen} onOk={handleOk_} onCancel={handleCancel} {...fieldProps}>
-        {typeof Content === "function" ?<Content isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>:Content}
+      <Modal
+        title={title}
+        open={isModalOpen}
+        onOk={handleOk_}
+        onCancel={handleCancel}
+        destroyOnClose
+        {...fieldProps}
+      >
+        {renderContent()}
       </Modal>
     </>
   );
-};
+});
 
-export default App;
+ModalPro.displayName = 'ModalPro';
+
+export default ModalPro;

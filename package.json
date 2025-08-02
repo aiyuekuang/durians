@@ -16,9 +16,22 @@
     "docs:build": "dumi build",
     "docs:preview": "dumi preview",
     "doctor": "father doctor",
-    "prepublishOnly": "father doctor && npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint src --ext .ts,.tsx,.js,.jsx --fix",
+    "lint:style": "stylelint src/**/*.{css,less,scss}",
+    "lint:style:fix": "stylelint src/**/*.{css,less,scss} --fix",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,md}\"",
+    "prepublishOnly": "npm run type-check && npm run lint && npm run test:ci && father doctor && npm run build",
     "publishIn": "node ./bin/master.mjs && npm version patch && node ./bin/master.mjs && npm publish --registry=https://packages.aliyun.com/5f9a23913a5188f27f3f344b/npm/npm-registry/",
-    "copy": "npm run build &&node ./bin/copy.mjs"
+    "copy": "npm run build && node ./bin/copy.mjs",
+    "clean": "rimraf dist docs-dist coverage",
+    "prepare": "husky install"
   },
   "commitlint": {
     "extends": [
@@ -28,20 +41,32 @@
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.5.0",
+    "@types/crypto-js": "^4.2.2",
+    "@types/jest": "^29.5.0",
+    "@types/lodash-es": "^4.17.12",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@umijs/lint": "^4.0.0",
-    "dumi": "^2.3.0",
+    "babel-jest": "^29.5.0",
+    "dumi": "^2.4.21",
     "eslint": "^8.23.0",
     "father": "^4.1.0",
     "husky": "^8.0.1",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "prettier-plugin-organize-imports": "^3.0.0",
     "prettier-plugin-packagejson": "^2.2.18",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "stylelint": "^14.9.1"
+    "rimraf": "^5.0.0",
+    "stylelint": "^14.9.1",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
     "react": ">=16.9.0",
@@ -54,15 +79,23 @@
     "ztao"
   ],
   "dependencies": {
-    "@ant-design/icons": "^5.5.2",
-    "@ant-design/pro-components": "^2.8.2",
-    "@types/crypto-js": "^4.2.2",
-    "@types/lodash-es": "^4.17.12",
-    "antd": "^5.22.5",
+    "@ant-design/icons": "^6.0.0",
+    "@ant-design/pro-components": "^2.8.10",
+    "antd": "^5.26.7",
     "crypto-js": "^4.2.0",
-    "esn": "^2.0.29",
-    "fs": "^0.0.1-security",
     "lodash-es": "^4.17.21",
     "umi-request": "^1.4.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{css,less,scss}": [
+      "stylelint --fix"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   }
 }

@@ -3,7 +3,9 @@ import {ActionType, ProTable, ProTableProps} from '@ant-design/pro-components';
 import {Button, Divider, message, PaginationProps, Popconfirm, Space, Table} from 'antd';
 import React, {FC, Fragment, useEffect, useRef, useState} from 'react';
 import {ajaxCommon, arrHasKey, commonFormHandler} from "../../utils/common";
-import {FormPro, ModalPro, TreePro} from "durians";
+import FormPro from '../FormPro';
+import ModalPro from '../ModalPro';
+import TreePro from '../TreePro';
 import ProProviderPro from '../ProProviderPro';
 import {cloneDeep} from "lodash-es";
 
