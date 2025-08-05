@@ -179,6 +179,99 @@ import { TreePro } from 'durians';
 />
 ```
 
+### FormItem - 表单项组件
+增强的表单项组件集合，提供更丰富的输入控件。
+
+**核心特性：**
+- 🌳 TreeSelectPro - 树形选择器
+- 📤 UploadPro - 文件上传组件
+- 📊 TableSelect - 表格选择器
+- 🔐 验证码组件
+- 🎨 高度可定制
+
+**适用场景：**
+- 复杂表单输入
+- 文件上传管理
+- 数据选择界面
+- 验证码验证
+
+```typescript
+import { TreeSelectPro, UploadPro, TableSelect } from 'durians';
+
+// 树形选择
+<TreeSelectPro
+  treeData={treeData}
+  multiple={true}
+  searchable={true}
+/>
+
+// 文件上传
+<UploadPro
+  action="/api/upload"
+  listType="picture-card"
+  maxCount={5}
+/>
+
+// 表格选择
+<TableSelect
+  columns={columns}
+  dataSource={dataSource}
+  multiple={true}
+/>
+```
+
+### ProProviderPro - 增强的 ProProvider
+为 ProForm 提供额外的 valueType 支持。
+
+**核心特性：**
+- 🔧 集成自定义 valueType
+- 📝 支持 treeSelectPro、uploadPro、tableSelect
+- 🔐 内置验证码组件
+- 🎯 简化表单配置
+
+**适用场景：**
+- 复杂表单构建
+- 自定义表单项
+- 统一表单配置
+
+```typescript
+import { ProProviderPro } from 'durians';
+
+<ProProviderPro>
+  <ProForm>
+    <ProForm.Item
+      name="tree"
+      label="树形选择"
+      valueType="treeSelectPro"
+    />
+    <ProForm.Item
+      name="upload"
+      label="文件上传"
+      valueType="uploadPro"
+    />
+  </ProForm>
+</ProProviderPro>
+```
+
+### YB - 示例组件
+简单的脚手架示例组件。
+
+**核心特性：**
+- 🎯 简单的欢迎页面
+- 🎨 可自定义名称
+- 📱 响应式设计
+
+**适用场景：**
+- 组件开发示例
+- 快速原型开发
+- 学习参考
+
+```typescript
+import { YB } from 'durians';
+
+<YB name="Durians" />
+```
+
 ## 🛠️ 开发指南
 
 ### 快速开始
@@ -279,10 +372,24 @@ const MyComponent = () => {
 ### 5. 可访问性
 遵循 WCAG 标准，提供良好的可访问性支持。
 
+## 🛠️ 工具和 Hooks
+
+### Hooks
+- [useAsyncOperation](/docs/hooks#useasyncoperation) - 异步操作管理
+- [useErrorHandler](/docs/hooks#useerrorhandler) - 错误处理
+
+### Utils
+- [common](/docs/utils#commontsx) - 通用工具函数
+- [storage](/docs/utils#storagets) - 本地存储工具
+- [constants](/docs/utils#constantsts) - 常量定义
+- [format](/docs/utils#formatts) - 格式化工具
+
 ## 📚 更多资源
 
 - [架构设计](/docs/architecture) - 了解技术架构和设计理念
 - [更新日志](/docs/changelog) - 查看版本更新和新功能
+- [Hooks 文档](/docs/hooks) - 查看所有 Hooks 用法
+- [工具函数](/docs/utils) - 查看所有工具函数
 - [GitHub](https://github.com/aiyuekuang/durians) - 源码和问题反馈
 - [示例项目](https://github.com/aiyuekuang/durians-examples) - 完整的使用示例
 
