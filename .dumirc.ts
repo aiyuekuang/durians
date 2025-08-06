@@ -18,10 +18,6 @@ export default defineConfig({
         link: '/components',
       },
       {
-        title: 'Mock 测试',
-        link: '/mock-test',
-      },
-      {
         title: '更新日志',
         link: '/changelog',
       },
